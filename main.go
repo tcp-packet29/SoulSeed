@@ -6,6 +6,7 @@ import (
 	// "context"
 	"github.com/gin-gonic/gin"
 	"main/genUtil"
+	"main/routeUtil"
 	// "go.mongodb.org/mongo-driver/mongo"
 	// "go.mongodb.org/mongo-driver/mongo/options"
 	// "go.mongodb.org/mongo-driver/bson"
@@ -17,5 +18,6 @@ func main() {
 	router := gin.Default()
 	genUtil.ConnectToMongo()
 	//mnot actually an instance of client we can actually reference, just for tersrting purposes
+	routeUtil.UserRoutes(router)
 	router.Run(":8080")
 }
