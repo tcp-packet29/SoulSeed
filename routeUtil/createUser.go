@@ -19,7 +19,7 @@ func CreateUser() gin.HandlerFunc { //to be used in request handling suchj as PO
 		var user storageUtil.User
 		//since omitem,pty is used iod wikll nmot need to be specified leadign to it only being made here when cxreating user (easier for sending erq and making new user)
 		if err := c.BindJSON(&user); err != nil {
-			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: nil})
+			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: map[string]interface{}{"data": err.Error()}})
 			return
 		}
 
