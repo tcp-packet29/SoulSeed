@@ -12,7 +12,7 @@ import (
 )
 
 
-func FetchUser() gin.HandlerFunc {
+func fetchUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ident := c.Param("uid")
 		var userFound storageUtil.User

@@ -12,15 +12,23 @@ import (
 )
 
 
-func FetchUser() gin.HandlerFunc {
+func EditUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ident := c.Param("uid")
-		var userFound storageUtil.User
+		var user storageUtil.User
+		
+
+		if err := c.BindJSON(&user); err != nil {
+			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false})
+			return
+		}
 
 		oID, _ := primitive.ObjectIDFromHex(ident)
 		//converting id form param from hex and assigning it to oid
 
-		err := userCol.FindOne(c, bson.M{"id": oID}).Decode(&userFound) //finding user and decoding and transferring into userfound struct
+		updatedBSONRep := bson.M{"username": user.Username, "password": user.Password}
+
+		_, err := userCol.UpdateOne(c, bson.M{"id" : oID}, bson.M{"$set": updatedBSONRep})
 
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false})
