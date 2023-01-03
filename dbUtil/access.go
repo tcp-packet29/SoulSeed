@@ -15,6 +15,6 @@ func GetClient() *mongo.Client {
 }
 
 func GetCollection(collectionName string) *mongo.Collection {
-	return client.Database("Cluster0").Collection(collectionName)
+	return client.Database("fruitApp").Collection(collectionName)
 }
 

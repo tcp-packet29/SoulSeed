@@ -15,7 +15,7 @@ func ConnectToMongo() *mongo.Client {
 	}
 
 	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
+	
 	err = client.Connect(ctx)
 	//err alrexists, just reassigning
 	if err != nil {
