@@ -13,6 +13,6 @@ import (
 )
 
 func main() {
-
-	
+	router := gin.Default()
+	router.Run(":8080")
 }
