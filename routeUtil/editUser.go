@@ -26,7 +26,7 @@ func EditUser() gin.HandlerFunc {
 		oID, _ := primitive.ObjectIDFromHex(ident)
 		//converting id form param from hex and assigning it to oid
 
-		updatedBSONRep := bson.M{"username": user.Username, "password": user.Password}
+		updatedBSONRep := bson.M{"username": user.Username, "password": user.Password, "items": user.Items}
 
 		res, err := userCol.UpdateOne(c, bson.M{"id" : oID}, bson.M{"$set": updatedBSONRep})
 

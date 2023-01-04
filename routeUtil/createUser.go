@@ -27,6 +27,7 @@ func CreateUser() gin.HandlerFunc { //to be used in request handling suchj as PO
 			Id:       primitive.NewObjectID(),
 			Username: user.Username,
 			Password: user.Password,
+			Items : user.Items,
 		}
 
 		_, err := userCol.InsertOne(c, nUser)
