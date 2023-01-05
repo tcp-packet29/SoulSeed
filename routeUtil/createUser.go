@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/bson"
 	
 )
 
@@ -30,6 +31,20 @@ func CreateUser() gin.HandlerFunc { //to be used in request handling suchj as PO
 			Items : user.Items,
 		}
 
+		resultIt, _ := userCol.Find(c, bson.M{}) //finding all of them, returning iterator
+
+		for resultIt.Next(c) {
+			var userFound storageUtil.User
+			err := resultIt.Decode(&userFound)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: nil})
+				return
+			}
+			if userFound.Username == nUser.Username {
+				c.JSON(http.StatusConflict, storageUtil.Response{Code: http.StatusConflict, Message: "Conflict", Success: false, Data: map[string]interface{}{"data": "Username already exists"}})
+				return
+			}
+		} //slgithjly oinegfgiwecnt since leooping oiver all other users whenever new ueser but fine
 		_, err := userCol.InsertOne(c, nUser)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: nil})
