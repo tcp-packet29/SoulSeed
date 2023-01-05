@@ -34,8 +34,8 @@ func EditUser() gin.HandlerFunc {
 				c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: nil})
 				return
 			}
-			if userFound.Username == user.Username {
-				c.JSON(http.StatusConflict, storageUtil.Response{Code: http.StatusConflict, Message: "Conflict", Success: false, Data: map[string]interface{}{"data": "Username already exists"}})
+			if userFound.Username == user.Username && ident != userFound.Id.Hex() {
+				c.JSON(http.StatusConflict, storageUtil.Response{Code: http.StatusConflict, Message: "Conflict", Success: false, Data: map[string]interface{}{"data": "Username already exists " + ident + " " + userFound.Id.Hex()}})
 				return
 			}
 		} //slgithjly oinegfgiwecnt since leooping oiver all other users whenever new ueser but fine
