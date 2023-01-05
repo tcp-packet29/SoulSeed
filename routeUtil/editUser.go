@@ -25,6 +25,20 @@ func EditUser() gin.HandlerFunc {
 
 		oID, _ := primitive.ObjectIDFromHex(ident)
 		//converting id form param from hex and assigning it to oid
+		resultIt, _ := userCol.Find(c, bson.M{}) //finding all of them, returning iterator
+
+		for resultIt.Next(c) {
+			var userFound storageUtil.User
+			err := resultIt.Decode(&userFound)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: nil})
+				return
+			}
+			if userFound.Username == user.Username {
+				c.JSON(http.StatusConflict, storageUtil.Response{Code: http.StatusConflict, Message: "Conflict", Success: false, Data: map[string]interface{}{"data": "Username already exists"}})
+				return
+			}
+		} //slgithjly oinegfgiwecnt since leooping oiver all other users whenever new ueser but fine
 
 		updatedBSONRep := bson.M{"username": user.Username, "password": user.Password, "items": user.Items}
 
