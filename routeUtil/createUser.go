@@ -32,7 +32,9 @@ func CreateUser() gin.HandlerFunc { //to be used in request handling suchj as PO
 		}
 
 		resultIt, _ := userCol.Find(c, bson.M{}) //finding all of them, returning iterator
-
+			//could do findone but then wouild check if mongo error and kind of iffy error conditional comparison
+		defer resultIt.Close(c)
+		
 		for resultIt.Next(c) {
 			var userFound storageUtil.User
 			err := resultIt.Decode(&userFound)
@@ -44,7 +46,7 @@ func CreateUser() gin.HandlerFunc { //to be used in request handling suchj as PO
 				c.JSON(http.StatusConflict, storageUtil.Response{Code: http.StatusConflict, Message: "Conflict", Success: false, Data: map[string]interface{}{"data": "Username already exists"}})
 				return
 			}
-		} //slgithjly oinegfgiwecnt since leooping oiver all other users whenever new ueser but fine
+		} //slgithjly oinegfgiwecnt since leooping oiver all other users whenever new ueser but
 		_, err := userCol.InsertOne(c, nUser)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: nil})
