@@ -29,12 +29,13 @@ func CreateUser() gin.HandlerFunc { //to be used in request handling suchj as PO
 			Username: user.Username,
 			Password: user.Password,
 			Items : user.Items,
+			Zipcode: user.Zipcode,
 		}
 
 		resultIt, _ := userCol.Find(c, bson.M{}) //finding all of them, returning iterator
 			//could do findone but then wouild check if mongo error and kind of iffy error conditional comparison
 		defer resultIt.Close(c)
-		
+		                                                                                                                                            
 		for resultIt.Next(c) {
 			var userFound storageUtil.User
 			err := resultIt.Decode(&userFound)

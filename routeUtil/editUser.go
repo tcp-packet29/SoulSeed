@@ -40,7 +40,7 @@ func EditUser() gin.HandlerFunc {
 			}
 		} //slgithjly oinegfgiwecnt since leooping oiver all other users whenever new ueser but fine
 
-		updatedBSONRep := bson.M{"username": user.Username, "password": user.Password, "items": user.Items}
+		updatedBSONRep := bson.M{"username": user.Username, "password": user.Password, "items": user.Items, "zipcode": user.Zipcode}
 
 		res, err := userCol.UpdateOne(c, bson.M{"id" : oID}, bson.M{"$set": updatedBSONRep})
 

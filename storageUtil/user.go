@@ -7,4 +7,5 @@ type User struct {
 	Username string `bson:"username,omitempty"`
 	Password string `bson:"password,omitempty"`
 	Items []string `bson:"items,omitempty"`
+	Zipcode string `bson:"zipcode,omitempty"`
 }

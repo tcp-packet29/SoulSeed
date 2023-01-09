@@ -1,0 +1,58 @@
+package routeUtil
+
+import (
+	
+	"main/dbUtil"
+	"main/storageUtil"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+)
+
+var tradeCol *mongo.Collection = dbUtil.GetCollection("trades");
+
+func CreateTrade() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var trade storageUtil.Trade
+		
+		err := c.BindJSON(&trade)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: nil})
+			return
+		}
+
+		var userFound storageUtil.User
+
+
+		oID, _ := primitive.ObjectIDFromHex(trade.MakerID)
+		//converting id form param from hex and assigning it to oid
+
+		err = userCol.FindOne(c, bson.M{"id": oID}).Decode(&userFound) //finding user and decoding and transferring into userfound struct
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: nil})
+			return
+		}
+
+		newTrade := storageUtil.Trade{
+			Id: primitive.NewObjectID(),
+			Maker: userFound,
+			Name: trade.Name,
+			Items: trade.Items,
+			Description: trade.Description,
+			Open: true,
+
+		}
+
+		_, err = tradeCol.InsertOne(c, newTrade)
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: nil})
+			return
+		}
+		c.JSON(http.StatusCreated, storageUtil.Response{Code: http.StatusCreated, Message: "Created", Success: true, Data: map[string]interface{}{"data": newTrade}})
+	}
+}
