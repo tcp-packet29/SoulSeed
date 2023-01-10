@@ -11,7 +11,7 @@ import (
 
 )
 
-func FetchRoutes() gin.HandlerFunc {
+func FetchTrades() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var trades []storageUtil.Trade
 
