@@ -36,10 +36,17 @@ func CreateTrade() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: nil})
 			return
 		}
+		newUser := storageUtil.User{
+			Id: userFound.Id,
+			Username: userFound.Username,
+			Password: "",
+			Items: userFound.Items,
+			Zipcode: userFound.Zipcode,
+		}
 
 		newTrade := storageUtil.Trade{
 			Id: primitive.NewObjectID(),
-			Maker: userFound,
+			Maker: newUser,
 			Name: trade.Name,
 			Items: trade.Items,
 			Description: trade.Description,
