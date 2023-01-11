@@ -44,6 +44,8 @@ func CreateTrade() gin.HandlerFunc {
 			Zipcode: userFound.Zipcode,
 		}
 
+		//jmustg e3dit password on 8wserefound ifv fierld 9i8ns txcug tis not rewaDP0NLY BUT ALSO WRITE
+
 		newTrade := storageUtil.Trade{
 			Id: primitive.NewObjectID(),
 			Maker: newUser,

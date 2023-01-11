@@ -22,8 +22,28 @@ func EditTrade() gin.HandlerFunc {
 		}
 
 		oID, _ := primitive.ObjectIDFromHex(tID)
+		var userFound storageUtil.User
 
-		updatedBson := bson.M{"maker": trade.Maker, "name": trade.Name, "items": trade.Items, "description": trade.Description, "open": trade.Open}
+
+		
+		//converting id form param from hex and assigning it to oid
+
+		err = userCol.FindOne(c, bson.M{"id": oID}).Decode(&userFound) //finding user and decoding and transferring into userfound struct
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: nil})
+			return
+		}
+		newUser := storageUtil.User{
+			Id: userFound.Id,
+			Username: userFound.Username,
+			Password: "",
+			Items: userFound.Items,
+			Zipcode: userFound.Zipcode,
+		}
+
+
+		updatedBson := bson.M{"maker": newUser, "name": trade.Name, "items": trade.Items, "description": trade.Description, "open": trade.Open}
 
 		res, err := tradeCol.UpdateOne(c, bson.M{"id": oID}, bson.M{"$set": updatedBson})
 		if err != nil {
