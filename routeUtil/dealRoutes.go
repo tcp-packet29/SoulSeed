@@ -9,4 +9,6 @@ func DealRoutes(r *gin.Engine) {
 	r.PUT("/trades/:tid", EditTrade())
 	r.GET("/trades/:tid", FetchTrade())
 	r.GET("/trades", FetchTrades())
+	//r.DELETE("/trades/:tid", DeleteTrade())
+	//delete trade doesnt exist
 }
