@@ -32,5 +32,6 @@ func FetchTrades() gin.HandlerFunc {
 
 
 		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: true, Data: map[string]interface{}{"data": trades}})
+		//sends a responsenback to the client 
 	}
 }
