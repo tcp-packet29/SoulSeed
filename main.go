@@ -16,5 +16,6 @@ func main() {
 	//mnot actually an instance of client we can actually reference, just for tersrting purposes
 	routeUtil.UserRoutes(router)
 	routeUtil.DealRoutes(router)
+	routeUtil.OrgRoutes(router)
 	router.Run(":8080")
 }
