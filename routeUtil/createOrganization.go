@@ -31,10 +31,10 @@ func PostOrganization() gin.HandlerFunc {
 			Description: organization.Description,
 			Image: organization.Image,
 			Zipcode: organization.Zipcode,
-			Owner: genUtil.FetchUserById(organization.Owner_ID, *userCol, c, func() {fmt.Println("Error")}),
+			Owner: genUtil.FetchUserById(organization.Owner_ID, userCol, c, func() {fmt.Println("Error")}),
 			Owner_ID: organization.Owner_ID,
 			Items: organization.Items,
-			Users: genUtil.FetchUsersByIDs(organization.Users_ID, *userCol, c, func() {fmt.Println("Error")}), //or could jsut add user by idas9iofg
+			Users: genUtil.FetchUsersByIDs(organization.Users_ID, userCol, c, func() {fmt.Println("Error")}), //or could jsut add user by idas9iofg
 			Users_ID: organization.Users_ID,
 		}
 		
