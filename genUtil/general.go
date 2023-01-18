@@ -83,7 +83,7 @@ func FetchOrgById(id string, col *mongo.Collection, ctx *gin.Context, f func()) 
 		Description: userFound.Description,
 		Image: userFound.Image,
 		Zipcode: userFound.Zipcode,
-		Owner: userFound.Owner
+		Owner: userFound.Owner,
 		Owner_ID: userFound.Owner_ID,
 		Items: userFound.Items,
 		Users: userFound.Users,
