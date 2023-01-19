@@ -11,7 +11,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 
-	"fmt"
+	
 
 
 )
@@ -31,8 +31,8 @@ func AddUserOrganization() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: nil})
 			return
 		}
-		organization := genUtil.FetchOrgById(uid, userCol, c, func() {c.JSON(http.StatusNotFound, storageUtil.Response{Code: http.StatusNotFound, Message: "Not Found", Success: false, Data: nil})
-			return
+		organization := genUtil.FetchOrgById(uid, OrganizationCol, c, func() {c.JSON(http.StatusNotFound, storageUtil.Response{Code: http.StatusNotFound, Message: "Not Found", Success: false, Data: nil})
+			
 		})
 
 		userList := organization.Users_ID
@@ -47,7 +47,7 @@ func AddUserOrganization() gin.HandlerFunc {
 			Owner: organization.Owner,
 			Owner_ID: organization.Owner_ID,
 			Items: organization.Items,
-			Users: genUtil.FetchUsersByIDs(userList, userCol, c, func() {fmt.Println("Error")}), //or could jsut add user by idas9iofg
+			Users: append(organization.Users, addedUser), //or could jsut add user by idas9iofg or just add hrt eentire user
 			Users_ID: userList,
 		}
 
@@ -74,9 +74,7 @@ func AddItemOrganization() gin.HandlerFunc {
 			return
 		}
 
-		organization := genUtil.FetchOrgById(uid, userCol, c, func() {c.JSON(http.StatusNotFound, storageUtil.Response{Code: http.StatusNotFound, Message: "Not Found", Success: false, Data: nil})
-			return
-		})
+		organization := genUtil.FetchOrgById(uid, OrganizationCol, c, func() {c.JSON(http.StatusNotFound, storageUtil.Response{Code: http.StatusNotFound, Message: "Not Found", Success: false, Data: nil})})
 		//finding organization
 
 		itemList := organization.Items

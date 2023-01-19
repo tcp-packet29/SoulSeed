@@ -1,16 +1,15 @@
 package routeUtil
 
 import (
-	"main/dbUtil"
-	"main/storageUtil"
-	"main/genUtil"
-	"net/http"
 	"fmt"
+	"main/dbUtil"
+	"main/genUtil"
+	"main/storageUtil"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-
-
 )
 
 var OrganizationCol *mongo.Collection = dbUtil.GetCollection("organizations")
@@ -26,7 +25,7 @@ func PostOrganization() gin.HandlerFunc {
 		}
 
 		finalOrganization := storageUtil.Organization{
-			Id: organization.Id,
+			Id: primitive.NewObjectID(),
 			Name: organization.Name,
 			Description: organization.Description,
 			Image: organization.Image,
