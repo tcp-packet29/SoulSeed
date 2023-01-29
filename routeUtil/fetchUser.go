@@ -30,3 +30,9 @@ func FetchUser() gin.HandlerFunc {
 		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: true, Data: map[string]interface{}{"data": userFound}})
 	}
 }
+
+func AuthUser() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		
+	}
+}
