@@ -23,7 +23,7 @@ func CreateUser() gin.HandlerFunc { //to be used in request handling suchj as PO
 			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: map[string]interface{}{"data": err.Error()}})
 			return
 		}
-
+		//create user and add to dataabase aon post  func for creaitng userbased on body of request acreate and add ot datbase
 		nUser := storageUtil.User{
 			Id:       primitive.NewObjectID(),
 			Username: user.Username,

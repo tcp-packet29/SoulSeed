@@ -1,4 +1,4 @@
-package routeUtil
+ package routeUtil
 
 import (
 
@@ -7,18 +7,46 @@ import (
 
 	"net/http"
 
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 
 	"go.mongodb.org/mongo-driver/bson"
-
-	
-
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 )
 
 func EditOrganization() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		orgId := c.Param("oid")
+		var updatedOrg storageUtil.Organization
 
+		err := c.BindJSON(&updatedOrg)
+		if err != nil {
+			fmt.Println("e")
+			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Body was not an organization", Success: false, Data: nil})
+			//return reponse    
+			//send a response back to the client if error
+			//return object of response struct
+		}
+
+		oID, err := primitive.ObjectIDFromHex(orgId) 
+		if err != nil {
+			fmt.Println("e")
+			//return response
+		}
+		fmt.Print(oID.Hex())
+		fmt.Print(orgId)
+		//will print the same thing
+
+
+
+	}
+}
+
+func changeUserOrganization() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		//by ref not value also handelr ufnc to handle route
 	}
 }
 
