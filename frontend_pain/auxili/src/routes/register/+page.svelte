@@ -61,13 +61,13 @@
                     <span class="label-text">Password</span>
                 </label>
                 
-                    <input type="password" placeholder="clojureIsBestJVM" class="input input-bordered input-accent w-full max-w-xs" bind:value={pword}/>
+                    <input type="password" placeholder="clojureIsBestJVMLang" class="input input-bordered input-accent w-full max-w-xs" bind:value={pword}/>
                 
                 <label class="label">
                     <span class="label-text">Confirm Password</span>
                 </label>
                 
-                    <input type="password" placeholder="clojureIsBestJVM" class="input input-bordered input-accent w-full max-w-xs" bind:value={confirm}/>
+                    <input type="password" placeholder="clojureIsBestJVMLang" class="input input-bordered input-accent w-full max-w-xs" bind:value={confirm}/>
                 
                 <label class="label">
                     <span class="label-text">Zipcode</span>
