@@ -1,8 +1,24 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [],
+  content: ['./src/routes/**/*.{html,js,svelte,ts}'],
   theme: {
     extend: {},
   },
   plugins: [require("daisyui")],
+
+  daisyui: {
+    themes: [
+      {
+        "mycodecompiled": {
+
+          "primary": "#3C787E",
+          "secondary": "#17191E",
+          "accent": "#9D6A9D",
+          "neutral": "#86CB92",
+          
+
+        },
+      }
+    ]
+  }
 }
