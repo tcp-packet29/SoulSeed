@@ -20,5 +20,6 @@ func main() {
 	routeUtil.UserRoutes(router)
 	routeUtil.DealRoutes(router)
 	routeUtil.OrgRoutes(router)
+	//routes for different ufnctiaonlties
 	router.Run(":8080")
 }

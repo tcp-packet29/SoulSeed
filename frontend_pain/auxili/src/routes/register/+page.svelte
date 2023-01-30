@@ -5,14 +5,28 @@
     let pword = "";
     let confirm = "";
     let zipcode = "";
+
+    let valid= false;
+
+    function fillIn(one, two, btn) {
+        document.getElementById("textone").innerHTML = one;
+        document.getElementById("texttwo").innerHTML = two;
+        document.getElementById("close").innerHTML = btn;
+    }
+
+    function leadToLogin() {
+        if (valid) {
+            window.location.href = "http://localhost:5173/login";
+        }
+    }
     
 
     function createUser() {
         if (uname == "" || pword == "" || zipcode == "" || confirm == "") {
-            alert("Please fill out all fields");
+            fillIn("Error", "Please fill in all fields", "Close");
             return;
         } else if (pword != confirm) {
-            alert("Passwords do not match");
+            fillIn("Error", "Passwords do not match", "Close");
             return;
         }
         axios.post('http://localhost:8080/users', {
@@ -22,8 +36,9 @@
         })
         .then(function (response) {
             if (response.status == 201 || response.status == 200) {
-                alert("User created successfully");
-                window.location.href = "http://localhost:5173/login";
+                valid= true;
+                fillIn("Account Created!", "You can now login to your account.", "Login!");
+                
             }
             console.log(response);
             
@@ -34,6 +49,17 @@
     }
 
 </script>
+
+<input type="checkbox" id="donemodal" class="modal-toggle" />
+<div class="modal">
+    <div class="modal-box relative bg-neutral">
+        <h3 class="text-lg font-bold text-primary" id="textone">Account Created!</h3>
+        <p class="text-gray-600 text-primary" id="texttwo">You can now login to your account.</p>
+        <div class="modal-action">
+            <label for="donemodal" class="btn btn-primary" id="close" on:click={leadToLogin}>Login!</label>
+        </div>
+    </div>
+</div>
 
 <body class="bg-primary"></body>
 <div class="navbar bg-base-100 bg-accent">
@@ -81,7 +107,7 @@
             
            
             <div class="card-actions">
-                <button class="btn btn-outline btn-accent" on:click={createUser}>Register</button>
+                <label for="donemodal" class="btn btn-outline btn-accent" on:click={createUser}>Register</label>
             </div>
         </div>
     </div>
