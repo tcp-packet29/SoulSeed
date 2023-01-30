@@ -39,6 +39,8 @@
                 valid= true;
                 fillIn("Account Created!", "You can now login to your account.", "Login!");
                 
+            } else {
+                fillIn("Error", "Username already exists", "Close");
             }
             console.log(response);
             
@@ -53,10 +55,10 @@
 <input type="checkbox" id="donemodal" class="modal-toggle" />
 <div class="modal">
     <div class="modal-box relative bg-neutral">
-        <h3 class="text-lg font-bold text-primary" id="textone">Account Created!</h3>
-        <p class="text-gray-600 text-primary" id="texttwo">You can now login to your account.</p>
+        <h3 class="text-lg font-bold text-primary" id="textone">Error</h3>
+        <p class="text-gray-600 text-primary" id="texttwo">Username already exists</p>
         <div class="modal-action">
-            <label for="donemodal" class="btn btn-primary" id="close" on:click={leadToLogin}>Login!</label>
+            <label for="donemodal" class="btn btn-primary" id="close" on:click={leadToLogin}>Close</label>
         </div>
     </div>
 </div>
@@ -88,6 +90,7 @@
                 </label>
                 
                     <input type="password" placeholder="clojureIsBestJVMLang" class="input input-bordered input-accent w-full max-w-xs" bind:value={pword}/>
+                    
                 
                 <label class="label">
                     <span class="label-text">Confirm Password</span>
