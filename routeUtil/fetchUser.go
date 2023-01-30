@@ -54,18 +54,21 @@ func JWTGen() (string, error) {
 func verifyJWToken( handlFunc func(c *gin.Context)) gin.HandlerFunc { //takes in reuest handlign rfunc as param to add process and middlerwar
 	return func (c *gin.Context) {
 		if c.Request.Header["Token"] == nil {
+			//if no jwt exists no auth
 			c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized (no token exists)", Success: false, Data: nil})
 			return
 		} else {
 			token, err := jwt.Parse(c.Request.Header["Token"][0], func(tok *jwt.Token) (interface{}, error) {
 				_, valid := tok.Method.(*jwt.SigningMethodECDSA)
 				if !valid {
+					//if method is not dseigned method then no auth
 					c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized due to jwt not being from provider", Success: false, Data: nil})
 					return nil, nil
 				}
 				return "", nil
 			})
 			if err != nil {
+				//if error in aprsing jwt no auth
 				c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized due to jwt not being parsed", Success: false, Data: nil})
 				return
 			}
@@ -73,6 +76,7 @@ func verifyJWToken( handlFunc func(c *gin.Context)) gin.HandlerFunc { //takes in
 			if token.Valid {
 				handlFunc(c)
 			} else {
+				//if invalid token no auth
 				c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized due to jwt not being valid due to some reason", Success: false, Data: nil})
 				return
 			}
