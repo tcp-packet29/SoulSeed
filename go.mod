@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.8.2
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/joho/godotenv v1.4.0
 	github.com/rabbitmq/amqp091-go v1.6.0
 	go.mongodb.org/mongo-driver v1.11.1

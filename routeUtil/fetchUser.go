@@ -1,15 +1,20 @@
 package routeUtil
 
 import (
-
+	"encoding/json"
+	"main/genUtil"
 	"main/storageUtil"
 	"net/http"
+	"time"
+
+	"github.com/golang-jwt/jwt"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-
 )
+
+var jwtEncryptionKey = []byte(genUtil.GetJWTData())
 
 
 func FetchUser() gin.HandlerFunc {
@@ -31,8 +36,13 @@ func FetchUser() gin.HandlerFunc {
 	}
 }
 
-func AuthUser() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		
-	}
+func JWTGen() (string, error) {
+	token := jwt.New(jwt.SigningMethodEdDSA)
+
+	claims := token.Claims.(jwt.MapClaims)
+	claims["exp"] = time.Now().Add(15 * time.Minute) //expriy time of hashmap
+	claims["iat"] = time.Now() //time of creation
+	claims["user"] = "user"
+
+	tokenString, err := token.SignedString()
 }
