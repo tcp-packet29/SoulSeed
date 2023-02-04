@@ -12,17 +12,24 @@
         document.getElementById("textone").innerHTML = one;
         document.getElementById("texttwo").innerHTML = two;
         document.getElementById("close").innerHTML = btn;
-    }
+    } //decode then weas not assigned or issued by this server mthe provider
+
+    //implemen jwt handlinglogin if cannot d
+
+    //programin rabbitmq clone with tui
+    //in addition implement profile api for processing request and sending response
+    //i rember i should make my ownr fabitmq     clone and rep it thrugh a tui using golang tui library called tvuiew e vcayuse then u can represetn queures through trui using tview
 
     function leadToLogin() {
         if (valid) {
             window.location.href = "http://localhost:5173/login";
+        } else {
+            return; //donmt nefesdsarily need reutnr but rmoe reogni
         }
     }
     
-
     function createUser() {
-        if (uname == "" || pword == "" || zipcode == "" || confirm == "") {
+        if (uname.trim() == "" || pword.trim() == "" || zipcode.trim() == "" || confirm.trim() == "") {
             fillIn("Error", "Please fill in all fields", "Close");
             return;
         } else if (pword != confirm) {
@@ -107,7 +114,7 @@
             </div>
             
             
-            
+           -= 
            
             <div class="card-actions">
                 <label for="donemodal" class="btn btn-outline btn-accent" on:click={createUser}>Register</label>

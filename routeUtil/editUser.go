@@ -14,7 +14,7 @@ import (
 
 func EditUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		ident := c.Param("uid")
+		specIdentifer := c.Param("uid")
 		var user storageUtil.User
 		
 
@@ -23,7 +23,7 @@ func EditUser() gin.HandlerFunc {
 			return
 		}
 
-		oID, _ := primitive.ObjectIDFromHex(ident)
+		oID, _ := primitive.ObjectIDFromHex(specIdentifer)
 		//converting id form param from hex and assigning it to oid
 		resultIt, _ := userCol.Find(c, bson.M{}) //finding all of them, returning iterator
 
@@ -34,7 +34,7 @@ func EditUser() gin.HandlerFunc {
 				c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: nil})
 				return
 			}
-			if userFound.Username == user.Username && ident != userFound.Id.Hex() {
+			if userFound.Username == user.Username && specIdentifer != userFound.Id.Hex() {
 				c.JSON(http.StatusConflict, storageUtil.Response{Code: http.StatusConflict, Message: "Username Already Exists; Conflict", Success: false, Data: map[string]interface{}{"data": ident, "other":userFound.Id.Hex()}})
 				return
 			}

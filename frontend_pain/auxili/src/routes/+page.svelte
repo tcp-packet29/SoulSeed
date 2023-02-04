@@ -25,6 +25,7 @@
             <div class="card-actions">
                 <a class="btn btn-outline btn-accent" href= "/login">Login</a>
                 <a class="btn btn-outline btn-accent" href= "/register">Register</a>
+                <a class="btn btn-outline btn-accent" href="/about>"About</a>
             </div>
         </div>
     </div>
