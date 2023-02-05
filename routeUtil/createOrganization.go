@@ -41,6 +41,8 @@ func PostOrganization() gin.HandlerFunc {
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: map[string]interface{}{
 				"data": err, //shows err imnr espo0nse to  eb read
+				"info": finalOrganization,
+				"explUne": "error inserting organization into db mongodbasd kfamsdcikxnzcnisdancasni"
 			}})
 			return
 		}

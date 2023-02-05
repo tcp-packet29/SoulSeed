@@ -1,22 +1,18 @@
 package routeUtil
 
 import (
-
 	"main/storageUtil"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-
 )
-
 
 func EditUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		specIdentifer := c.Param("uid")
 		var user storageUtil.User
-		
 
 		if err := c.BindJSON(&user); err != nil {
 			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: nil})
@@ -35,14 +31,14 @@ func EditUser() gin.HandlerFunc {
 				return
 			}
 			if userFound.Username == user.Username && specIdentifer != userFound.Id.Hex() {
-				c.JSON(http.StatusConflict, storageUtil.Response{Code: http.StatusConflict, Message: "Username Already Exists; Conflict", Success: false, Data: map[string]interface{}{"data": ident, "other":userFound.Id.Hex()}})
+				c.JSON(http.StatusConflict, storageUtil.Response{Code: http.StatusConflict, Message: "Username Already Exists; Conflict", Success: false, Data: map[string]interface{}{"data": specIdentifer, "other": userFound.Id.Hex()}})
 				return
 			}
 		} //slgithjly oinegfgiwecnt since leooping oiver all other users whenever new ueser but fine
 
 		updatedBSONRep := bson.M{"username": user.Username, "password": user.Password, "items": user.Items, "zipcode": user.Zipcode}
 
-		res, err := userCol.UpdateOne(c, bson.M{"id" : oID}, bson.M{"$set": updatedBSONRep})
+		res, err := userCol.UpdateOne(c, bson.M{"id": oID}, bson.M{"$set": updatedBSONRep})
 
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: nil})

@@ -1,4 +1,4 @@
-<script>
+      <script>
     function a() {
         console.log("hello");
     }
