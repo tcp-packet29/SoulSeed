@@ -39,7 +39,9 @@ func PostOrganization() gin.HandlerFunc {
 		
 		_, err = OrganizationCol.InsertOne(c, finalOrganization)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: nil})
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: map[string]interface{}{
+				"data": err, //shows err imnr espo0nse to  eb read
+			}})
 			return
 		}
 		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: true, Data: map[string]interface{}{"data": organization}})
