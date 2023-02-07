@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func DealRoutes(r *gin.Engine) {
+func DealRoutes(r *gin.RouterGroup) {
 	r.POST("/trades", CreateTrade())
 	r.PUT("/trades/:tid", EditTrade())
 	r.GET("/trades/:tid", FetchTrade())

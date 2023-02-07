@@ -1,17 +1,13 @@
 package routeUtil
 
 import (
-	
-	
 	"github.com/gin-gonic/gin"
 )
 
-func UserRoutes(router *gin.Engine) {
+func UserRoutes(router *gin.RouterGroup) {
 	router.GET("/users/:uid", FetchUser())
 	router.GET("/users", FetchUsers())
-	router.POST("/users", CreateUser())
 	router.DELETE("/users/:uid", DeleteUser())
 	router.PUT("/users/:uid", EditUser())
-	
-	
+
 }

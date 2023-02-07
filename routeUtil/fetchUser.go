@@ -1,7 +1,8 @@
 package routeUtil
 
 import (
-	"encoding/json"
+	"errors"
+	"fmt"
 	"main/genUtil"
 	"main/storageUtil"
 	"net/http"
@@ -15,7 +16,6 @@ import (
 )
 
 var jwtEncryptionKey = []byte(genUtil.GetJWTData())
-
 
 func FetchUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -36,52 +36,74 @@ func FetchUser() gin.HandlerFunc {
 	}
 }
 
-func JWTGen() (string, error) {
-	token := jwt.New(jwt.SigningMethodEdDSA)
+func LogAuth(username string, password string, c *gin.Context) (string, error) {
+	var usr storageUtil.User
+	err := userCol.FindOne(c, bson.M{"username": username}).Decode(&usr)
+	if err != nil {
+		return "", err
+	}
+	//didnt hash passwords so will use hashing check later
+	if usr.Password != password {
+		return "", errors.New("passwords do not match")
+	}
+	token, err := JWTGen(usr.Id.Hex())
+	if err != nil {
+		return "", err
+	}
+	return token, nil
+}
+
+func JWTGen(userId string) (string, error) {
+	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
-	claims["exp"] = time.Now().Add(15 * time.Minute) //expriy time of hashmap
-	claims["iat"] = time.Now() //time of creation
-	claims["user"] = "user"
+	claims["exp"] = time.Now().Add(15 * time.Minute).Unix() //expriy time of hashmap
+	fmt.Println(claims["exp"])
+	claims["auth"] = true //time of creation
+	claims["user_id"] = userId
 
 	tokenString, err := token.SignedString(jwtEncryptionKey)
 	if err != nil {
 		return "", err
 	}
+	fmt.Println([]byte(tokenString))
 	return tokenString, nil //no error
+
 }
 
-func verifyJWToken( handlFunc func(c *gin.Context)) gin.HandlerFunc { //takes in reuest handlign rfunc as param to add process and middlerwar
-	return func (c *gin.Context) {
-		if c.Request.Header["Token"] == nil {
-			//if no jwt exists no auth
-			c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized (no token exists)", Success: false, Data: nil})
-			return
-		} else {
-			token, err := jwt.Parse(c.Request.Header["Token"][0], func(tok *jwt.Token) (interface{}, error) {
-				_, valid := tok.Method.(*jwt.SigningMethodECDSA)
-				if !valid {
-					//if method is not dseigned method then no auth
-					c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized due to jwt not being from provider", Success: false, Data: nil})
-					return nil, nil
-				}
-				return "", nil
-			})
-			if err != nil {
-				//if error in aprsing jwt no auth
-				c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized due to jwt not being parsed", Success: false, Data: nil})
-				return
-			}
+func VerifyJWTToken(c *gin.Context) (er error) { //takes in reuest handlign rfunc as param to add process and middlerwar
 
-			if token.Valid {
-				handlFunc(c)
-			} else {
-				//if invalid token no auth
-				c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized due to jwt not being valid due to some reason", Success: false, Data: nil})
-				return
+	if c.Request.Header["Token"] == nil {
+		//if no jwt exists no auth
+		c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized (no token exists)", Success: false, Data: nil})
+		return errors.New("error in parsing jwt")
+	} else {
+		token, err := jwt.Parse(c.Request.Header["Token"][0], func(tok *jwt.Token) (interface{}, error) {
+			_, valid := tok.Method.(*jwt.SigningMethodHMAC)
+			if !valid {
+				//if method is not dseigned method then no auth
+				c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized due to jwt not being from provider", Success: false, Data: nil})
+				return nil, nil
 			}
-
-			
+			return jwtEncryptionKey, nil
+		})
+		if err != nil {
+			//if error in aprsing jwt no auth
+			c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized due to jwt not being parsed", Success: false, Data: map[string]interface{}{"error": err.Error()}})
+			return errors.New("error in parsing jwt")
 		}
+
+		if token.Valid {
+			return nil
+		} else {
+			//if invalid token no auth
+			c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized due to jwt not being valid due to some reason", Success: false, Data: nil})
+			return errors.New("error in parsing jwt")
+		}
+
 	}
 }
+
+//TODO:
+//1. Hashing and encoding passwords through bcrypt
+//2. Getting fetcvhing current user from token and current and inuse active user by id from token

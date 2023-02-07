@@ -2,16 +2,46 @@ package oauthhandling
 
 import (
 	"errors"
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 	"main/genUtil"
+	"main/routeUtil"
+	"main/storageUtil"
+	"net/http"
 	"time"
 )
+
+type logInp struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
 
 var jwtKey = []byte(genUtil.GetJWTData())
 
 type jwtClaims struct {
 	Username string `json:"username"`
 	jwt.StandardClaims
+}
+
+func LoginHandle() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var inp logInp
+		err := c.BindJSON(&inp)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: map[string]interface{}{"data": err.Error()}})
+			return
+		}
+
+		u := storageUtil.User{Username: inp.Username, Password: inp.Password}
+		tok, err := routeUtil.LogAuth(u.Username, u.Password, c)
+
+		if err != nil {
+			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: map[string]interface{}{"data": err.Error()}})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"Token": tok}) //sending token so can login
+	}
 }
 
 func generateJWTWithClaims(username string) (tokens string, err error) {
@@ -37,11 +67,11 @@ func validToken(tok string) (err error) {
 	}
 	clai, ok := toke.Claims.(*jwtClaims)
 	if !ok {
-		err = errors.New("Could not parse claims and params of jwt token")
+		err = errors.New("could not parse claims and params of jwt token")
 		return err
 	}
 	if clai.ExpiresAt < time.Now().Unix() {
-		err = errors.New("Token/session expired")
+		err = errors.New("token/session expired")
 		return err
 	}
 	return nil
