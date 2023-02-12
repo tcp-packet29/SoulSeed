@@ -22,7 +22,7 @@
 
     function leadToLogin() {
         if (valid) {
-            window.location.href = "http://localhost:5173/login";
+            window.location.href = "http://localhost:5173/setupItems";
         } else {
             return; //donmt nefesdsarily need reutnr but rmoe reogni
         }
@@ -36,7 +36,7 @@
             fillIn("Error", "Passwords do not match", "Close");
             return;
         }
-        axios.post('http://localhost:8080/users', {
+        axios.post('http://localhost:8080/access/users', {
             "username": uname,
             "password": pword,
             "zipcode": zipcode,

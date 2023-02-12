@@ -83,9 +83,16 @@ func VerifyJWTToken(c *gin.Context) (er error) { //takes in reuest handlign rfun
 			if !valid {
 				//if method is not dseigned method then no auth
 				c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized due to jwt not being from provider", Success: false, Data: nil})
+
+				errors.New("signing kethod does not match; not from provider.")
 				return nil, nil
+				//iloveporgrmamaingasawholedarkmodeisnice
+
 			}
+			//return key to check if issued by provider, me
+			fmt.Println("parsing successful (this probvably won't print in main consoe")
 			return jwtEncryptionKey, nil
+
 		})
 		if err != nil {
 			//if error in aprsing jwt no auth
