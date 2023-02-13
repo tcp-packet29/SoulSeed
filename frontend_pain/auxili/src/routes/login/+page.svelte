@@ -8,7 +8,7 @@
     let uname = "";
     let pword = "";
     let toke = ""; //xss vulnerability
-    const store = window.localStorage.content;
+   // const store = window.localStorage.content;
 
     //is there an env that determines brorwser?
 
@@ -27,20 +27,21 @@
             .then(function (response) {
                 if (response.status == 201 || response.status == 200) {
                     alert("Logged In successfully");
-                    window.location.href = "http://localhost:5173/access/login";
                 }
                 console.log(response);
-                let jso = JSON.parse(response.data)
+                let jso = JSON.parse(JSON.stringify(response.data))
+                console.log(jso)
+                console.log(jso.Token)
                 toke = writable(jso.token); //not immutable
                 toke.subscribe(value => {
                     if (browser) {
                         //if in browser
-                        window.localStorage.setItem("content", value);
+                        //window.localStorage.setItem("content", value);
                     }
 
                 });
 
-                console.log(window.localStorage.getItem("content"))
+                //console.log(window.localStorage.getItem("content"))
 
             })
             .catch(function (error) {

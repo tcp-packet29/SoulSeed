@@ -21,6 +21,7 @@ func main() {
 	access := router.Group("/access")
 	access.POST("/login", auth.LoginHandle())
 	access.POST("/users", routeUtil.CreateUser())
+	access.GET("/users/:uid", routeUtil.FetchUser())
 	authNeeded := router.Group("/app")
 	authNeeded.Use(middleware.JwtAuth())
 	routeUtil.UserRoutes(authNeeded)
