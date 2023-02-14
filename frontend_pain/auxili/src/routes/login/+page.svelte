@@ -5,6 +5,7 @@
 
 
 
+
     let uname = "";
     let pword = "";
     let toke = ""; //xss vulnerability
@@ -33,6 +34,7 @@
                 console.log(jso)
                 console.log(jso.Token)
                 toke = writable(jso.token); //not immutable
+               //idempotenmt
                 toke.subscribe(value => {
                     if (browser) {
                         //if in browser

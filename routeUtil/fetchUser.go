@@ -28,7 +28,7 @@ func FetchUser() gin.HandlerFunc {
 		err := userCol.FindOne(c, bson.M{"id": oID}).Decode(&userFound) //finding user and decoding and transferring into userfound struct
 
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: nil})
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: map[string]interface{}{"error": err.Error()}})
 			return
 		}
 
@@ -108,6 +108,29 @@ func VerifyJWTToken(c *gin.Context) (er error) { //takes in reuest handlign rfun
 			return errors.New("error in parsing jwt")
 		}
 
+	}
+}
+
+func FetchUserByUsername() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		uName := c.Param("username")
+		var userFound storageUtil.User
+
+		err := userCol.FindOne(c, bson.M{"username": uName}).Decode(&userFound) //finding user and decoding and transferring into userfound struct"}
+		if err != nil {
+			fmt.Println(err)
+			return //closure func tionm in a varioable to ivnvoke ervbent event
+		}
+
+		userCopy := storageUtil.User{
+			Id:       userFound.Id,
+			Username: userFound.Username,
+			Password: "",
+			Items:    userFound.Items,
+			Zipcode:  userFound.Zipcode,
+		}
+
+		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: true, Data: map[string]interface{}{"data": userCopy}})
 	}
 }
 
