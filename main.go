@@ -27,6 +27,7 @@ func main() {
 	routeUtil.UserRoutes(authNeeded)
 	routeUtil.DealRoutes(authNeeded)
 	routeUtil.OrgRoutes(authNeeded)
+	authNeeded.GET("/auth", auth.AuthEndpoint())
 	//routes for different ufnctiaonlties
 	router.Run(":8080")
 

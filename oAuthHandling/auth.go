@@ -77,3 +77,9 @@ func validToken(tok string) (err error) {
 	return nil
 
 }
+
+func AuthEndpoint() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"data": "you are authenticated"})
+	}
+}

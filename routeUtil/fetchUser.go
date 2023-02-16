@@ -130,7 +130,10 @@ func FetchUserByUsername() gin.HandlerFunc {
 			Zipcode:  userFound.Zipcode,
 		}
 
-		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: true, Data: map[string]interface{}{"data": userCopy}})
+		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "200 OK", Success: true, Data: map[string]interface{}{"data": userCopy}})
+		//send user and response back to client
+		//so can be fetched
+
 	}
 }
 

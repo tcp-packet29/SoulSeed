@@ -25,7 +25,7 @@ func PostOrganization() gin.HandlerFunc {
 		}
 
 		finalOrganization := storageUtil.Organization{
-			Id:          primitive.NewObjectID(),
+			Id:          primitive.NewObjectID(), //newobj id when creatin new organization (new omngo objectif to referennce)cd
 			Name:        organization.Name,
 			Description: organization.Description,
 			Image:       organization.Image,
@@ -33,19 +33,20 @@ func PostOrganization() gin.HandlerFunc {
 			Owner:       genUtil.FetchUserById(organization.Owner_ID, userCol, c, func() { fmt.Println("Error") }),
 			Owner_ID:    organization.Owner_ID,
 			Items:       organization.Items,
-			Users:       genUtil.FetchUsersByIDs(organization.Users_ID, userCol, c, func() { fmt.Println("Error") }), //or could jsut add user by idas9iofg
-			Users_ID:    organization.Users_ID,
+			//macro actions stored in fif oqueue
+			Users:    genUtil.FetchUsersByIDs(organization.Users_ID, userCol, c, func() { fmt.Println("Error") }), //or could jsut add user by idas9iofg
+			Users_ID: organization.Users_ID,
 		}
 
 		_, err = OrganizationCol.InsertOne(c, finalOrganization)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: map[string]interface{}{
-				"data":    err, //shows err imnr espo0nse to  eb read
-				"info":    finalOrganization,
-				"explUne": "error inserting organization into db mongodbasd kfamsdcikxnzcnisdancasni"},
+				"data": err, //shows err imnr espo0nse to  eb read
+				"info": finalOrganization},
+			//organization data fetched fro nomrganization, erortr in interl aerror wheninsertion into db
 			})
 			return
 		}
-		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: true, Data: map[string]interface{}{"data": organization}})
+		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: true, Data: map[string]interface{}{"orgFetched": organization}})
 	}
 }

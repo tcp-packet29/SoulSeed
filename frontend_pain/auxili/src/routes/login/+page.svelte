@@ -2,6 +2,8 @@
     import axios from 'axios';
     import { writable } from "svelte/store";
     import { browser } from "$app/environment";
+    import setItem from "./login.js";
+
 
 
 
@@ -33,17 +35,13 @@
                 let jso = JSON.parse(JSON.stringify(response.data))
                 console.log(jso)
                 console.log(jso.Token)
-                toke = writable(jso.token); //not immutable
+                //not immutable
                //idempotenmt
-                toke.subscribe(value => {
-                    if (browser) {
-                        //if in browser
-                        //window.localStorage.setItem("content", value);
-                    }
+                if (browser) {
+                    window.localStorage.setItem("token", jso.Token.toString());
+                }
 
-                });
-
-                //console.log(window.localStorage.getItem("content"))
+                console.log(window.localStorage.getItem("token"))
 
             })
             .catch(function (error) {

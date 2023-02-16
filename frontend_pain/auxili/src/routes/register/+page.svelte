@@ -27,6 +27,7 @@
             return; //donmt nefesdsarily need reutnr but rmoe reogni
         }
     }
+    //checking zipcode on frontend, could do on bacvkend
     
     function createUser() {
         if (uname.trim() == "" || pword.trim() == "" || zipcode.trim() == "" || confirm.trim() == "") {
@@ -34,6 +35,9 @@
             return;
         } else if (pword != confirm) {
             fillIn("Error", "Passwords do not match", "Close");
+            return;
+        } else if (zipcode.length != 5) {
+            fillIn("Error", "Zipcode must be 5 digits", "Close");
             return;
         }
         axios.post('http://localhost:8080/access/users', {
@@ -70,16 +74,17 @@
     </div>
 </div>
 
+
 <body class="bg-primary"></body>
+
 <div class="navbar bg-base-100 bg-accent">
     <a class="btn btn-ghost btn-sm rounded-btn bg-secondary" href="http://localhost:5173">Auxili</a>
     <h1>--</h1>
     <h2><a class="btn btn-sm btn-ghost rounded-btn bg-secondary" href="http://localhost:5173/register">Register</a></h2>
     <h1>--</h1>
     <h2><a class="btn btn-ghost btn-sm rounded-btn bg-secondary" href="http://localhost:5173/login">Login</a></h2>
-    
-</div>
 
+</div>
 <div class="flex h-screen justify-center items-center">
     <div data-theme="mycodecompiled" class="card w-96 bg-secondary bg-base-200 text-neutral-content shadow-xl">
         <div class="card-body items-center text-center">
@@ -88,6 +93,7 @@
             <div class="form-control">
                 <label class="label">
                     <span class="label-text">Username</span>
+
                 </label>
             
                     <input type="text" placeholder="myCodeCompiled42" class="input input-bordered input-accent w-full max-w-xs" bind:value={uname}/>
