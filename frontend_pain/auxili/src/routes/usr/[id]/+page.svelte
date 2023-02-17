@@ -4,7 +4,6 @@
     import { onMount } from 'svelte';
 
 
-
     console.log($page.params.id)
     function replaceName(name, zip, ob) {
         document.getElementById("Name").innerHTML = name
