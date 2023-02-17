@@ -1,5 +1,6 @@
 <script>
     import axios from 'axios';
+    import {browser} from "$app/environment";
 
     let uname = "";
     let pword = "";
@@ -22,12 +23,51 @@
 
     function leadToLogin() {
         if (valid) {
+            axios.post('http://localhost:8080/access/login', {
+                "username": uname,
+                "password": pword
+            })
+                .then(function (response) {
+                    if (response.status == 201 || response.status == 200) {
+                        alert("Logged In successfully");
+                    }
+                    console.log(response);
+                    let jso = JSON.parse(JSON.stringify(response.data))
+                    console.log(jso)
+                    console.log(jso.Token)
+                    //not immutable
+                    //idempotenmt
+                    if (browser) {
+                        window.localStorage.setItem("token", jso.Token.toString());
+                    }
+
+                    console.log(window.localStorage.getItem("token"))
+
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            uname = "";
+            pword = "";
+            confirm = "";
+            zipcode = "";
             window.location.href = "http://localhost:5173/setupItems";
         } else {
             return; //donmt nefesdsarily need reutnr but rmoe reogni
         }
     }
     //checking zipcode on frontend, could do on bacvkend
+    function validZipcode(a) {
+        let regex = new RegExp("^[0-9]{5}(?:-[0-9]{4})?$");
+        return regex.test(a)
+    }
+
+
+
+
+
+
+
     
     function createUser() {
         if (uname.trim() == "" || pword.trim() == "" || zipcode.trim() == "" || confirm.trim() == "") {
@@ -36,8 +76,8 @@
         } else if (pword != confirm) {
             fillIn("Error", "Passwords do not match", "Close");
             return;
-        } else if (zipcode.length != 5) {
-            fillIn("Error", "Zipcode must be 5 digits", "Close");
+        } else if (!validZipcode(zipcode)) {
+            fillIn("Error", "Zipcode is not valid", "Close");
             return;
         }
         axios.post('http://localhost:8080/access/users', {

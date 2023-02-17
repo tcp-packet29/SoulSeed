@@ -19,8 +19,8 @@
             }
         })
             .then(function (response) {
-                if (response.status != 201 || response.status != 200) {
-
+                if (response.status != 201 && response.status != 200) {
+                    console.log(response.status)
                     alert("You are not logged in")//will it show
 
                 }

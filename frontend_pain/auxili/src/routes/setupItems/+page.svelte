@@ -2,14 +2,47 @@
     import axios from 'axios';
     import {writable} from "svelte/store";
 
+    class Choices {
+        constructor(mango, banana, apple, orange, persimmon, avocado, peach , apricot) { //SEPFICI INSTRACTURE, ANNOYING WHEN ADDINGT CVUSTOM CHOCIES
+            this.mango = mango;
+            this.banana = banana;
+            this.apple = apple;
+            this.orange = orange;
+            this.persimmon = persimmon;
+            this.avocado = avocado;
+            this.peach = peach;
+            this.apricot = apricot;
+            this.choiceList = [this.mango, this.banana, this.apple, this.orange, this.persimmon, this.avocado, this.peach, this.apricot];
+
+        }
+
+        convertToList() {
+            let list = [];
+            for (let i = 0; i < this.choiceList.length; i++) {
+                if (this.choiceList[i][1]) {
+                    list.push(this.choiceList[i][0]);
+                }
+            }
+            //dont want toi make big elifs
+            return list;
+
+        }
+    }
+
     let uname = "";
     let pword = "";
     let toke = ""; //xss vulnerability
     //const store = localStorage.content;
 
+    let choices = new Choices(["Mango", false], ["Banana", false], ["Apple", false], ["Orange", false], ["Persimmon", false], ["Avocado", false], ["Peach", false], ["Apricot", false]);
+    let test = choices.convertToList()
 
 
 
+    function tests() {
+        let testlist = choices.convertToList();
+        console.log(testlist);
+    }
 
     function createUser() {
         if (uname == "" || pword == "" || zipcode == "" || confirm == "") {
@@ -41,8 +74,8 @@
     }
 
 </script>
-
 <body class="bg-primary"></body>
+<button class="btn btn-accent" on:click={tests}>asdfasdf</button>
 <div class="navbar bg-base-100 bg-accent">
     <a class="btn btn-ghost btn-sm rounded-btn bg-secondary" href="http://localhost:5173">Auxili</a>
     <h1>--</h1>
@@ -61,7 +94,7 @@
                 <h2 class="card-title text-neutral">Golang</h2>
                 <p class="text-neutral">High Level, Static Typed, Compiled</p>
                 <div class="card-actions justify-end">
-                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg"/>
+                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg" bind:checked={choices.choiceList[0][1]}/>
                 </div>
             </div>
         </div>
@@ -71,7 +104,7 @@
                 <h2 class="card-title text-neutral">Golang</h2>
                 <p class="text-neutral">High Level, Static Typed, Compiled</p>
                 <div class="card-actions justify-end">
-                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg"/>
+                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg" bind:checked={choices.choiceList[1][1]}/>
                 </div>
             </div>
         </div>
@@ -81,7 +114,7 @@
                 <h2 class="card-title text-neutral">Golang</h2>
                 <p class="text-neutral">High Level, Static Typed, Compiled</p>
                 <div class="card-actions justify-end">
-                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg"/>
+                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg" bind:checked={choices.choiceList[2][1]}/>
                 </div>
             </div>
         </div>
@@ -91,7 +124,7 @@
                 <h2 class="card-title text-neutral">Golang</h2>
                 <p class="text-neutral">High Level, Static Typed, Compiled</p>
                 <div class="card-actions justify-end">
-                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg"/>
+                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg" bind:checked={choices.choiceList[3][1]}/>
                 </div>
             </div>
         </div>
@@ -101,7 +134,7 @@
                 <h2 class="card-title text-neutral">Golang</h2>
                 <p class="text-neutral">High Level, Static Typed, Compiled</p>
                 <div class="card-actions justify-end">
-                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg"/>
+                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg" bind:checked={choices.choiceList[4][1]}/>
                 </div>
             </div>
         </div>
@@ -111,7 +144,7 @@
                 <h2 class="card-title text-neutral">Golang</h2>
                 <p class="text-neutral">High Level, Static Typed, Compiled</p>
                 <div class="card-actions justify-end">
-                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg"/>
+                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg" bind:checked={choices.choiceList[5][1]}/>
                 </div>
             </div>
         </div>
@@ -121,7 +154,7 @@
                 <h2 class="card-title text-neutral">Golang</h2>
                 <p class="text-neutral">High Level, Static Typed, Compiled</p>
                 <div class="card-actions justify-end">
-                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg"/>
+                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg" bind:checked={choices.choiceList[6][1]}/>
                 </div>
             </div>
         </div>
@@ -131,7 +164,7 @@
                 <h2 class="card-title text-neutral">Golang</h2>
                 <p class="text-neutral">High Level, Static Typed, Compiled</p>
                 <div class="card-actions justify-end">
-                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg"/>
+                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg" bind:checked={choices.choiceList[7][1]}/>
                 </div>
             </div>
         </div>
@@ -141,7 +174,7 @@
                 <h2 class="card-title text-neutral">Golang</h2>
                 <p class="text-neutral">High Level, Static Typed, Compiled</p>
                 <div class="card-actions justify-end">
-                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg"/>
+                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg" bind:checked={choices.choiceList[0][1]}/>
                 </div>
             </div>
         </div>
@@ -151,7 +184,7 @@
                 <h2 class="card-title text-neutral">Golang</h2>
                 <p class="text-neutral">High Level, Static Typed, Compiled</p>
                 <div class="card-actions justify-end">
-                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg"/>
+                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg" bind:checked={choices.choiceList[0][1]}/>
                 </div>
             </div>
         </div>
@@ -161,7 +194,7 @@
                 <h2 class="card-title text-neutral">Golang</h2>
                 <p class="text-neutral">High Level, Static Typed, Compiled</p>
                 <div class="card-actions justify-end">
-                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg"/>
+                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg" bind:checked={choices.choiceList[0][1]}/>
                 </div>
             </div>
         </div>
@@ -171,7 +204,7 @@
                 <h2 class="card-title text-neutral">Golang</h2>
                 <p class="text-neutral">High Level, Static Typed, Compiled</p>
                 <div class="card-actions justify-end">
-                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg"/>
+                    <input type="checkbox" class="checkbox checkbox-accent checkbox-lg" bind:checked={choices.choiceList[0][1]}/>
                 </div>
             </div>
         </div>
