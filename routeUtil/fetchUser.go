@@ -111,6 +111,66 @@ func VerifyJWTToken(c *gin.Context) (er error) { //takes in reuest handlign rfun
 	}
 }
 
+func ExtractUserID(c *gin.Context) (string, error) { //takes in reuest handlign rfunc as param to add process and middlerwar
+
+	if c.Request.Header["Token"] == nil {
+		//if no jwt exists no auth
+		c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized (no token exists)", Success: false, Data: nil})
+		return "", errors.New("error in parsing jwt")
+	} else {
+		token, err := jwt.Parse(c.Request.Header["Token"][0], func(tok *jwt.Token) (interface{}, error) {
+			_, valid := tok.Method.(*jwt.SigningMethodHMAC)
+			if !valid {
+				//if method is not dseigned method then no auth
+				c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized due to jwt not being from provider", Success: false, Data: nil})
+
+				errors.New("signing kethod does not match; not from provider.")
+				return nil, nil
+				//iloveporgrmamaingasawholedarkmodeisnice
+
+			}
+			//return key to check if issued by provider, me
+			fmt.Println("parsing successful (this probvably won't print in main consoe")
+			return jwtEncryptionKey, nil
+
+		})
+		if err != nil {
+			//if error in aprsing jwt no auth
+			c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized due to jwt not being parsed", Success: false, Data: map[string]interface{}{"error": err.Error()}})
+			return "", errors.New("error in parsing jwt")
+		}
+
+		if token.Valid {
+
+			claims, okay := token.Claims.(jwt.MapClaims)
+			if okay {
+				userId := claims["user_id"].(string)
+				return userId, nil
+			}
+			return "", nil
+		} else {
+			//if invalid token no auth
+			c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized due to jwt not being valid due to some reason", Success: false, Data: nil})
+			return "", errors.New("error in parsing jwt")
+		}
+
+	}
+}
+
+func FullID() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		userId, err := ExtractUserID(c)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized due to jwt not being valid due to some reason", Success: false, Data: nil})
+			return
+		}
+		userFnd := genUtil.FetchUserById(userId, userCol, c, func() { c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "user", Success: true, Data: nil}) })
+		//automatically converst from hex tro oid
+
+		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "user", Success: true, Data: map[string]interface{}{"Data": userFnd}})
+	}
+}
+
 func FetchUserByUsername() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		uName := c.Param("username")

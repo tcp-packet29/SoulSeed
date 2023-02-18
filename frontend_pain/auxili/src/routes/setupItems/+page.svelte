@@ -15,7 +15,7 @@
             this.choiceList = [this.mango, this.banana, this.apple, this.orange, this.persimmon, this.avocado, this.peach, this.apricot];
 
         }
-
+    //conver to tlist and return for put requ
         convertToList() {
             let list = [];
             for (let i = 0; i < this.choiceList.length; i++) {
