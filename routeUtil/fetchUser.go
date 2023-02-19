@@ -164,7 +164,9 @@ func FullID() gin.HandlerFunc {
 			c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized due to jwt not being valid due to some reason", Success: false, Data: nil})
 			return
 		}
-		userFnd := genUtil.FetchUserById(userId, userCol, c, func() { c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "user", Success: true, Data: nil}) })
+		userFnd := genUtil.FetchUserById(userId, userCol, c, func() {
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "user", Success: true, Data: nil})
+		})
 		//automatically converst from hex tro oid
 
 		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "user", Success: true, Data: map[string]interface{}{"Data": userFnd}})
@@ -185,6 +187,7 @@ func FetchUserByUsername() gin.HandlerFunc {
 		userCopy := storageUtil.User{
 			Id:       userFound.Id,
 			Username: userFound.Username,
+			Email:    userFound.Email,
 			Password: "",
 			Items:    userFound.Items,
 			Zipcode:  userFound.Zipcode,

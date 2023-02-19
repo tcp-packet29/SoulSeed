@@ -6,7 +6,7 @@ require (
 	github.com/gin-gonic/gin v1.8.2
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/joho/godotenv v1.4.0
-	github.com/mailgun/mailgun-go/v3 v3.6.4
+	github.com/mailgun/mailgun-go/v4 v4.8.2
 	github.com/rabbitmq/amqp091-go v1.6.0
 	go.mongodb.org/mongo-driver v1.11.1
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d
@@ -14,17 +14,16 @@ require (
 
 require (
 	github.com/gin-contrib/sse v0.1.0 // indirect
-	github.com/go-chi/chi v4.0.0+incompatible // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.11.1 // indirect
 	github.com/goccy/go-json v0.9.11 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/go-cmp v0.5.8 // indirect
+	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
-	github.com/mailru/easyjson v0.0.0-20180823135443-60711f1a8329 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect

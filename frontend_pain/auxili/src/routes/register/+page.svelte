@@ -6,6 +6,7 @@
     let pword = "";
     let confirm = "";
     let zipcode = "";
+    let email= "";
 
     let valid= false;
 
@@ -83,6 +84,7 @@
         axios.post('http://localhost:8080/access/users', {
             "username": uname,
             "password": pword,
+            "email": email,
             "zipcode": zipcode,
         })
         .then(function (response) {
@@ -137,6 +139,12 @@
                 </label>
             
                     <input type="text" placeholder="myCodeCompiled42" class="input input-bordered input-accent w-full max-w-xs" bind:value={uname}/>
+
+                <label class="label">
+                    <span class="label-text">Email</span>
+                </label>
+
+                <input type="password" placeholder="clojureIsBestJVMLang" class="input input-bordered input-accent w-full max-w-xs" bind:value={email}/>
                 
                 <label class="label">
                     <span class="label-text">Password</span>

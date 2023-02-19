@@ -6,14 +6,12 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/bson"
-	
 )
 
 var userCol *mongo.Collection = dbUtil.GetCollection("users")
-
 
 func CreateUser() gin.HandlerFunc { //to be used in request handling suchj as POST
 	return func(c *gin.Context) {
@@ -26,16 +24,17 @@ func CreateUser() gin.HandlerFunc { //to be used in request handling suchj as PO
 		//create user and add to dataabase aon post  func for creaitng userbased on body of request acreate and add ot datbase
 		nUser := storageUtil.User{
 			Id:       primitive.NewObjectID(),
+			Email:    user.Email,
 			Username: user.Username,
 			Password: user.Password,
-			Items : user.Items,
-			Zipcode: user.Zipcode,
+			Items:    user.Items,
+			Zipcode:  user.Zipcode,
 		}
 
 		resultIt, _ := userCol.Find(c, bson.M{}) //finding all of them, returning iterator
-			//could do findone but then wouild check if mongo error and kind of iffy error conditional comparison
+		//could do findone but then wouild check if mongo error and kind of iffy error conditional comparison
 		defer resultIt.Close(c)
-		                                                                                                                                            
+
 		for resultIt.Next(c) {
 			var userFound storageUtil.User
 			err := resultIt.Decode(&userFound)
@@ -55,7 +54,6 @@ func CreateUser() gin.HandlerFunc { //to be used in request handling suchj as PO
 		}
 
 		c.JSON(http.StatusCreated, storageUtil.Response{Code: http.StatusCreated, Message: "Created", Success: true, Data: map[string]interface{}{"data": nUser}})
-
 
 	}
 }

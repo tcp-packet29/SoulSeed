@@ -54,6 +54,7 @@ func FetchUserById(id string, col *mongo.Collection, ctx *gin.Context, f func())
 	userCopy = storageUtil.User{
 		Id:       userFound.Id,
 		Username: userFound.Username,
+		Email:    userFound.Email,
 		Password: "",
 		Items:    userFound.Items,
 		Zipcode:  userFound.Zipcode,
