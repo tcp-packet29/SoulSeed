@@ -74,7 +74,14 @@ func TokenCheckMiddleware() gin.HandlerFunc {
 			if tok.Expiry.Before(time.Now()) {
 				_, err := tokCol.DeleteOne(c, bson.M{"ID": tok.ID})
 				if err != nil {
-					return
+					c.JSON(http.StatusInternalServerError, storageUtil.Response{
+						Code:    500,
+						Message: "internal server error",
+						Success: false,
+						Data: map[string]interface{}{
+							"Error": err.Error(),
+						},
+					})
 				}
 			}
 		}
@@ -109,13 +116,13 @@ func createAccessToken() gin.HandlerFunc {
 			})
 		}
 
-		dur, _ := time.ParseDuration(num + "h")
+		dur, _ := time.ParseDuration(num + "m")
 
 		newTok := storageUtil.Token{
 			ID:               primitive.NewObjectID(),
 			Access:           tokenToUse,
 			OrganizationCode: tok.OrganizationCode,
-			Expiry:           time.Now().Add(time.Hour * dur),
+			Expiry:           time.Now().Add(time.Minute * dur),
 		}
 
 		one, err := tokCol.InsertOne(c, newTok)
@@ -129,6 +136,35 @@ func createAccessToken() gin.HandlerFunc {
 			Success: true,
 			Data: map[string]interface{}{
 				"data": one,
+			},
+		})
+
+	}
+}
+
+func GetToken() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id := c.Param("uniqID")
+		var tokToFind storageUtil.Token
+
+		oId, err := primitive.ObjectIDFromHex(id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{
+				Code:    500,
+				Message: "internal server error",
+				Success: false,
+				Data: map[string]interface{}{
+					"Error": err.Error(),
+				},
+			})
+		}
+		_ := tokCol.FindOne(c, bson.M{"ID": oId}).Decode(&tokToFind)
+		c.JSON(http.StatusOK, storageUtil.Response{
+			Code:    http.StatusOK,
+			Message: "Created obj",
+			Success: true,
+			Data: map[string]interface{}{
+				"data": tokToFind,
 			},
 		})
 
