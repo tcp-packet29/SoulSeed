@@ -46,6 +46,27 @@ func changeUserOrganization() gin.HandlerFunc {
 	}
 }
 
+func FetchOrganization() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		//by ref not value also handelr ufnc to handle route
+		id := c.Param("uid")
+		oid, err := primitive.ObjectIDFromHex(id)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: nil})
+			return
+		}
+		var org storageUtil.Organization
+
+		err = OrganizationCol.FindOne(c, bson.M{"id": oid}).Decode(&org)
+		if err != nil {
+			c.JSON(http.StatusNotFound, storageUtil.Response{Code: http.StatusNotFound, Message: "Not Found", Success: false, Data: nil})
+			return
+		}
+		//could use genercis but getching with this code is fine
+		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: true, Data: map[string]interface{}{"organization": org}})
+	}
+}
+
 func AddUserOrganization() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		uid := c.Param("oid")

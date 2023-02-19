@@ -5,8 +5,18 @@
         axios.get('http://localhost:8080/tokens/tokens/' + val)
             .then(response=> {
                 let jsobj = JSON.parse(JSON.stringify(response.data));
-                console.log(jsobj.data.data.ID)
+                console.log(jsobj.data.data.OrganizationCode)
                 console.log(jsobj)
+                axios.get('http://localhost:8080/app/organizations/' + jsobj.data.data.OrganizationCode)
+                    .then(response => {
+                        let jsobj = JSON.parse(JSON.stringify(response.data));
+                        console.log(jsobj)
+                        alert(jsobj.data.organization.Description)
+
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
 
             })
             .catch(error => {
