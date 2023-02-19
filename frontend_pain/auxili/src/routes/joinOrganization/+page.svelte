@@ -1,3 +1,33 @@
+<script>
+    import axios from 'axios';
+    function getVal(tok) {
+        axios.get('http://localhost:8080/tokens/tokens/' + tok)
+            .then(response=> {
+                let jsobj = JSON.parse(JSON.stringify(response.data));
+                console.log(jsobj.data.data.ID)
+                console.log(jsobj)
+
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+    /*axios.get('http://localhost:8080/tokens/tokens/')
+        .then(response => {
+           let jsobj = JSON.parse(JSON.stringify(response.data));
+           console.log(jsobj.access)
+
+        })
+        .catch(error => {
+            console.log(error)
+        })]
+
+
+        *
+     */
+</script>
+
+
 <div class="hero min-h-screen bg-base-200 bg-secondary">
     <div class="hero-content flex-col lg:flex-row-reverse">
         <div class="text-center lg:text-right">
@@ -12,7 +42,7 @@
                     </label>
                     <input type="text" placeholder="Code" class="input input-bordered text-accent">
                 </div>
-                <button class="btn btn-accent">Join</button>
+                <button class="btn btn-accent" on:click={getVal}>Join</button>
             </div>
         </div>
     </div>

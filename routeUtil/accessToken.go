@@ -147,18 +147,7 @@ func GetToken() gin.HandlerFunc {
 		id := c.Param("uniqID")
 		var tokToFind storageUtil.Token
 
-		oId, err := primitive.ObjectIDFromHex(id)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, storageUtil.Response{
-				Code:    500,
-				Message: "internal server error",
-				Success: false,
-				Data: map[string]interface{}{
-					"Error": err.Error(),
-				},
-			})
-		}
-		_ := tokCol.FindOne(c, bson.M{"ID": oId}).Decode(&tokToFind)
+		_ = tokCol.FindOne(c, bson.M{"access": id}).Decode(&tokToFind)
 		c.JSON(http.StatusOK, storageUtil.Response{
 			Code:    http.StatusOK,
 			Message: "Created obj",
