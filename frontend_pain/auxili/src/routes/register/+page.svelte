@@ -56,8 +56,9 @@
             axios.get("http://localhost:8080/email/confirm/" + email)
                 .then(function (response) {
                     let jsooo = JSON.parse(JSON.stringify(response.data))
+                    console.log(jsooo)
                     if (browser) {
-                        window.localStorage.setItem("conf", jsooo.data.token);
+                        window.localStorage.setItem("conf", jsooo.data.Token.toString());
                     }
                 })
                 .catch(function (error) {
@@ -65,6 +66,8 @@
                 });
 
             window.location.href = "http://localhost:5173/confirm";
+
+
 
 
         }
