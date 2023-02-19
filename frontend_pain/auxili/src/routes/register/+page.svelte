@@ -52,9 +52,21 @@
             pword = "";
             confirm = "";
             zipcode = "";
-            window.location.href = "http://localhost:5173/setupItems";
-        } else {
-            return; //donmt nefesdsarily need reutnr but rmoe reogni
+
+            axios.get("http://localhost:8080/email/confirm/" + email)
+                .then(function (response) {
+                    let jsooo = JSON.parse(JSON.stringify(response.data))
+                    if (browser) {
+                        window.localStorage.setItem("conf", jsooo.data.token);
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+            window.location.href = "http://localhost:5173/confirm";
+
+
         }
     }
     //checking zipcode on frontend, could do on bacvkend
