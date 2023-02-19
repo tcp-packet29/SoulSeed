@@ -41,7 +41,7 @@ func CreateRandomId(c *gin.Context) (string, error) {
 
 }
 
-func tokenCheckMiddleware() gin.HandlerFunc {
+func TokenCheckMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		checkCont, err := tokCol.Find(c, bson.M{})
 		if err != nil {

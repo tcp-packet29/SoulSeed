@@ -18,12 +18,14 @@ func main() {
 	//mnot actually an instance of client we can actually reference, just for tersrting purposes
 
 	access := router.Group("/access")
+	tokens := router.Group("/tokens")
 	access.Use(auth.NonContribCors())
 	access.POST("/login", auth.LoginHandle())
 	access.POST("/users", routeUtil.CreateUser())
 	access.GET("/users/:username", routeUtil.FetchUserByUsername())
 	access.GET("/users/token", routeUtil.FullID())
-	routeUtil.TokRoutes(access)
+	routeUtil.TokRoutes(tokens)
+	tokens.Use(routeUtil.TokenCheckMiddleware())
 	authNeeded := router.Group("/app")
 	authNeeded.Use(auth.NonContribCors())
 	authNeeded.Use(middleware.JwtAuth())
