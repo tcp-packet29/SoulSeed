@@ -28,7 +28,7 @@ func CreateRandomId(c *gin.Context) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	newVal := base32.StdEncoding.EncodeToString(byteL)
+	newVal := base32.StdEncoding.EncodeToString(byteL)[:10]
 
 	_ = tokCol.FindOne(c, bson.M{"access": newVal}).Decode(&tokChecker)
 	if tokChecker.Access == newVal {
@@ -147,7 +147,17 @@ func GetToken() gin.HandlerFunc {
 		id := c.Param("uniqID")
 		var tokToFind storageUtil.Token
 
-		_ = tokCol.FindOne(c, bson.M{"access": id}).Decode(&tokToFind)
+		err := tokCol.FindOne(c, bson.M{"access": id}).Decode(&tokToFind)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{
+				Code:    500,
+				Message: "internal server error",
+				Success: false,
+				Data: map[string]interface{}{
+					"Error": err.Error(),
+				},
+			})
+		}
 		c.JSON(http.StatusOK, storageUtil.Response{
 			Code:    http.StatusOK,
 			Message: "Created obj",

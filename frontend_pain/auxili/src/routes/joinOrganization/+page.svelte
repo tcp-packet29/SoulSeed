@@ -1,7 +1,8 @@
 <script>
     import axios from 'axios';
-    function getVal(tok) {
-        axios.get('http://localhost:8080/tokens/tokens/' + tok)
+    let val = '';
+    function getVal() {
+        axios.get('http://localhost:8080/tokens/tokens/' + val)
             .then(response=> {
                 let jsobj = JSON.parse(JSON.stringify(response.data));
                 console.log(jsobj.data.data.ID)
@@ -10,6 +11,7 @@
             })
             .catch(error => {
                 console.log(error)
+                alert("Invalid Code not va;od among us")
             })
     }
     /*axios.get('http://localhost:8080/tokens/tokens/')
@@ -40,7 +42,7 @@
                     <label class="label">
                         <span class="label-text text-neutral">Code</span>
                     </label>
-                    <input type="text" placeholder="Code" class="input input-bordered text-accent">
+                    <input type="text" placeholder="Code" class="input input-bordered text-accent" bind:value={val}>
                 </div>
                 <button class="btn btn-accent" on:click={getVal}>Join</button>
             </div>
