@@ -10,15 +10,18 @@ import (
 	"main/dbUtil"
 	"main/storageUtil"
 	"net/http"
+	"time"
 )
 
 var tokCol *mongo.Collection = dbUtil.GetCollection("orgCodes")
+
+//could use ttl but i think on request is better
 
 //creating id lsits
 
 func CreateRandomId(c *gin.Context) (string, error) {
 	var tokChecker storageUtil.Token
-	byteL := make([]byte, 15)
+	byteL := make([]byte, 10)
 	//create byte array
 	//randomly read and ocnvert to stirng (random)
 	_, err := rand.Read(byteL)
@@ -26,8 +29,9 @@ func CreateRandomId(c *gin.Context) (string, error) {
 		return "", err
 	}
 	newVal := base32.StdEncoding.EncodeToString(byteL)
-	obj := tokCol.FindOne(c, bson.M{"access": newVal}).Decode(&tokChecker)
-	if obj != nil {
+
+	_ = tokCol.FindOne(c, bson.M{"access": newVal}).Decode(&tokChecker)
+	if tokChecker.Access == newVal {
 		return CreateRandomId(c)
 	} else {
 		return newVal, nil
@@ -36,8 +40,50 @@ func CreateRandomId(c *gin.Context) (string, error) {
 	//could just use mongodb id but its fine
 
 }
+
+func tokenCheckMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		checkCont, err := tokCol.Find(c, bson.M{})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{
+				Code:    500,
+				Message: "internal server error",
+				Success: false,
+				Data: map[string]interface{}{
+					"Error": err.Error(),
+				},
+			})
+		}
+
+		defer checkCont.Close(c)
+
+		for checkCont.Next(c) {
+			var tok storageUtil.Token
+			err := checkCont.Decode(&tok)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, storageUtil.Response{
+					Code:    500,
+					Message: "internal server error",
+					Success: false,
+					Data: map[string]interface{}{
+						"Error": err.Error(),
+					},
+				})
+			}
+
+			if tok.Expiry.Before(time.Now()) {
+				_, err := tokCol.DeleteOne(c, bson.M{"ID": tok.ID})
+				if err != nil {
+					return
+				}
+			}
+		}
+
+	}
+}
 func createAccessToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		num := c.Param("expiry")
 		var tok storageUtil.Token
 
 		if err := c.BindJSON(&tok); err != nil {
@@ -63,10 +109,13 @@ func createAccessToken() gin.HandlerFunc {
 			})
 		}
 
+		dur, _ := time.ParseDuration(num + "h")
+
 		newTok := storageUtil.Token{
 			ID:               primitive.NewObjectID(),
 			Access:           tokenToUse,
 			OrganizationCode: tok.OrganizationCode,
+			Expiry:           time.Now().Add(time.Hour * dur),
 		}
 
 		one, err := tokCol.InsertOne(c, newTok)
@@ -77,7 +126,7 @@ func createAccessToken() gin.HandlerFunc {
 		c.JSON(http.StatusCreated, storageUtil.Response{
 			Code:    http.StatusCreated,
 			Message: "Created obj",
-			Success: false,
+			Success: true,
 			Data: map[string]interface{}{
 				"data": one,
 			},
@@ -86,8 +135,8 @@ func createAccessToken() gin.HandlerFunc {
 	}
 }
 
-func FetchTok() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		id := c.Param("uniqID")
-	}
-}
+//func FetchTok() gin.HandlerFunc {
+//	return func(c *gin.Context) {
+//		id := c.Param("uniqID")
+//	}
+//}

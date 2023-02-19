@@ -23,6 +23,7 @@ func main() {
 	access.POST("/users", routeUtil.CreateUser())
 	access.GET("/users/:username", routeUtil.FetchUserByUsername())
 	access.GET("/users/token", routeUtil.FullID())
+	routeUtil.TokRoutes(access)
 	authNeeded := router.Group("/app")
 	authNeeded.Use(auth.NonContribCors())
 	authNeeded.Use(middleware.JwtAuth())
