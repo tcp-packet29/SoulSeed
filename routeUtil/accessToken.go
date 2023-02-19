@@ -1,6 +1,7 @@
 package routeUtil
 
 import (
+	"crypto/rand"
 	"encoding/base32"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -9,12 +10,9 @@ import (
 	"main/dbUtil"
 	"main/storageUtil"
 	"net/http"
-	"crypto/rand"
-
 )
 
 var tokCol *mongo.Collection = dbUtil.GetCollection("orgCodes")
-
 
 //creating id lsits
 
@@ -35,7 +33,6 @@ func CreateRandomId(c *gin.Context) (string, error) {
 		return newVal, nil
 	}
 
-
 	//could just use mongodb id but its fine
 
 }
@@ -54,13 +51,25 @@ func createAccessToken() gin.HandlerFunc {
 			})
 		}
 
+		tokenToUse, err := CreateRandomId(c)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{
+				Code:    500,
+				Message: "internal server error",
+				Success: false,
+				Data: map[string]interface{}{
+					"Error": err.Error(),
+				},
+			})
+		}
+
 		newTok := storageUtil.Token{
-			ID: primitive.NewObjectID(),
-			Access:           ,
+			ID:               primitive.NewObjectID(),
+			Access:           tokenToUse,
 			OrganizationCode: tok.OrganizationCode,
 		}
 
-		one, err := tokCol.InsertOne(c, tok)
+		one, err := tokCol.InsertOne(c, newTok)
 		if err != nil {
 			return
 		}
