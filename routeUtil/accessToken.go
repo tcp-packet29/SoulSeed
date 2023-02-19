@@ -4,10 +4,12 @@ import (
 	"crypto/rand"
 	"encoding/base32"
 	"github.com/gin-gonic/gin"
+	ma "github.com/mailgun/mailgun-go/v4"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"main/dbUtil"
+	"main/genUtil"
 	"main/storageUtil"
 	"net/http"
 	"time"
@@ -175,3 +177,47 @@ func GetToken() gin.HandlerFunc {
 //		id := c.Param("uniqID")
 //	}
 //}
+
+func SendConfirmationMessage() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		em := c.Param("email")
+		val, err := CreateRandomId(c)
+		if err != nil {
+			c.JSON(500, storageUtil.Response{
+				Code:    500,
+				Message: "internal server error",
+				Success: false,
+				Data: map[string]interface{}{
+					"Error": err.Error(),
+				},
+			})
+		}
+		va := genUtil.GetMailgunData()
+		mg := ma.NewMailgun("sandbox9c61bd1e4277496793c46e636d1f0a6c.mailgun.org", va)
+		tok := mg.NewMessage(
+			"Gaurav <bansal22.gaurav@gmail.com",
+			"Please confirm your email",
+			"Please use the following token to confirm your email: \n<b>"+val+"</b>.",
+			em,
+		)
+		_, _, err = mg.Send(c, tok)
+		if err != nil {
+			c.JSON(500, storageUtil.Response{
+				Code:    500,
+				Message: "internal server error",
+				Success: false,
+				Data: map[string]interface{}{
+					"Error": err.Error(),
+				},
+			})
+		}
+		c.JSON(200, storageUtil.Response{
+			Code:    200,
+			Message: "success",
+			Success: true,
+			Data: map[string]interface{}{
+				"Token": val,
+			},
+		})
+	}
+}

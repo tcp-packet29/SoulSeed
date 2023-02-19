@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"main/dbUtil"
 	"main/genUtil"
 	"main/middleware"
 	auth "main/oAuthHandling"
@@ -20,12 +21,13 @@ func main() {
 	router := gin.Default()
 
 	//all,ow for creds in middleware request parsing and requersuit procedssign for ofdrs
-	genUtil.ConnectToMongo()
+	dbUtil.ConnectToMongo()
 	router.Use(auth.NonContribCors())
 	//mnot actually an instance of client we can actually reference, just for tersrting purposes
 
 	access := router.Group("/access")
 	tokens := router.Group("/tokens")
+	confirmation := router.Group("/email")
 	access.Use(auth.NonContribCors())
 	access.POST("/login", auth.LoginHandle())
 	access.POST("/users", routeUtil.CreateUser())
@@ -33,6 +35,7 @@ func main() {
 	access.GET("/users/token", routeUtil.FullID())
 	routeUtil.TokRoutes(tokens)
 	tokens.Use(routeUtil.TokenCheckMiddleware())
+	confirmation.GET("/confirm/:email", routeUtil.SendConfirmationMessage()) //dont need middleware, just make random token
 	authNeeded := router.Group("/app")
 	authNeeded.Use(auth.NonContribCors())
 	authNeeded.Use(middleware.JwtAuth())

@@ -144,7 +144,7 @@
                     <span class="label-text">Email</span>
                 </label>
 
-                <input type="password" placeholder="clojureIsBestJVMLang" class="input input-bordered input-accent w-full max-w-xs" bind:value={email}/>
+                <input type="text" placeholder="golang@golang.go" class="input input-bordered input-accent w-full max-w-xs" bind:value={email}/>
                 
                 <label class="label">
                     <span class="label-text">Password</span>
