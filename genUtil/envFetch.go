@@ -1,11 +1,10 @@
 package genUtil
 
 import (
-	"github.com/joho/godotenv"
 	"fmt"
+	"github.com/joho/godotenv"
 	"os"
 )
-
 
 func getMongoURI() string {
 	err := godotenv.Load()
@@ -13,6 +12,15 @@ func getMongoURI() string {
 		fmt.Println("Error loading .env file")
 	}
 	return os.Getenv("MURI")
+}
+
+func GetMailgunData() string {
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("Error loading environmen file")
+	}
+	return os.Getenv("MG_APIKEY")
+
 }
 
 func GetGoogleData() (string, string) {
