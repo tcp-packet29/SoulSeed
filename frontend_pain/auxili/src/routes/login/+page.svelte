@@ -67,6 +67,7 @@
 
             <input type="text" placeholder="Username" class="input input-bordered input-accent w-full max-w-xs" bind:value={uname}/>
             <input type="password" placeholder="Password" class="input input-bordered input-accent w-full max-w-xs" bind:value={pword}/>
+            <p class="text-neutral textarea-sm"><a href="http://localhost:5173/password">Forgot Password?</a></p>
             <div class="card-actions">
                 <button class="btn btn-outline btn-accent" on:click={createUser}>Login</button>
             </div>

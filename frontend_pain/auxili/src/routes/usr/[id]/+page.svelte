@@ -2,19 +2,12 @@
     import { page } from '$app/stores';
     import axios from 'axios';
     import { onMount } from 'svelte';
-
+    let items = []
 
     console.log($page.params.id)
     function replaceName(name, zip, ob) {
         document.getElementById("Name").innerHTML = name
         document.getElementById("Zipcode").innerHTML = zip
-        if (ob == null) {
-            return
-        }
-        for (let i = 0; i < ob.length; i++) {
-            document.createElement("div").innerHTML = "test"
-            console.log("test")
-        }
     }
 
 
@@ -24,6 +17,8 @@
             let usr = JSON.parse(JSON.stringify(response.data))
             console.log(usr, usr.data.data.Username)
             replaceName(usr.data.data.Username, "Zipcode: " + +usr.data.data.Zipcode, usr.data.data.Items)
+            items = usr.data.data.Items
+            console.log(items)
 
 
         }
@@ -47,6 +42,13 @@
     <div class="card-body">
         <h2 id="Name" class="card-title text-neutral">Golang</h2>
         <p id="Zipcode" class="text-neutral">High Level, Static Typed, Compiled</p>
+        {#each items as item}
+            <div class="badge badge-accent gap-2">
+                {item}
+            </div>
+        {/each}
     </div>
 </div>
 </div>
+
+

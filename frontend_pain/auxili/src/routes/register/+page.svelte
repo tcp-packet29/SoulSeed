@@ -111,10 +111,22 @@
         } else if (!validZipcode(zipcode)) {
             fillIn("Error", "Zipcode is not valid", "Close");
 
-        } else {
-            valid= true
-            fillIn("Final Step!", "A registration code was emailed to you (check your spam folder)", "Continue");
         }
+        axios.get('http://localhost:8080/users/' + uname)
+            .then(function (response) {
+                if (response.status == 200) {
+                    fillIn("Error", "Username already exists", "Close");
+                }
+                console.log(response);
+                else if (response.status == 404) {
+                    valid = true
+                    fillIn("Final Step", "Please enter the code sent to your email", "Done")
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
     }
 
 </script>
@@ -124,8 +136,11 @@
     <div class="modal-box relative bg-neutral">
         <h3 class="text-lg font-bold text-primary" id="textone">Error</h3>
         <p class="text-gray-600 text-primary" id="texttwo">Username already exists</p>
+
         <div class="modal-action">
-            <label for="donemodal" class="btn btn-primary" id="close" on:click={leadToLogin}>Close</label>
+            <input type="text" placeholder="MYCODECOMP" class="input input-bordered input-accent w-full max-w-xs" bind:value={code}/>
+            <label for="donemodal" class="btn btn-primary" id="" on:click={leadToLogin}> </label>
+
         </div>
     </div>
 </div>
@@ -193,7 +208,7 @@
                 <div class="card-body items-center text-center">
                     <h2 class="card-title text-neutral">Confirmation</h2>
                     <p class="mb-5">Please enter your confirmation code that was sent to your email.</p>
-                    <input type="password" placeholder="Password" class="input input-bordered input-accent w-full max-w-xs" bind:value={code}/>
+                    <input type="text" placeholder="MYCODECOMP" class="input input-bordered input-accent w-full max-w-xs" bind:value={code}/>
                     <div class="card-actions">
                         <button class="btn btn-outline btn-accent" on:click={create}>Check</button>
                     </div>
