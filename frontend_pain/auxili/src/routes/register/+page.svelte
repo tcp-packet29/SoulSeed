@@ -42,7 +42,7 @@
     }
 
     function create() {
-        if tok === code {
+        if (tok === code) {
             axios.post('http://localhost:8080/access/users', {
                 "username": uname,
                 "password": pword,
@@ -50,9 +50,10 @@
                 "zipcode": zipcode,
             })
                 .then(function (response) {
+                    console.log(response);
                     if (response.status == 201 || response.status == 200) {
                         valid = true;
-                        fillIn("Final Step!", "A registration code was emailed to you (check your spam folder)", "Continue");
+
 
                     } else {
                         fillIn("Error", "Username already exists", "Close");
@@ -64,8 +65,8 @@
                     console.log(error);
                 });
             axios.post('http://localhost:8080/access/login', {
-                "username": uname,
-                "password": pword
+                "Username": uname,
+                "Password": pword
             })
                 .then(function (response) {
                     if (response.status == 201 || response.status == 200) {
@@ -102,14 +103,17 @@
 
 
     function check() {
-        if (uname.trim() == "" || pword.trim() == "" || zipcode.trim() == "" || confirm.trim() == "") {
+        if (uname.trim() === "" || pword.trim() === "" || zipcode.trim() === "" || confirm.trim() === "") {
             fillIn("Error", "Please fill in all fields", "Close");
-        } else if (pword != confirm) {
+        } else if (pword !== confirm) {
             fillIn("Error", "Passwords do not match", "Close");
 
         } else if (!validZipcode(zipcode)) {
             fillIn("Error", "Zipcode is not valid", "Close");
 
+        } else {
+            valid= true
+            fillIn("Final Step!", "A registration code was emailed to you (check your spam folder)", "Continue");
         }
     }
 
