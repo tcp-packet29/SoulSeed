@@ -1,6 +1,7 @@
 <script>
     import axios from 'axios';
     import {browser} from "$app/environment";
+    import { usrn, psord, em, zpc, emTok} from "../../stores.js";
 
     let uname = "";
     let pword = "";
@@ -33,6 +34,13 @@
                     let jsooo = JSON.parse(JSON.stringify(response.data))
                     console.log(jsooo)
                     tok = jsooo.data.Token.toString();
+                    usrn.set(uname);
+                    psord.set(pword);
+                    em.set(email);
+                    zpc.set(zipcode);
+                    emTok.set(tok);
+
+                    window.location.href = "http://localhost:5173/confirm"
 
                 })
                 .catch(function (error) {
@@ -41,56 +49,7 @@
         }
     }
 
-    function create() {
-        if (tok === code) {
-            axios.post('http://localhost:8080/access/users', {
-                "username": uname,
-                "password": pword,
-                "email": email,
-                "zipcode": zipcode,
-            })
-                .then(function (response) {
-                    console.log(response);
-                    if (response.status == 201 || response.status == 200) {
-                        valid = true;
 
-
-                    } else {
-                        fillIn("Error", "Username already exists", "Close");
-                    }
-                    console.log(response);
-
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            axios.post('http://localhost:8080/access/login', {
-                "Username": uname,
-                "Password": pword
-            })
-                .then(function (response) {
-                    if (response.status == 201 || response.status == 200) {
-                        alert("Logged In successfully");
-                    }
-                    console.log(response);
-                    let jso = JSON.parse(JSON.stringify(response.data))
-                    console.log(jso)
-                    console.log(jso.Token)
-                    //not immutable
-                    //idempotenmt
-                    if (browser) {
-                        window.localStorage.setItem("token", jso.Token.toString());
-                        console.log(window.localStorage.getItem("token"))
-                    }
-
-                    console.log(window.localStorage.getItem("token"))
-
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        }
-    }
     //checking zipcode on frontend, could do on bacvkend
     function validZipcode(a) {
         let regex = new RegExp("^[0-9]{5}(?:-[0-9]{4})?$");
@@ -120,7 +79,8 @@
                 console.log(response);
                 else if (response.status == 404) {
                     valid = true
-                    fillIn("Final Step", "Please enter the code sent to your email", "Done")
+
+                    fillIn("Final Step", "Please enter the code sent to your email", "GOTO")
                 }
             })
             .catch(function (error) {
@@ -138,7 +98,6 @@
         <p class="text-gray-600 text-primary" id="texttwo">Username already exists</p>
 
         <div class="modal-action">
-            <input type="text" placeholder="MYCODECOMP" class="input input-bordered input-accent w-full max-w-xs" bind:value={code}/>
             <label for="donemodal" class="btn btn-primary" id="" on:click={leadToLogin}> </label>
 
         </div>
@@ -199,19 +158,6 @@
                 </div>
                 <div class="card-actions">
                     <label for="donemodal" class="btn btn-outline btn-accent" on:click={check}>Register</label>
-                </div>
-            </div>
-
-            <div class="divider text-accent"> & </div>
-
-            <div data-theme="mycodecompiled" class="card w-96 bg-secondary bg-base-200 text-neutral-content shadow-xl">
-                <div class="card-body items-center text-center">
-                    <h2 class="card-title text-neutral">Confirmation</h2>
-                    <p class="mb-5">Please enter your confirmation code that was sent to your email.</p>
-                    <input type="text" placeholder="MYCODECOMP" class="input input-bordered input-accent w-full max-w-xs" bind:value={code}/>
-                    <div class="card-actions">
-                        <button class="btn btn-outline btn-accent" on:click={create}>Check</button>
-                    </div>
                 </div>
             </div>
 

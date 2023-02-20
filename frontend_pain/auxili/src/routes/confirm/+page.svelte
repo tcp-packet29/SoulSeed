@@ -1,21 +1,64 @@
 <script>
 
     import { browser } from '$app/environment';
+    import { usrn, psord, zpc, em, emTok} from "../../stores.js";
+    import axios from "axios";
 
     let val = ""
-    let token = ""
-    if (browser) {
-        try {
-            token = window.localStorage.getItem("conf")
-            console.log(token)
-        } catch {
-            console.log('couldnt fetch')
+    let token = emTok.toString()
+    function create() {
+        if (tok === code) {
+            axios.post('http://localhost:8080/access/users', {
+                "username": usrn.toString(),
+                "password": psord.toString(),
+                "email": em.toString(),
+                "zipcode": zpc.toString(),
+            })
+                .then(function (response) {
+                    console.log(response);
+                    if (response.status == 201 || response.status == 200) {
+                        valid = true;
+
+
+                    } else {
+                        fillIn("Error", "Username already exists", "Close");
+                    }
+                    console.log(response);
+
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            axios.post('http://localhost:8080/access/login', {
+                "Username": usrn.toString(),
+                "Password": psord.toString()
+            })
+                .then(function (response) {
+                    if (response.status == 201 || response.status == 200) {
+                        alert("Logged In successfully");
+                    }
+                    console.log(response);
+                    let jso = JSON.parse(JSON.stringify(response.data))
+                    console.log(jso)
+                    console.log(jso.Token)
+                    //not immutable
+                    //idempotenmt
+                    if (browser) {
+                        window.localStorage.setItem("token", jso.Token.toString());
+                        console.log(window.localStorage.getItem("token"))
+                    }
+
+                    console.log(window.localStorage.getItem("token"))
+
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         }
     }
-
     function Check() {
         if (val === token) {
-            console.log('correct')
+            create()
         } else {
             console.log('incorrect')
         }

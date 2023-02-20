@@ -42,6 +42,8 @@
     <div class="card-body">
         <h2 id="Name" class="card-title text-neutral">Golang</h2>
         <p id="Zipcode" class="text-neutral">High Level, Static Typed, Compiled</p>
+        <br>
+        <h2 class="text-neutral card-side"><b>Items</b></h2>
         {#each items as item}
             <div class="badge badge-accent gap-2">
                 {item}
