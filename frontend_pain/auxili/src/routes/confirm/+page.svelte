@@ -3,26 +3,52 @@
     import { browser } from '$app/environment';
     import { usrn, psord, zpc, em, emTok} from "../../stores.js";
     import axios from "axios";
+    import {get} from "svelte/store";
 
     let val = ""
-    let token = emTok.toString()
+    let token = ""
+    let email = ""
+    let username = ""
+    let password = ""
+    let zipcode = ""
+
+    if (browser) {
+        email = window.localStorage.getItem("email")
+        username = window.localStorage.getItem("username")
+        password = window.localStorage.getItem("password")
+        zipcode = window.localStorage.getItem("zipcode")
+    }
+
+    axios.get("http://localhost:8080/email/confirm/" + email)
+        .then(function (response) {
+            let jsooo = JSON.parse(JSON.stringify(response.data))
+            console.log(jsooo)
+            token = jsooo.data.Token.toString();
+
+
+
+            //
+
+            //lambdas anonymosu inolie fiunc s firs tclass functigons
+
+
+            //stores not working????
+
+        })
+        .catch(function (error) {
+            console.log(error);
+
+        });
+
+
     function create() {
-        if (tok === code) {
             axios.post('http://localhost:8080/access/users', {
-                "username": usrn.toString(),
-                "password": psord.toString(),
-                "email": em.toString(),
-                "zipcode": zpc.toString(),
+                "username": username,
+                "password": password,
+                "email": email,
+                "zipcode": zipcode,
             })
                 .then(function (response) {
-                    console.log(response);
-                    if (response.status == 201 || response.status == 200) {
-                        valid = true;
-
-
-                    } else {
-                        fillIn("Error", "Username already exists", "Close");
-                    }
                     console.log(response);
 
                 })
@@ -30,8 +56,8 @@
                     console.log(error);
                 });
             axios.post('http://localhost:8080/access/login', {
-                "Username": usrn.toString(),
-                "Password": psord.toString()
+                "Username": username,
+                "Password": password,
             })
                 .then(function (response) {
                     if (response.status == 201 || response.status == 200) {
@@ -54,13 +80,15 @@
                 .catch(function (error) {
                     console.log(error);
                 });
-        }
+
     }
     function Check() {
         if (val === token) {
             create()
         } else {
             console.log('incorrect')
+            console.log(val)
+            console.log(token)
         }
     }
 //  could just look in local storage

@@ -2,6 +2,7 @@
     import axios from 'axios';
     import {browser} from "$app/environment";
     import { usrn, psord, em, zpc, emTok} from "../../stores.js";
+    import {get} from "svelte/store";
 
     let uname = "";
     let pword = "";
@@ -29,23 +30,13 @@
 
     function leadToLogin() {
         if (valid) {
-            axios.get("http://localhost:8080/email/confirm/" + email)
-                .then(function (response) {
-                    let jsooo = JSON.parse(JSON.stringify(response.data))
-                    console.log(jsooo)
-                    tok = jsooo.data.Token.toString();
-                    usrn.set(uname);
-                    psord.set(pword);
-                    em.set(email);
-                    zpc.set(zipcode);
-                    emTok.set(tok);
-
-                    window.location.href = "http://localhost:5173/confirm"
-
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+            if (browser) {
+                window.localStorage.setItem("username", uname);
+                window.localStorage.setItem("password", pword);
+                window.localStorage.setItem("email", email);
+                window.localStorage.setItem("zipcode", zipcode);
+            }
+            window.location.href = "http://localhost:5173/confirm"
         }
     }
 
@@ -75,16 +66,19 @@
             .then(function (response) {
                 if (response.status == 200) {
                     fillIn("Error", "Username already exists", "Close");
+                    console.log(response)
                 }
-                console.log(response);
-                else if (response.status == 404) {
-                    valid = true
 
-                    fillIn("Final Step", "Please enter the code sent to your email", "GOTO")
-                }
             })
             .catch(function (error) {
                 console.log(error);
+                if (error.response.status == 404) {
+
+                    valid = true
+
+                    fillIn("Final Step", "Please enter the code sent to your email", "GOTO")
+
+                }
             });
 
     }
@@ -98,7 +92,7 @@
         <p class="text-gray-600 text-primary" id="texttwo">Username already exists</p>
 
         <div class="modal-action">
-            <label for="donemodal" class="btn btn-primary" id="" on:click={leadToLogin}> </label>
+            <label for="donemodal" class="btn btn-primary" id="close" on:click={leadToLogin}> </label>
 
         </div>
     </div>
