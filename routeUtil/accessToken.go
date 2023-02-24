@@ -184,7 +184,7 @@ func GetToken() gin.HandlerFunc {
 			return //exit and escape handlerfunc for route
 		}
 		c.JSON(http.StatusOK, storageUtil.Response{
-			Code:    http.StatusOK,
+			Code:    http.StatusOK,  //emojis parsed o nfrontend
 			Message: "Found object", //i love gcc
 			Success: true,
 			Data: map[string]interface{}{
