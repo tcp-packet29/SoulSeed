@@ -181,7 +181,7 @@ func GetToken() gin.HandlerFunc {
 					"data": tokToFind,
 				},
 			})
-			return
+			return //exit and escape handlerfunc for route
 		}
 		c.JSON(http.StatusOK, storageUtil.Response{
 			Code:    http.StatusOK,
