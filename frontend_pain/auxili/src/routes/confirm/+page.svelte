@@ -17,9 +17,13 @@
         username = window.localStorage.getItem("username")
         password = window.localStorage.getItem("password")
         zipcode = window.localStorage.getItem("zipcode")
+    } else {
+        token = "not browser" //so doesnt cause anyh iffiness with nuyll
     }
 
-    axios.get("http://localhost:8080/email/confirm/" + email)
+    axios.post("http://localhost:8080/email/confirm/" + email, {
+        "username": username,
+    })
         .then(function (response) {
             let jsooo = JSON.parse(JSON.stringify(response.data))
             console.log(jsooo)
@@ -81,6 +85,12 @@
                     console.log(error);
                 });
 
+            window.localStorage.setItem("username", "");
+            window.localStorage.setItem("password", "");
+            window.localStorage.setItem("email", "");
+            window.localStorage.setItem("zipcode", "");
+            window.location.href = "http://localhost:5173/setupItems"
+
     }
     function Check() {
         if (val === token) {
@@ -103,7 +113,7 @@
         <div class="card-body items-center text-center">
             <h2 class="card-title text-neutral">Confirmation</h2>
             <p class="mb-5">Please enter your confirmation code that was sent to your email.</p>
-            <input type="password" placeholder="Password" class="input input-bordered input-accent w-full max-w-xs" bind:value={val}/>
+            <input type="text" placeholder="Password" class="input input-bordered input-accent w-full max-w-xs" bind:value={val}/>
             <div class="card-actions">
                 <button class="btn btn-outline btn-accent" on:click={Check}>Check</button>
             </div>
