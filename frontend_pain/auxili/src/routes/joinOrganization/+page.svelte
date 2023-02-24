@@ -7,7 +7,11 @@
                 let jsobj = JSON.parse(JSON.stringify(response.data));
                 console.log(jsobj.data.data.OrganizationCode)
                 console.log(jsobj)
-                axios.get('http://localhost:8080/app/organizations/' + jsobj.data.data.OrganizationCode)
+                axios.put('http://localhost:8080/app/organizations/' + jsobj.data.data.OrganizationCode+'/users', {
+                    "username": "test",
+                    "email": "mycodehathcompiled@mycodehathcompiled.com",
+                    "password": "test",
+                })
                     .then(response => {
                         let jsobj = JSON.parse(JSON.stringify(response.data));
                         console.log(jsobj)
