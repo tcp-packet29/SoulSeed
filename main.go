@@ -35,7 +35,7 @@ func main() {
 	access.GET("/users/token", routeUtil.FullID())
 	routeUtil.TokRoutes(tokens)
 	tokens.Use(routeUtil.TokenCheckMiddleware())
-	confirmation.GET("/confirm/:email", routeUtil.SendConfirmationMessage()) //dont need middleware, just make random token
+	confirmation.POST("/confirm/:email", routeUtil.SendConfirmationMessage()) //dont need middleware, just make random token
 	authNeeded := router.Group("/app")
 	authNeeded.Use(auth.NonContribCors())
 	authNeeded.Use(middleware.JwtAuth())

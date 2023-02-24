@@ -43,7 +43,7 @@ func CreateRandomId(c *gin.Context) (string, error) {
 
 }
 
-func TokenCheckMiddleware() gin.HandlerFunc {
+func TokenCheckMiddleware() gin.HandlerFunc { //better to check fi watnd token isi valid
 	return func(c *gin.Context) {
 		checkCont, err := tokCol.Find(c, bson.M{})
 		if err != nil {
@@ -118,13 +118,13 @@ func createAccessToken() gin.HandlerFunc {
 			})
 		}
 
-		dur, _ := time.ParseDuration(num + "m")
+		dur, _ := time.ParseDuration(num + "m") //llvm backend compiler
 
 		newTok := storageUtil.Token{
 			ID:               primitive.NewObjectID(),
 			Access:           tokenToUse,
 			OrganizationCode: tok.OrganizationCode,
-			Expiry:           time.Now().Add(time.Minute * dur),
+			Expiry:           time.Now().Add(dur),
 		}
 
 		one, err := tokCol.InsertOne(c, newTok)
@@ -160,9 +160,32 @@ func GetToken() gin.HandlerFunc {
 				},
 			})
 		}
+		if tokToFind.Expiry.Before(time.Now()) {
+			_, err = tokCol.DeleteOne(c, bson.M{"id": tokToFind.ID})
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, storageUtil.Response{
+					Code:    500,
+					Message: "internal server error",
+					Success: false,
+					Data: map[string]interface{}{
+						"Error": err.Error(),
+					},
+				})
+				return //ret
+			}
+			c.JSON(http.StatusNotAcceptable, storageUtil.Response{
+				Code:    http.StatusNotAcceptable,
+				Message: "Token expired",
+				Success: false,
+				Data: map[string]interface{}{
+					"data": tokToFind,
+				},
+			})
+			return
+		}
 		c.JSON(http.StatusOK, storageUtil.Response{
 			Code:    http.StatusOK,
-			Message: "Created obj",
+			Message: "Found object", //i love gcc
 			Success: true,
 			Data: map[string]interface{}{
 				"data": tokToFind,
@@ -181,6 +204,18 @@ func GetToken() gin.HandlerFunc {
 func SendConfirmationMessage() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		em := c.Param("email")
+		var usr storageUtil.User
+		err := c.BindJSON(&usr)
+		if err != nil {
+			c.JSON(500, storageUtil.Response{
+				Code:    500,
+				Message: "internal server error",
+				Success: false,
+				Data: map[string]interface{}{
+					"Error": err.Error(),
+				},
+			})
+		}
 		val, err := CreateRandomId(c)
 		if err != nil {
 			c.JSON(500, storageUtil.Response{
@@ -195,9 +230,9 @@ func SendConfirmationMessage() gin.HandlerFunc {
 		va := genUtil.GetMailgunData()
 		mg := ma.NewMailgun("sandbox9c61bd1e4277496793c46e636d1f0a6c.mailgun.org", va)
 		tok := mg.NewMessage(
-			"Gaurav <bansal22.gaurav@gmail.com",
+			"Gaurav <bansal22.gaurav@gmail.com>",
 			"Please confirm your email",
-			"Please use the following token to confirm your email: \n<b>"+val+"</b>.",
+			"Hello "+usr.Username+",\n"+"Please use the following token to confirm your email: \n"+val+"\n\nIf you did not sign up for this service, please ignore this email.",
 			em,
 		)
 		_, _, err = mg.Send(c, tok)

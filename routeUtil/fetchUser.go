@@ -3,6 +3,7 @@ package routeUtil
 import (
 	"errors"
 	"fmt"
+	"go.mongodb.org/mongo-driver/mongo"
 	"main/genUtil"
 	"main/storageUtil"
 	"net/http"
@@ -180,8 +181,15 @@ func FetchUserByUsername() gin.HandlerFunc {
 
 		err := userCol.FindOne(c, bson.M{"username": uName}).Decode(&userFound) //finding user and decoding and transferring into userfound struct"}
 		if err != nil {
-			fmt.Println(err)
-			return //closure func tionm in a varioable to ivnvoke ervbent event
+			if err == mongo.ErrNoDocuments {
+				c.JSON(http.StatusNotFound, storageUtil.Response{
+					Code:    http.StatusNotFound,
+					Message: err.Error(),
+					Success: false,
+					Data:    nil,
+				})
+				return //closure func tionm in a varioable to ivnvoke ervbent event
+			}
 		}
 
 		userCopy := storageUtil.User{
