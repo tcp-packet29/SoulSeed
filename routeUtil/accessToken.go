@@ -71,6 +71,7 @@ func TokenCheckMiddleware() gin.HandlerFunc { //better to check fi watnd token i
 						"Error": err.Error(),
 					},
 				})
+				return
 			}
 
 			if tok.Expiry.Before(time.Now()) {
@@ -84,6 +85,7 @@ func TokenCheckMiddleware() gin.HandlerFunc { //better to check fi watnd token i
 							"Error": err.Error(),
 						},
 					})
+					return
 				}
 			}
 		}
@@ -159,6 +161,7 @@ func GetToken() gin.HandlerFunc {
 					"Error": err.Error(),
 				},
 			})
+			return
 		}
 		if tokToFind.Expiry.Before(time.Now()) {
 			_, err = tokCol.DeleteOne(c, bson.M{"id": tokToFind.ID})
