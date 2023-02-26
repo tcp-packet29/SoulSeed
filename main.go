@@ -45,6 +45,7 @@ func main() {
 	routeUtil.OrgRoutes(authNeeded)
 	authNeeded.GET("/auth", auth.AuthEndpoint())
 	//routes for different ufnctiaonlties
+	//oi lve golang restapi guragavbansal restapis
 	router.Run(":8080")
 
 }

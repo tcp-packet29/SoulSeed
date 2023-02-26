@@ -7,7 +7,7 @@
 
     console.log($page.params.id)
     function replaceName(name, zip, ob) {
-        if +(browser) {
+        if (browser) {
         document.getElementById("Name").innerHTML = name
         document.getElementById("Zipcode").innerHTML = zip
         items = ob

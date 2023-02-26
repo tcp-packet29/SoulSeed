@@ -3,6 +3,7 @@ package routeUtil
 import (
 	"crypto/rand"
 	"encoding/base32"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	ma "github.com/mailgun/mailgun-go/v4"
 	"go.mongodb.org/mongo-driver/bson"
@@ -207,8 +208,10 @@ func GetToken() gin.HandlerFunc {
 func SendConfirmationMessage() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		em := c.Param("email")
+		//fethc email
+		fmt.Println(em, " is the email")
 		var usr storageUtil.User
-		err := c.BindJSON(&usr)
+		err := c.BindJSON(&usr) //by value
 		if err != nil {
 			c.JSON(500, storageUtil.Response{
 				Code:    500,
@@ -218,6 +221,7 @@ func SendConfirmationMessage() gin.HandlerFunc {
 					"Error": err.Error(),
 				},
 			})
+			return
 		}
 		val, err := CreateRandomId(c)
 		if err != nil {

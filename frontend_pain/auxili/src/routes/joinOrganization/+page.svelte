@@ -1,16 +1,30 @@
 <script>
     import axios from 'axios';
+    import {browser} from "$app/environment";
     let val = '';
+    function getToken() {
+        if (browser) {
+            return window.localStorage.getItem("token");
+
+        }
+    }
     function getVal() {
         axios.get('http://localhost:8080/tokens/tokens/' + val)
             .then(response=> {
                 let jsobj = JSON.parse(JSON.stringify(response.data));
                 console.log(jsobj.data.data.OrganizationCode)
                 console.log(jsobj)
+                console.log(jsobj.data.data.access) //what they input
                 axios.put('http://localhost:8080/app/organizations/' + jsobj.data.data.OrganizationCode+'/users', {
+                    headers : {
+                        "Token": getToken(),
+                        "Content-Type": "application/json"
+
+                    },
                     "username": "test",
                     "email": "mycodehathcompiled@mycodehathcompiled.com",
                     "password": "test",
+
                 })
                     .then(response => {
                         let jsobj = JSON.parse(JSON.stringify(response.data));
