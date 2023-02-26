@@ -8,6 +8,8 @@
 
         }
     }
+
+    axios.defaults.headers.put['Token'] = getToken();
     function getVal() {
         axios.get('http://localhost:8080/tokens/tokens/' + val)
             .then(response=> {
@@ -16,11 +18,7 @@
                 console.log(jsobj)
                 console.log(jsobj.data.data.access) //what they input
                 axios.put('http://localhost:8080/app/organizations/' + jsobj.data.data.OrganizationCode+'/users', {
-                    headers : {
-                        "Token": getToken(),
-                        "Content-Type": "application/json"
-
-                    },
+                    "id": "123456789876543212345678", //not just an int
                     "username": "test",
                     "email": "mycodehathcompiled@mycodehathcompiled.com",
                     "password": "test",
@@ -29,7 +27,8 @@
                     .then(response => {
                         let jsobj = JSON.parse(JSON.stringify(response.data));
                         console.log(jsobj)
-                        alert(jsobj.data.organization.Description)
+                        console.log("it worked")
+                        alert(jsobj.data.data.organization.description)
 
                     })
                     .catch(error => {

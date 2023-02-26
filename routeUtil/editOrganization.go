@@ -70,16 +70,19 @@ func FetchOrganization() gin.HandlerFunc {
 func AddUserOrganization() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		uid := c.Param("oid")
+		oid, err := primitive.ObjectIDFromHex(uid)
 		var addedUser storageUtil.User
-		err := c.BindJSON(&addedUser)
+		err = c.BindJSON(&addedUser)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: nil})
+			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: map[string]interface{}{"error": err.Error()}})
 			return
 		}
 		organization := genUtil.FetchOrgById(uid, OrganizationCol, c, func() {
 			c.JSON(http.StatusNotFound, storageUtil.Response{Code: http.StatusNotFound, Message: "Not Found", Success: false, Data: nil})
 
 		})
+
+		fmt.Println(organization.Name)
 
 		userList := organization.Users_ID
 		userList = append(userList, addedUser.Id.Hex())
@@ -98,7 +101,11 @@ func AddUserOrganization() gin.HandlerFunc {
 			Users_ID:    userList,
 		}
 
-		result, err := OrganizationCol.UpdateOne(c, bson.M{"id": uid}, bson.M{"$set": finalOrganization})
+		fmt.Println(finalOrganization.Users)
+
+		//result, err := OrganizationCol.UpdateOne(c, bson.M{"id": uid}, bson.D{{"$set", bson.D{{"users", finalOrganization.Users}, {"users_id", finalOrganization.Users_ID}}}})
+		result, err := OrganizationCol.ReplaceOne(c, bson.M{"id": oid}, finalOrganization)
+
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: nil})
 			return
@@ -115,7 +122,7 @@ func AddItemOrganization() gin.HandlerFunc {
 		var addedItem storageUtil.Item
 		err := c.BindJSON(&addedItem)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: nil})
+			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: map[string]interface{}{"error": err.Error()}})
 			return
 		}
 
