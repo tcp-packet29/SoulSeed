@@ -55,11 +55,13 @@
     function check() {
         if (uname.trim() === "" || pword.trim() === "" || zipcode.trim() === "" || confirm.trim() === "") {
             fillIn("Error", "Please fill in all fields", "Close");
+            return
         } else if (pword !== confirm) {
             fillIn("Error", "Passwords do not match", "Close");
-
+            return
         } else if (!validZipcode(zipcode)) {
             fillIn("Error", "Zipcode is not valid", "Close");
+            return
 
         }
         axios.get('http://localhost:8080/users/' + uname)

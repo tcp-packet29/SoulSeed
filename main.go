@@ -22,6 +22,7 @@ func main() {
 
 	//all,ow for creds in middleware request parsing and requersuit procedssign for ofdrs
 	dbUtil.ConnectToMongo()
+	dbUtil.ConnectToRedis()
 	router.Use(auth.NonContribCors())
 	//mnot actually an instance of client we can actually reference, just for tersrting purposes
 
@@ -43,6 +44,7 @@ func main() {
 	routeUtil.UserRoutes(authNeeded)
 	routeUtil.DealRoutes(authNeeded)
 	routeUtil.OrgRoutes(authNeeded)
+
 	authNeeded.GET("/auth", auth.AuthEndpoint())
 	//routes for different ufnctiaonlties
 	//oi lve golang restapi guragavbansal restapis

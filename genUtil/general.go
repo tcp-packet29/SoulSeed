@@ -24,11 +24,12 @@ func FetchUsersByIDs(ids []string, col *mongo.Collection, ctx *gin.Context, f fu
 			f() //closure func tionm in a varioable to ivnvoke ervbent event
 		}
 		userCopy = storageUtil.User{
-			Id:       userFound.Id,
-			Username: userFound.Username,
-			Password: "",
-			Items:    userFound.Items,
-			Zipcode:  userFound.Zipcode,
+			Id:                userFound.Id,
+			Username:          userFound.Username,
+			Password:          "",
+			Items:             userFound.Items,
+			Zipcode:           userFound.Zipcode,
+			OrganizationOwned: userFound.OrganizationOwned,
 		}
 
 	}
@@ -52,12 +53,13 @@ func FetchUserById(id string, col *mongo.Collection, ctx *gin.Context, f func())
 	}
 
 	userCopy = storageUtil.User{
-		Id:       userFound.Id,
-		Username: userFound.Username,
-		Email:    userFound.Email,
-		Password: "",
-		Items:    userFound.Items,
-		Zipcode:  userFound.Zipcode,
+		Id:                userFound.Id,
+		Username:          userFound.Username,
+		Email:             userFound.Email,
+		Password:          "",
+		Items:             userFound.Items,
+		Zipcode:           userFound.Zipcode,
+		OrganizationOwned: userFound.OrganizationOwned,
 	}
 
 	return userCopy
@@ -90,4 +92,5 @@ func FetchOrgById(id string, col *mongo.Collection, ctx *gin.Context, f func()) 
 	}
 
 	return userCopy
+	//i loe fetchinguser id and tookkt and wrapeprs111111111111111111111111111111111111111111111111111111 ytecode.
 }

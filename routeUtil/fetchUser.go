@@ -193,12 +193,13 @@ func FetchUserByUsername() gin.HandlerFunc {
 		}
 
 		userCopy := storageUtil.User{
-			Id:       userFound.Id,
-			Username: userFound.Username,
-			Email:    userFound.Email,
-			Password: "",
-			Items:    userFound.Items,
-			Zipcode:  userFound.Zipcode,
+			Id:                userFound.Id,
+			Username:          userFound.Username,
+			Email:             userFound.Email,
+			Password:          "",
+			Items:             userFound.Items,
+			Zipcode:           userFound.Zipcode,
+			OrganizationOwned: userFound.OrganizationOwned,
 		}
 
 		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "200 OK", Success: true, Data: map[string]interface{}{"data": userCopy}})

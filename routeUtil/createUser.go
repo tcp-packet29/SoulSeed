@@ -23,12 +23,13 @@ func CreateUser() gin.HandlerFunc { //to be used in request handling suchj as PO
 		}
 		//create user and add to dataabase aon post  func for creaitng userbased on body of request acreate and add ot datbase
 		nUser := storageUtil.User{
-			Id:       primitive.NewObjectID(),
-			Email:    user.Email,
-			Username: user.Username,
-			Password: user.Password,
-			Items:    user.Items,
-			Zipcode:  user.Zipcode,
+			Id:                primitive.NewObjectID(),
+			Email:             user.Email,
+			Username:          user.Username,
+			Password:          user.Password,
+			Items:             user.Items,
+			Zipcode:           user.Zipcode,
+			OrganizationOwned: user.OrganizationOwned,
 		}
 
 		resultIt, _ := userCol.Find(c, bson.M{}) //finding all of them, returning iterator
