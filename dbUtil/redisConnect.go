@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	redis "github.com/redis/go-redis/v9"
+	"main/storageUtil"
 	"time"
 )
 
@@ -30,9 +31,17 @@ func ConnectToRedis() {
 	redC.Set(ctx, "key", "value", 0)
 	redC.RPush(ctx, "sql dbs", "postgres", "sqlite", "acas", "mysql")
 	val, _ := redC.LRange(ctx, "sql dbs", 0, -1).Result()
+	//gariuavbansal hv gaiurav bansal gaurav bansal hv data
 	fmt.Println(val)
 }
 
 func GetRedis() *redis.Client {
 	return redC
+}
+
+func addMsg(msg storageUtil.Message, key string) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	redC.RPush(ctx, key, msg) //pus hstruct as json?
 }
