@@ -49,6 +49,33 @@ func EditUser() gin.HandlerFunc {
 	}
 }
 
+func CreateOrg() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		usrId := c.Param("ui")
+
+		oId, _ := primitive.ObjectIDFromHex(usrId)
+
+		var user storageUtil.User
+		err := userCol.FindOne(c, bson.M{"id": oId}).Decode(&user)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error, cannot decode", Success: false, Data: map[string]interface{}{"Data": 99999}})
+			return
+		}
+		if len(user.OrganizationOwned) == 5 {
+			c.JSON(http.StatusNotAcceptable, storageUtil.Response{Code: http.StatusOK, Message: "Organization Limit of 5 Exceeded", Success: false, Data: map[string]interface{}{"Data": 99999}})
+			return
+		}
+
+		org, err := MakeOrg(c)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error, cannot decode", Success: false, Data: map[string]interface{}{"Data": 99999}})
+			return
+		}
+		user.OrganizationOwned = append(user.OrganizationOwned, org.Id.Hex())
+		c.JSON(http.StatusOK, Code: http.StatusInternalServerError, Message: "Internal Server Error, cannot decode", Success: false, Data: map[string]interface{}{"Data": 99999}}R)
+	}
+}
+
 func AddOrgMember() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		usr := c.Param("uid")
@@ -77,3 +104,5 @@ func AddOrgMember() gin.HandlerFunc {
 
 	}
 }
+
+

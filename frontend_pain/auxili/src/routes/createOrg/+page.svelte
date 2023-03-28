@@ -48,7 +48,7 @@
         }; //end exp and start exp in abstract syntax tree
 
         let head = {
-            headers: {
+            headers: {//inverse kinematics reference
                 "Token": getToken(),
             }
         };
