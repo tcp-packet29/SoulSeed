@@ -5,8 +5,7 @@
     import setItem from "./login.js";
 
 
-
-
+    let tok = ""
 
     let uname = "";
     let pword = "";
@@ -17,7 +16,25 @@
 
 
 
+    function forPass() {
+        axios.get('localhost:8080/access/users/token', {
+            headers: {
+            "Token": tok
+        }})
+            .then(function (response) {
+                console.log(response);
+                let jso = JSON.parse(JSON.stringify(response.data))
+                toke = jso.data.Data.Id
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
 
+        if (browser) {
+            //ssr
+            window.localStorage.setItem("token", toke.toString());
+        }
+    }
     function createUser() {
         if (uname == "" || pword == "" || confirm == "") {
             alert("Please fill out all fields");
@@ -35,6 +52,7 @@
                 let jso = JSON.parse(JSON.stringify(response.data))
                 console.log(jso)
                 console.log(jso.Token)
+                //programminglkib to intercet http request amqp
                 //not immutable
                //idempotenmt
                 if (browser) {
@@ -42,6 +60,7 @@
                 }
 
                 console.log(window.localStorage.getItem("token"))
+                tok = window.localStorage.getItem("token")
 
             })
             .catch(function (error) {
@@ -67,7 +86,7 @@
 
             <input type="text" placeholder="Username" class="input input-bordered input-accent w-full max-w-xs" bind:value={uname}/>
             <input type="password" placeholder="Password" class="input input-bordered input-accent w-full max-w-xs" bind:value={pword}/>
-            <p class="text-neutral textarea-sm"><a href="http://localhost:5173/password">Forgot Password?</a></p>
+            <p class="text-neutral textarea-sm"><a on:click={forPass}>Forgot Password?</a></p>
             <div class="card-actions">
                 <button class="btn btn-outline btn-accent" on:click={createUser}>Login</button>
             </div>

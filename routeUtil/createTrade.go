@@ -1,7 +1,6 @@
 package routeUtil
 
 import (
-	
 	"main/dbUtil"
 	"main/storageUtil"
 	"net/http"
@@ -17,7 +16,7 @@ var tradeCol *mongo.Collection = dbUtil.GetCollection("trades");
 func CreateTrade() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var trade storageUtil.Trade
-		
+
 		err := c.BindJSON(&trade)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: nil})
@@ -25,7 +24,6 @@ func CreateTrade() gin.HandlerFunc {
 		}
 
 		var userFound storageUtil.User
-
 
 		oID, _ := primitive.ObjectIDFromHex(trade.MakerID)
 		//converting id form param from hex and assigning it to oid
@@ -37,23 +35,22 @@ func CreateTrade() gin.HandlerFunc {
 			return
 		}
 		newUser := storageUtil.User{
-			Id: userFound.Id,
+			Id:       userFound.Id,
 			Username: userFound.Username,
 			Password: "",
-			Items: userFound.Items,
-			Zipcode: userFound.Zipcode,
+			Items:    userFound.Items,
+			Zipcode:  userFound.Zipcode,
 		}
 
 		//jmustg e3dit password on 8wserefound ifv fierld 9i8ns txcug tis not rewaDP0NLY BUT ALSO WRITE
 
 		newTrade := storageUtil.Trade{
-			Id: primitive.NewObjectID(),
-			Maker: newUser,
-			Name: trade.Name,
-			Items: trade.Items,
+			Id:          primitive.NewObjectID(),
+			Maker:       newUser,
+			Name:        trade.Name,
+			Items:       trade.Items,
 			Description: trade.Description,
-			Open: true,
-
+			Open:        true,
 		}
 
 		_, err = tradeCol.InsertOne(c, newTrade)

@@ -10,7 +10,11 @@
     }
     var data = [];
     axios.defaults.headers.put['Token'] = getToken();
-    axios.get('http://localhost:8080/access/users/token')
+    axios.get('http://localhost:8080/access/users/token', {
+        headers: {
+            'Token': getToken(),
+        }
+    })
     .then(response => {
             let jsobj = JSON.parse(JSON.stringify(response.data));
             console.log(jsobj)
@@ -26,6 +30,18 @@
 
 
     function getVal() {
+
+        if (val.length != 10 || val == null) {
+            alert("Invalid Code")
+            return;
+        }
+        //TODO:
+        // ake request
+        // let ems = []
+        // if (!ems.includes(data[1])) {
+        //     alert("Invalid Code")
+        // return;-
+        // }
         axios.get('http://localhost:8080/tokens/tokens/' + val)
             .then(response=> {
                 let jsobj = JSON.parse(JSON.stringify(response.data));
@@ -35,15 +51,14 @@
                 axios.put('http://localhost:8080/app/organizations/' + jsobj.data.data.OrganizationCode+'/users', {
                     "id": data[2], //not just an int
                     "username": data[0],
-                    "email": data[1],
-                    //fetching data from list
+                    //body of the request, ast an d lexer and parser ignore this comments and preesnet in ast but dont parse persay
 
                 })
                     .then(response => {
                         let jsobj = JSON.parse(JSON.stringify(response.data));
                         console.log(jsobj)
                         console.log("it worked")
-                        alert(jsobj.data.data.organization.description)
+                        alert(jsobj.data.data.description)
 
                     })
                     .catch(error => {
@@ -55,6 +70,7 @@
                 console.log(error)
                 alert("Invalid Code not va;od among us")
             })
+
     }
     /*axios.get('http://localhost:8080/tokens/tokens/')
         .then(response => {

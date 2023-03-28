@@ -113,7 +113,7 @@
 </div>
 
 <div class="flex h-screen justify-center items-center">
-    <div>
+    <div> <!-- ignore in html to oparse uib abtufe vriwedsr redbere oarse html by http requedst !-->
         <div data-theme="mycodecompiled" class="card w-96 bg-secondary bg-base-200 text-neutral-content shadow-xl">
             <div class="card-body items-center text-center">
                 <h2 class="card-title text-neutral">Register</h2>

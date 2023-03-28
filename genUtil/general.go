@@ -30,6 +30,7 @@ func FetchUsersByIDs(ids []string, col *mongo.Collection, ctx *gin.Context, f fu
 			Items:             userFound.Items,
 			Zipcode:           userFound.Zipcode,
 			OrganizationOwned: userFound.OrganizationOwned,
+			OrganizationsIn:   userFound.OrganizationsIn,
 		}
 
 	}
@@ -60,6 +61,7 @@ func FetchUserById(id string, col *mongo.Collection, ctx *gin.Context, f func())
 		Items:             userFound.Items,
 		Zipcode:           userFound.Zipcode,
 		OrganizationOwned: userFound.OrganizationOwned,
+		OrganizationsIn:   userFound.OrganizationsIn,
 	}
 
 	return userCopy

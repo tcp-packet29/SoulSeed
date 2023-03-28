@@ -19,7 +19,7 @@ func main() {
 	}
 	go middleware.RateLimitInit()
 	router := gin.Default()
-
+	//create new router to be used with the backend webserver 	This involves creating a new handler for routes and group of routes gaurav bansal jwt auth middleware is on the use l low level systems uilzie proceser through assevmhly (7)
 	//all,ow for creds in middleware request parsing and requersuit procedssign for ofdrs
 	dbUtil.ConnectToMongo()
 	dbUtil.ConnectToRedis()
@@ -34,9 +34,11 @@ func main() {
 	access.POST("/users", routeUtil.CreateUser())
 	access.GET("/users/:username", routeUtil.FetchUserByUsername())
 	access.GET("/users/token", routeUtil.FullID())
+	access.GET("/users/organizations/:uid/:rg", routeUtil.AddOrgMember())
 	routeUtil.TokRoutes(tokens)
 	tokens.Use(routeUtil.TokenCheckMiddleware())
 	confirmation.POST("/confirm/:email", routeUtil.SendConfirmationMessage()) //dont need middleware, just make random token
+	confirmation.POST("/password/:email", routeUtil.SendPasswordMessage())
 	authNeeded := router.Group("/app")
 	authNeeded.Use(auth.NonContribCors())
 	authNeeded.Use(middleware.JwtAuth())
@@ -49,5 +51,6 @@ func main() {
 	//routes for different ufnctiaonlties
 	//oi lve golang restapi guragavbansal restapis
 	router.Run(":8080")
+	//ythis is the abstract syntrax tree is a comment node
 
 }

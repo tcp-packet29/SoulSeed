@@ -48,3 +48,32 @@ func EditUser() gin.HandlerFunc {
 		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: true, Data: map[string]interface{}{"data": res}})
 	}
 }
+
+func AddOrgMember() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		usr := c.Param("uid")
+		org := c.Param("rg")
+
+		oID, _ := primitive.ObjectIDFromHex(usr)
+
+		var user storageUtil.User
+
+		err := userCol.FindOne(c, bson.M{"id": oID}).Decode(&user)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error, cannot decode", Success: false, Data: map[string]interface{}{"hackclub": err.Error(), "reso": "ast"}})
+			return
+		}
+		orgs := user.OrganizationsIn
+		orgs = append(orgs, org)
+
+		resalib, err := userCol.UpdateOne(c, bson.M{"id": oID}, bson.M{"$set": bson.M{"organizations_in": orgs}})
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error, cannot edit mdb doc", Success: false, Data: nil})
+			return
+		}
+
+		c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: false, Data: map[string]interface{}{"Data": resalib}})
+
+	}
+}

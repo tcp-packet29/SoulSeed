@@ -205,6 +205,56 @@ func GetToken() gin.HandlerFunc {
 //	}
 //}
 
+func SendPasswordMessage() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		em := c.Param("email")
+		val, err := CreateRandomId(c)
+		if err != nil {
+			c.JSON(500, storageUtil.Response{
+				Code:    500,
+				Message: "internal server error",
+				Success: false,
+				Data: map[string]interface{}{
+					"Error": err.Error(),
+				},
+			})
+			return
+		}
+
+		m := genUtil.GetMailgunData()
+		gm := ma.NewMailgun("sandbox9c61bd1e4277496793c46e636d1f0a6c.mailgun.org", m)
+		tok := gm.NewMessage(
+			"Gaurav <bansal22.gaurav@gmail.com>",
+			"Resetting your password",
+			"Please click on this link to change your password.\n http://localhost:5173/password/"+val+"\n. My code compiled",
+			em,
+		)
+
+		_, _, err = gm.Send(c, tok)
+		if err != nil {
+			c.JSON(500, storageUtil.Response{
+				Code:    500,
+				Message: "internal server error",
+				Success: false,
+				Data: map[string]interface{}{
+					"Error": err.Error(),
+				},
+			})
+			return
+		}
+
+		c.JSON(200, storageUtil.Response{
+			Code:    200,
+			Message: "Email sent",
+			Success: true,
+			Data: map[string]interface{}{
+				"token": val,
+			},
+		})
+
+	}
+}
+
 func SendConfirmationMessage() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		em := c.Param("email")
@@ -230,7 +280,8 @@ func SendConfirmationMessage() gin.HandlerFunc {
 				Message: "internal server error",
 				Success: false,
 				Data: map[string]interface{}{
-					"Error": err.Error(),
+					"Error":   err.Error(),
+					"message": "random Id could not be created",
 				},
 			})
 		}
@@ -246,7 +297,7 @@ func SendConfirmationMessage() gin.HandlerFunc {
 		if err != nil {
 			c.JSON(500, storageUtil.Response{
 				Code:    500,
-				Message: "internal server error",
+				Message: "internal server error could ot send message could",
 				Success: false,
 				Data: map[string]interface{}{
 					"Error": err.Error(),

@@ -22,9 +22,27 @@ func SendTokenMessage(domain string, token storageUtil.Token, sender string, org
 		receiver,
 	)
 
-	ca, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	ca, cancel := context.WithTimeout(context.Background(), time.Second*14)
 	defer cancel()
 
 	_, _, _ = mg.Send(ca, tok)
 	return "Success", ""
+}
+
+// edit ast
+// hash pasdswrod and send t6oken mg wqith mailgu n
+func setResPword(domain string, uName string, tok string, g string) error { //how p[arsed in astrr with return
+	val := GetMailgunData()
+	mg := ma.NewMailgun(domain, val)
+	rPword := mg.NewMessage(
+		"Gaurav <bansal22.gaurav@gmail.com>",
+		"Reset Password",
+		"Please use the following token to reset your password, "+uName+": "+tok+".\n This token will expire in 1 hour.",
+		g)
+	con, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+
+	_, _, err := mg.Send(con, rPword)
+	return err
+
 }

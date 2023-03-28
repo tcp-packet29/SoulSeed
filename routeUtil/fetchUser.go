@@ -200,6 +200,7 @@ func FetchUserByUsername() gin.HandlerFunc {
 			Items:             userFound.Items,
 			Zipcode:           userFound.Zipcode,
 			OrganizationOwned: userFound.OrganizationOwned,
+			OrganizationsIn:   userFound.OrganizationsIn,
 		}
 
 		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "200 OK", Success: true, Data: map[string]interface{}{"data": userCopy}})

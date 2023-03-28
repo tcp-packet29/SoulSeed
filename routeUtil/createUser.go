@@ -21,6 +21,7 @@ func CreateUser() gin.HandlerFunc { //to be used in request handling suchj as PO
 			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: map[string]interface{}{"data": err.Error()}})
 			return
 		}
+		empt := []string{"placeholder"}
 		//create user and add to dataabase aon post  func for creaitng userbased on body of request acreate and add ot datbase
 		nUser := storageUtil.User{
 			Id:                primitive.NewObjectID(),
@@ -29,7 +30,8 @@ func CreateUser() gin.HandlerFunc { //to be used in request handling suchj as PO
 			Password:          user.Password,
 			Items:             user.Items,
 			Zipcode:           user.Zipcode,
-			OrganizationOwned: user.OrganizationOwned,
+			OrganizationOwned: empt,
+			OrganizationsIn:   empt,
 		}
 
 		resultIt, _ := userCol.Find(c, bson.M{}) //finding all of them, returning iterator

@@ -64,18 +64,19 @@
     <div class="drawer-side">
         <label for="opensettings" class="drawer-overlay"></label>
         <ul class="menu p-4 w-80 bg-base-100 text-base-content text-accent bg-secondary rounded-l-box border-accent">
-            <li>
-                <a href="/mainPg">Home</a>
+            <li class="menu-title hover:text-accent">
+                <span class="hover:text-accent">General</span>
             </li>
-            <li>
-                <a href="/login">Login</a>
-            </li>
-            <li>
-                <a href="/register">Register</a>
-            </li>
+            <li><button><a>Profile</a></button></li>
             <li>
                 <button on:click={logOut}><a>Logout</a></button>
             </li>
-        </ul>
-    </div>
+            <li class="divider"></li>
+            <li class="menu-title hover:text-accent">
+                <span class="hover:text-accent">Util</span>
+            </li>
+            <li><button><a>Organizations</a></button></li>
+            <li><button><a>Trades</a></button></li>
+            <li><button><a>Deals</a></button></li>
+        </ul></div>
 </div>

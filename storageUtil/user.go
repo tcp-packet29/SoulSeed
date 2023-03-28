@@ -13,6 +13,8 @@ type User struct {
 	Items             []string           `bson:"items,omitempty"`
 	Zipcode           string             `bson:"zipcode,omitempty"`
 	OrganizationOwned []string           `bson:"organization_owned,omitempty"`
+	OrganizationsIn   []string           `bson:"organizations_in,omitempty"`
+	Profilep          []byte             `bson:"profilep,omitempty"`
 }
 
 func (usr *User) hashPassword(pass string) error {
