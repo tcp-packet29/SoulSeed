@@ -72,7 +72,7 @@ func CreateOrg() gin.HandlerFunc {
 			return
 		}
 		user.OrganizationOwned = append(user.OrganizationOwned, org.Id.Hex())
-		c.JSON(http.StatusOK, Code: http.StatusInternalServerError, Message: "Internal Server Error, cannot decode", Success: false, Data: map[string]interface{}{"Data": 99999}}R)
+		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error, cannot decode", Success: false, Data: map[string]interface{}{"Data": 99999}})
 	}
 }
 
@@ -104,5 +104,3 @@ func AddOrgMember() gin.HandlerFunc {
 
 	}
 }
-
-
