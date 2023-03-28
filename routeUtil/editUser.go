@@ -58,11 +58,11 @@ func CreateOrg() gin.HandlerFunc {
 		var user storageUtil.User
 		err := userCol.FindOne(c, bson.M{"id": oId}).Decode(&user)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error, cannot decode", Success: false, Data: map[string]interface{}{"Data": 99998, "Err": err.Error()}})
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error, cannot decode", Success: false, Data: map[string]interface{}{"Data": 99998}})
 			return
 		}
 		if len(user.OrganizationOwned) == 5 {
-			c.JSON(http.StatusNotAcceptable, storageUtil.Response{Code: http.StatusOK, Message: "Organization Limit of 5 Exceeded", Success: false, Data: map[string]interface{}{"Data": 99999, "Err": err.Error()}})
+			c.JSON(http.StatusNotAcceptable, storageUtil.Response{Code: http.StatusNotAcceptable, Message: "Organization Limit of 5 Exceeded", Success: false, Data: map[string]interface{}{"Data": 99999}})
 			return
 		}
 
