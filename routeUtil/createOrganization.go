@@ -43,7 +43,7 @@ func PostOrganization() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: map[string]interface{}{
 				"data": err, //shows err imnr espo0nse to  eb read
 				"info": finalOrganization},
-				//organization data fetched fro nomrganization, erortr in interl aerror wheninsertion into db
+			//organization data fetched fro nomrganization, erortr in interl aerror wheninsertion into db
 			})
 			return
 		}
@@ -65,7 +65,7 @@ func MakeOrg(c *gin.Context) (storageUtil.Organization, error) {
 		Name:        organization.Name,
 		Description: organization.Description,
 		Image:       organization.Image,
-		Zipcode:     organization.Zipcode,
+		Zipcode:     genUtil.FetchUserById(organization.Owner_ID, userCol, c, func() { fmt.Println("Error") }).Zipcode,
 		Owner:       genUtil.FetchUserById(organization.Owner_ID, userCol, c, func() { fmt.Println("Error") }),
 		Owner_ID:    organization.Owner_ID,
 		Items:       organization.Items,

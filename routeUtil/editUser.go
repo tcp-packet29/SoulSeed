@@ -58,21 +58,22 @@ func CreateOrg() gin.HandlerFunc {
 		var user storageUtil.User
 		err := userCol.FindOne(c, bson.M{"id": oId}).Decode(&user)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error, cannot decode", Success: false, Data: map[string]interface{}{"Data": 99999}})
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error, cannot decode", Success: false, Data: map[string]interface{}{"Data": 99998, "Err": err.Error()}})
 			return
 		}
 		if len(user.OrganizationOwned) == 5 {
-			c.JSON(http.StatusNotAcceptable, storageUtil.Response{Code: http.StatusOK, Message: "Organization Limit of 5 Exceeded", Success: false, Data: map[string]interface{}{"Data": 99999}})
+			c.JSON(http.StatusNotAcceptable, storageUtil.Response{Code: http.StatusOK, Message: "Organization Limit of 5 Exceeded", Success: false, Data: map[string]interface{}{"Data": 99999, "Err": err.Error()}})
 			return
 		}
 
 		org, err := MakeOrg(c)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error, cannot decode", Success: false, Data: map[string]interface{}{"Data": 99999}})
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error, cannot decode", Success: false, Data: map[string]interface{}{"Data": 99999, "Err": err.Error()}})
 			return
 		}
 		user.OrganizationOwned = append(user.OrganizationOwned, org.Id.Hex())
-		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error, cannot decode", Success: false, Data: map[string]interface{}{"Data": 99999}})
+		resa, err := userCol.UpdateOne(c, bson.M{"id": oId}, bson.M{"$set": bson.M{"organization_owned": user.OrganizationOwned}})
+		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "Internal Server Error, cannot decode", Success: true, Data: map[string]interface{}{"Data": 999988, "result": resa}})
 	}
 }
 
