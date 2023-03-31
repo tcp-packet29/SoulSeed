@@ -54,27 +54,23 @@
         };
 
 
-        if (val.OrganizationOwned.length == 5) {
-            document.getElementById("textone").innerHTML = "Error";
+
+    axios.post('http://localhost:8080/app/users/org/' + val.Id + '/createOrganization', dat, head)
+        .then(function (response) {
+            console.log(response);
+            document.getElementById("textone").innerHTML = "Org Created";
             document.getElementById("texttwo").innerHTML = "You have reached the maximum number of organizations you can own";
             document.getElementById("close").innerHTML = "Close";
             document.getElementById("donemodal").checked = true;
-        } else {
-            axios.post('http://localhost:8080/app/organizations', dat, head)
-                .then(function (response) {
-                    console.log(response);
-                    document.getElementById("textone").innerHTML = "Org Created";
-                    document.getElementById("texttwo").innerHTML = "You have reached the maximum number of organizations you can own";
-                    document.getElementById("close").innerHTML = "Close";
-                    document.getElementById("donemodal").checked = true;
-                    //TODO:
-                    //send put request
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+            //TODO:
+            //send put request
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    //xmpp amqp jwt authb mdidelewar for these and use in stomp mqtt
 
-        }
+
 
     }
     if (browser) {

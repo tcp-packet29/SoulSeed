@@ -9,6 +9,6 @@ func UserRoutes(router *gin.RouterGroup) {
 	router.DELETE("/users/:uid", DeleteUser())
 	router.PUT("/users/:uid", EditUser())
 	router.GET("/users/:uid", FetchUser())
-	router.GET("/users/org/:ui/createOrganization", CreateOrg())
+	router.POST("/users/org/:ui/createOrganization", CreateOrg())
 
 }
