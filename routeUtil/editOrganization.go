@@ -67,6 +67,49 @@ func FetchOrganization() gin.HandlerFunc {
 	}
 }
 
+type orgVals struct {
+	orgIds []string `bson:"orgIds"`
+}
+
+func MultOrg() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var orgIdas storageUtil.OrgData
+		err := c.BindJSON(&orgIdas)
+		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: true, Data: map[string]interface{}{"organization": orgIdas.OrgVal}})
+		if err != nil {
+			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: map[string]interface{}{"error": err.Error()}})
+			return
+		}
+		organizations := []storageUtil.Organization{}
+		for _, val := range orgIdas.OrgVal { //jwt
+			//jwt
+			//jwt
+			//jwt
+			//jwt
+			//jwt
+			//nwt
+			//jwt
+			//jwt
+			//jwt
+			fmt.Println(val)
+			oid, err := primitive.ObjectIDFromHex(val)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: map[string]interface{}{"error": err.Error()}})
+				return
+			}
+			var org storageUtil.Organization
+			err = OrganizationCol.FindOne(c, bson.M{"id": oid}).Decode(&org)
+			if err != nil {
+				c.JSON(http.StatusNotFound, storageUtil.Response{Code: http.StatusNotFound, Message: "Not Found", Success: false, Data: nil})
+				return
+			}
+			organizations = append(organizations, org)
+		}
+
+		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: true, Data: map[string]interface{}{"organizations": organizations}})
+	}
+}
+
 func AddUserOrganization() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		uid := c.Param("oid")

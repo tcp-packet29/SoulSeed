@@ -53,13 +53,13 @@
         <span class="hover:text-accent">Organizations In</span>
     </li>
     {#each ids as id}
-        <li><a href="/org/{id}">{id}</a></li>
+        <li><a href="/organization/{id}">{id}</a></li>
     {/each}
     <li class="menu-title">
         <span class="hover:text-accent">Organizations Owned</span>
     </li>
     {#each owned as id}
-        <li><a href="/org/{id}">{id}</a></li>
+        <li><a href="/organization/{id}">{id}</a></li>
     {/each}
 
 
