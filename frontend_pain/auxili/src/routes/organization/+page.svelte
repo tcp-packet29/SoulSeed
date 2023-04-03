@@ -1,12 +1,14 @@
 <script>
     import axios from 'axios';
     import { browser } from '$app/environment';
-    import { getTok, getToken, prse } from '$lib/parse.svelte';
+    import { getTok, getToken, prsse } from '$lib/parse.svelte';
     //http reference?
     //TODO:
     //1. send a request to check if user is logged in through jwt auth middleware to fertch dat aform the databs erolesnaocljerf and render orgs
     var ids = []
     var owned = []
+    var dats = []
+    var ins = []
     axios.get('http://localhost:8080/app/auth', {
         headers: {//inverse kinematics reference
             "Token": getToken(),
@@ -34,6 +36,54 @@
             ids = response.data.data.Data.OrganizationsIn;
             console.log(ids);
             owned = response.data.data.Data.OrganizationOwned;
+            owned.splice(0,1);
+            ids.splice(0, 1)
+            axios.post('http://localhost:8080/app/organizations/idBulk', {
+                "orgVal": owned,
+            }, {
+                headers: {
+                    "Token": getToken(),
+                }
+            })
+                .then(function (response) {
+                    console.log(response)
+                    let vals = prsse(response)
+                    console.log(vals);
+                    dats = vals.organizations;
+
+                })
+                .catch(function (error) {
+                    if (browser) {
+                        alert("not logged in");
+                        console.log('why sir estapi')
+                        console.log(error);
+                        // window.location.href = "/login";
+                    }
+
+                })
+            axios.post('http://localhost:8080/app/organizations/idBulk', {
+                "orgVal": ids,
+            }, {
+                headers: {
+                    "Token": getToken(),
+                }
+            })
+                .then(function (response) {
+                    console.log(response)
+                    let vals = prsse(response)
+                    console.log(vals);
+                    ins = vals.organizations;
+
+                })
+                .catch(function (error) {
+                    if (browser) {
+                        alert("not logged in");
+                        console.log('why sir estapi')
+                        console.log(error);
+                        // window.location.href = "/login";
+                    }
+
+                })
         })
         .catch(function (error) {
 
@@ -52,14 +102,14 @@
     <li class="menu-title">
         <span class="hover:text-accent">Organizations In</span>
     </li>
-    {#each ids as id}
-        <li><a href="/organization/{id}">{id}</a></li>
+    {#each ins as org}
+        <li><a href="/organization/{org.Id}">{org.Name}</a></li>
     {/each}
     <li class="menu-title">
         <span class="hover:text-accent">Organizations Owned</span>
     </li>
-    {#each owned as id}
-        <li><a href="/organization/{id}">{id}</a></li>
+    {#each dats as id}
+        <li><a href="/organization/{id.Id}">{id.Name}</a></li>
     {/each}
 
 

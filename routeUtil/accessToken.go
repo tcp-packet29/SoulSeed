@@ -130,7 +130,7 @@ func createAccessToken() gin.HandlerFunc {
 			Expiry:           time.Now().Add(dur),
 		}
 
-		one, err := tokCol.InsertOne(c, newTok)
+		_, err = tokCol.InsertOne(c, newTok)
 		if err != nil {
 			return
 		}
@@ -140,7 +140,7 @@ func createAccessToken() gin.HandlerFunc {
 			Message: "Created obj",
 			Success: true,
 			Data: map[string]interface{}{
-				"data": one,
+				"data": newTok,
 			},
 		})
 

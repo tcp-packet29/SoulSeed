@@ -75,7 +75,7 @@ func MultOrg() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var orgIdas storageUtil.OrgData
 		err := c.BindJSON(&orgIdas)
-		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: true, Data: map[string]interface{}{"organization": orgIdas.OrgVal}})
+
 		if err != nil {
 			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: map[string]interface{}{"error": err.Error()}})
 			return
@@ -172,6 +172,7 @@ func AddItemOrganization() gin.HandlerFunc {
 		organization := genUtil.FetchOrgById(uid, OrganizationCol, c, func() {
 			c.JSON(http.StatusNotFound, storageUtil.Response{Code: http.StatusNotFound, Message: "Not Found", Success: false, Data: nil})
 		})
+		//wt auth interpce thtp request
 		//finding organization
 
 		itemList := organization.Items
@@ -198,6 +199,13 @@ func AddItemOrganization() gin.HandlerFunc {
 
 		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: true, Data: map[string]interface{}{"data": result}})
 
+	}
+}
+
+func Wotk() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		x := c.Param("jwt")
+		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: true, Data: map[string]interface{}{"jwt": x}})
 	}
 }
 

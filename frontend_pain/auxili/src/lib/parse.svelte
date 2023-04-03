@@ -5,6 +5,10 @@
         let jso = JSON.parse(JSON.stringify(dat));
         return jso.data.data.Data
     }
+    export function prsse(dat) {
+        let jso = JSON.parse(JSON.stringify(dat));
+        return jso.data.data
+    }
 
     export function getToken() {
         if (browser) {
