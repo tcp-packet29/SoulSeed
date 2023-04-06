@@ -126,24 +126,7 @@
             <div class="card-body items-center text-center">
                 <h2 class="card-title text-neutral">Make a New Organization!</h2>
                 <p class="card-subtitle text-primary">Make a group</p>
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">Name</span>
 
-                    </label>
-
-                    <input type="text" placeholder="myCodeCompiled42" class="input input-bordered input-accent w-full max-w-xs" bind:value={valo}/>
-
-                    <label class="label">
-                        <span class="label-text">Description</span>
-                    </label>
-
-                    <input type="text" placeholder="a place for gcc users" class="input input-bordered input-accent w-full max-w-xs" bind:value={editast}/>
-
-                </div>
-                <div class="card-actions">
-                    <label for="donemodal" class="btn btn-outline btn-accent" on:click={createOrg}>Create</label>
-                </div>
             </div>
 
         </div>

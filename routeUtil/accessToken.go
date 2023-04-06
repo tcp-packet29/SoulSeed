@@ -121,13 +121,14 @@ func createAccessToken() gin.HandlerFunc {
 			})
 		}
 
-		dur, _ := time.ParseDuration(num + "m") //llvm backend compiler
+		dur, _ := time.ParseDuration(num + "h") //llvm backend compiler
 
 		newTok := storageUtil.Token{
 			ID:               primitive.NewObjectID(),
 			Access:           tokenToUse,
 			OrganizationCode: tok.OrganizationCode,
 			Expiry:           time.Now().Add(dur),
+			Emails:           tok.Emails,
 		}
 
 		_, err = tokCol.InsertOne(c, newTok)

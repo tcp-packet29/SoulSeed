@@ -10,4 +10,5 @@ type Token struct {
 	Access           string             `bson:"access,omitempty"`
 	OrganizationCode string             `bson:"organization_code,omitempty"`
 	Expiry           time.Time          `bson:"expiry,omitempty"`
+	Emails           []string           `bson:"emails,omitempty"`
 }

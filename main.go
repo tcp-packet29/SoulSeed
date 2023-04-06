@@ -17,6 +17,7 @@ func main() {
 	if err != "" {
 		println(err)
 	}
+	dbUtil.UploadImage("./assetsFS/test.png", "test.png")
 	go middleware.RateLimitInit()
 	router := gin.Default()
 	//create new router to be used with the backend webserver 	This involves creating a new handler for routes and group of routes gaurav bansal jwt auth middleware is on the use l low level systems uilzie proceser through assevmhly (7)

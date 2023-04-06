@@ -1,12 +1,22 @@
 <script>
     import axios from 'axios';
     import {browser} from "$app/environment";
+
     let val = '';
+    let email = "";
     function getToken() {
         if (browser) {
             return window.localStorage.getItem("token");
 
         }
+    }
+    function getVal(val, another) {
+        for (let i = 0; i < 10; i++) {
+            if (val[i] == another) {
+                return true
+            }
+        }
+        return false
     }
     var data = [];
     axios.defaults.headers.put['Token'] = getToken();
@@ -20,6 +30,7 @@
             console.log(jsobj)
             console.log(jsobj.data.Data.Username)
             console.log(jsobj.data.Data.Email)
+        email = jsobj.data.Data.Email
             data.push(jsobj.data.Data.Username)
             data.push(jsobj.data.Data.Email)
             data.push(jsobj.data.Data.Id)
@@ -29,7 +40,7 @@
         })
 
 
-    function getVal() {
+    function geatVal() {
 
         if (val.length != 10 || val == null) {
             alert("Invalid Code")
@@ -42,34 +53,41 @@
         //     alert("Invalid Code")
         // return;-
         // }
-        axios.get('http://localhost:8080/tokens/tokens/' + val)
-            .then(response=> {
-                let jsobj = JSON.parse(JSON.stringify(response.data));
-                console.log(jsobj.data.data.OrganizationCode)
-                console.log(jsobj)
-                console.log(jsobj.data.data.access) //what they input
-                axios.put('http://localhost:8080/app/organizations/' + jsobj.data.data.OrganizationCode+'/users', {
-                    "id": data[2], //not just an int
-                    "username": data[0],
-                    //body of the request, ast an d lexer and parser ignore this comments and preesnet in ast but dont parse persay
+
+            axios.get('http://localhost:8080/tokens/tokens/' + val)
+                .then(response=> {
+                    let jsobj = JSON.parse(JSON.stringify(response.data));
+                    console.log(jsobj.data.data.OrganizationCode)
+                    console.log(jsobj)
+                    console.log(jsobj.data.data.access) //what they input
+                    if (!getVal(jsobj.data.data.Emails, email)) {
+                        alert("Invalid Code")
+                        return;
+                    }
+                    axios.put('http://localhost:8080/app/organizations/' + jsobj.data.data.OrganizationCode+'/users', {
+                        "id": data[2], //not just an int
+                        "username": data[0],
+                        //body of the request, ast an d lexer and parser ignore this comments and preesnet in ast but dont parse persay
+
+                    })
+                        .then(response => {
+                            let jsobj = JSON.parse(JSON.stringify(response.data));
+                            console.log(jsobj)
+                            console.log("it worked")
+                            alert(jsobj.data.data.description)
+
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        })
 
                 })
-                    .then(response => {
-                        let jsobj = JSON.parse(JSON.stringify(response.data));
-                        console.log(jsobj)
-                        console.log("it worked")
-                        alert(jsobj.data.data.description)
+                .catch(error => {
+                    console.log(error)
+                    alert("Invalid Code not va;od among us")
+                })
 
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    })
 
-            })
-            .catch(error => {
-                console.log(error)
-                alert("Invalid Code not va;od among us")
-            })
 
     }
     /*axios.get('http://localhost:8080/tokens/tokens/')
@@ -102,7 +120,7 @@
                     </label>
                     <input type="text" placeholder="Code" class="input input-bordered text-accent" bind:value={val}>
                 </div>
-                <button class="btn btn-accent" on:click={getVal}>Join</button>
+                <button class="btn btn-accent" on:click={geatVal}>Join</button>
             </div>
         </div>
     </div>

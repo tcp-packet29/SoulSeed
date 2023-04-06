@@ -4,7 +4,8 @@
     import { getTok, getToken, prse } from '$lib/parse.svelte';
     import {browser} from "$app/environment";
     var exp = "";
-
+    var emails = "";
+    console.log($page.params.id)
     function aaa() {
         if (browser) {
             var date = Date.now()
@@ -18,7 +19,8 @@
             }
         }
         axios.post("http://localhost:8080/tokens/tokens/" + exp, {
-            "organization_code": $page.params.id,
+            "OrganizationCode": $page.params.id,
+            "emails": emails.split(","),
         },{
             headers: {
                 Token: getToken()
@@ -53,6 +55,7 @@
 
             <input type="text" placeholder="Expiry" class="input input-bordered w-full" bind:value={exp} />
             <h1 class="text-neutral" id="token">Token To Be Generated!</h1>
+            <input type="text" placeholder="Emails (separate by comma)" class="input input-bordered w-full" bind:value={emails} />
 
             <button class="btn btn-primary" on:click={aaa}>Generate</button>
         </div>
