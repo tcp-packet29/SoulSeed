@@ -1,5 +1,19 @@
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css' rel='stylesheet' />
+<style>
+    #map {
+        width: 100%;
+        position: center;
+        height: 100%;
+
+
+
+    }
+</style>
 <script>
     import axios from 'axios';
+    import { onMount } from 'svelte';
+    import mapboxgl from 'mapbox-gl';
+
     import { browser } from '$app/environment';
     function getToken() {
         if (browser) {
@@ -18,30 +32,41 @@
     //cpidl add of sttet,emt nroser but then would ahe to add if not browser then rhrow erero
 
 
-        axios.get('http://localhost:8080/app/auth', {
+        // axios.get('http://localhost:8080/app/auth', {
+        //
+        //     headers: {
+        //         "Token": getToken(), //this isnt returning null or underfined
+        //         "Content-Type": "application/json"
+        //     }
+        // })
+        //     .then(function (response) {
+        //         if (response.status != 201 && response.status != 200) {
+        //             console.log(response.status)
+        //             alert("You are not logged in")//will it show
+        //
+        //         }
+        //         console.log(response);
+        //
+        //
+        //     }).catch(function (error) {
+        //     console.log(error);
+        //     if (browser) {
+        //         alert("You are not logged in")//will it show
+        //         window.location.href = "/login";
+        //     }
+        //
+        // });
 
-            headers: {
-                "Token": getToken(), //this isnt returning null or underfined
-                "Content-Type": "application/json"
-            }
+    onMount(async () => {
+        mapboxgl.accessToken = "pk.eyJ1Ijoic3BlbGxjYXN0IiwiYSI6ImNsZTN1YjNtcTBjaGczb2xmMzJ1YnZua2IifQ.ZzbJhqpfTl94WAt8jpUHvA" //should probably env this
+
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [-74.5, 40],
+            zoom: 11.5,
         })
-            .then(function (response) {
-                if (response.status != 201 && response.status != 200) {
-                    console.log(response.status)
-                    alert("You are not logged in")//will it show
-
-                }
-                console.log(response);
-
-
-            }).catch(function (error) {
-            console.log(error);
-            if (browser) {
-                alert("You are not logged in")//will it show
-                window.location.href = "/login";
-            }
-
-        });
+    })
 
 
 </script>
@@ -49,7 +74,8 @@
 <div class="drawer drawer-end">
     <input id="opensettings" type="checkbox" class="drawer-toggle">
     <div class="drawer-content">
-        <div class="navbar bg-base-200 rounded-b-box">
+        <div id="map" class="z-40"></div>
+        <div class="navbar bg-base-200 rounded-b-box z-50 absolute inset-x-0 top-0">
             <div class="flex-1">
                 <a class="btn btn-ghost btn-sm rounded-btn btn btn-md border-accent">restapi</a>
             </div>
@@ -60,6 +86,9 @@
                 </label>
             </div>
         </div>
+
+
+
     </div>
     <div class="drawer-side">
         <label for="opensettings" class="drawer-overlay"></label>
