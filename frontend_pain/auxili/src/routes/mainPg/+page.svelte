@@ -15,6 +15,8 @@
     import { onMount } from 'svelte';
     import mapboxgl from 'mapbox-gl';
 
+    let zipc = ""
+
     import { browser } from '$app/environment';
     function getToken() {
         if (browser) {
@@ -30,40 +32,61 @@
         }
     }
 
-    function setLatLong(lat, long) {
+    function setLatLong(e) {
         if (browser) {
-            window.localStorage.setItem("lat", lat)
-            window.localStorage.setItem("long", long)
+            axios.get('http://localhost:8080/access/geo/' + zipc, {
+                headers: {
+                    "Token": getToken(), //this isnt returning null or underfined
+                    "Content-Type": "application/json"
+                }
+            })
+
+                .then(function (response) {
+                    console.log(response)
+                    // if (response.status != 201 && response.status != 200) {
+                    //     console.log(response.status)
+                    //     alert("You are not logged in")//will it show
+                    //
+                    // }
+
+                    window.location.href = "http://localhost:5173/tradeCreate/" + e.lngLat.wrap().lat + "~amqp~" + e.lngLat.wrap().lng
+
+
+                }).catch(function (error) {
+                    console.log(error)
+                    alert("That is not a nearby area!")
+
+            })
         }
     }
 
     //cpidl add of sttet,emt nroser but then would ahe to add if not browser then rhrow erero
 
 
-        // axios.get('http://localhost:8080/app/auth', {
-        //
-        //     headers: {
-        //         "Token": getToken(), //this isnt returning null or underfined
-        //         "Content-Type": "application/json"
-        //     }
-        // })
-        //     .then(function (response) {
-        //         if (response.status != 201 && response.status != 200) {
-        //             console.log(response.status)
-        //             alert("You are not logged in")//will it show
-        //
-        //         }
-        //         console.log(response);
-        //
-        //
-        //     }).catch(function (error) {
-        //     console.log(error);
-        //     if (browser) {
-        //         alert("You are not logged in")//will it show
-        //         window.location.href = "/login";
-        //     }
-        //
-        // });
+        axios.get('http://localhost:8080/app/auth', {
+
+            headers: {
+                "Token": getToken(), //this isnt returning null or underfined
+                "Content-Type": "application/json"
+            }
+        })
+            .then(function (response) {
+                if (response.status != 201 && response.status != 200) {
+                    console.log(response.status)
+                    alert("You are not logged in")//will it show
+
+                }
+                console.log(response);
+
+
+            }).catch(function (error) {
+            console.log(error);
+            if (browser) {
+                alert("You are not logged in")//will it show
+                window.location.href = "/login";
+            }
+
+        });
 
     onMount(async () => {
         mapboxgl.accessToken = "pk.eyJ1Ijoic3BlbGxjYXN0IiwiYSI6ImNsZTN1YjNtcTBjaGczb2xmMzJ1YnZua2IifQ.ZzbJhqpfTl94WAt8jpUHvA" //should probably env this
@@ -76,11 +99,24 @@
         })
 
         map.on("click", (e) => {
+            axios.get(' https://api.mapbox.com/geocoding/v5/mapbox.places/' + e.lngLat.wrap().lng + ',' + e.lngLat.wrap().lat + '.json?types=postcode&limit=1&access_token=pk.eyJ1Ijoic3BlbGxjYXN0IiwiYSI6ImNsZTN1YjNtcTBjaGczb2xmMzJ1YnZua2IifQ.ZzbJhqpfTl94WAt8jpUHvA')
+                .then(function (response) {
+                    console.log(response.data.features[0].text);
+                    zipc = response.data.features[0].text
+
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
             console.log(e.lngLat.wrap())
-            new mapboxgl.Popup()
+            let pop = new mapboxgl.Popup()
                 .setLngLat(e.lngLat.wrap())
-                .setHTML("<a class='text-xl text-accent' href='http://localhost:5173/tradeCreate/" + e.lngLat.wrap().lat + "~amqp~" + e.lngLat.wrap().lng + "'>Create</a>")
+                .setHTML("<a class='text-xl text-accent' href=''>Create</a>")
                 .addTo(map)
+
+            pop.getElement().addEventListener('click', () => {
+                setLatLong(e)
+            })
         })
     })
 
