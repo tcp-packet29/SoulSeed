@@ -44,6 +44,8 @@ func main() {
 	authNeeded.Use(auth.NonContribCors())
 	authNeeded.Use(middleware.JwtAuth())
 
+	routeUtil.GeoRoutes(access)
+
 	routeUtil.UserRoutes(authNeeded)
 	routeUtil.DealRoutes(authNeeded)
 	routeUtil.OrgRoutes(authNeeded)

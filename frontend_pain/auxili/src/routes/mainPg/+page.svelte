@@ -3,7 +3,8 @@
     #map {
         width: 100%;
         position: center;
-        height: 100%;
+        height: 80%;
+
 
 
 
@@ -26,6 +27,13 @@
         if (browser) {
             window.localStorage.removeItem("token");
             window.location.href = "/login";
+        }
+    }
+
+    function setLatLong(lat, long) {
+        if (browser) {
+            window.localStorage.setItem("lat", lat)
+            window.localStorage.setItem("long", long)
         }
     }
 
@@ -66,6 +74,14 @@
             center: [-74.5, 40],
             zoom: 11.5,
         })
+
+        map.on("click", (e) => {
+            console.log(e.lngLat.wrap())
+            new mapboxgl.Popup()
+                .setLngLat(e.lngLat.wrap())
+                .setHTML("<a class='text-xl text-accent' href='http://localhost:5173/tradeCreate/" + e.lngLat.wrap().lat + "~amqp~" + e.lngLat.wrap().lng + "'>Create</a>")
+                .addTo(map)
+        })
     })
 
 
@@ -74,7 +90,7 @@
 <div class="drawer drawer-end">
     <input id="opensettings" type="checkbox" class="drawer-toggle">
     <div class="drawer-content">
-        <div id="map" class="z-40"></div>
+        <div id="map" class="z-40 border-8 border-b-secondary border-l-secondary border-r-secondary rounded-xl"></div>
         <div class="navbar bg-base-200 rounded-b-box z-50 absolute inset-x-0 top-0">
             <div class="flex-1">
                 <a class="btn btn-ghost btn-sm rounded-btn btn btn-md border-accent">restapi</a>

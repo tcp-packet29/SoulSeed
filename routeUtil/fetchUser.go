@@ -174,6 +174,32 @@ func FullID() gin.HandlerFunc {
 	}
 }
 
+func CheckZipcodeVicinity(zipcode string, comparable string) bool {
+	return zipcode[0:3] == comparable[0:3]
+}
+
+func GettingId() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		userId, err := ExtractUserID(c)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized due to jwt not being valid due to some reason", Success: false, Data: nil})
+			return
+		}
+		userFnd := genUtil.FetchUserById(userId, userCol, c, func() {
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "user", Success: true, Data: nil})
+		})
+		//automatically converst from hex tro oid
+		if CheckZipcodeVicinity(userFnd.Zipcode, c.Param("zipcode")) {
+			c.JSON(200, "okay")
+		} else {
+			c.JSON(http.StatusNotAcceptable, "does not match")
+		}
+
+		//c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "user", Success: true, Data: map[string]interface{}{"Data": userFnd}})
+	}
+
+}
+
 func FetchUserByUsername() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		uName := c.Param("username")
