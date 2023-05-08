@@ -18,9 +18,11 @@ func SendTokenMessage(domain string, token storageUtil.Token, sender string, org
 	tok := mg.NewMessage(
 		"Gaurav <bansal22.gaurav@gmail.com>", //tobedecided
 		"You have been invited to the organization \""+org+"\" by "+sender,
-		"Please use the following token to join the organization: "+token.Access+".\nThis token will expire in "+aaa+" hours.",
+		"",
 		receiver,
 	)
+
+	tok.SetHtml("<h1>Please use the following token to join the organization: " + token.Access + ".</h1><br>This token will expire in " + aaa + " hours")
 
 	ca, cancel := context.WithTimeout(context.Background(), time.Second*14)
 	defer cancel()

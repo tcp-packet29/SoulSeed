@@ -4,6 +4,7 @@
     import { usrn, psord, zpc, em, emTok} from "../../stores.js";
     import axios from "axios";
     import {get} from "svelte/store";
+    import {onMount} from "svelte";
 
     let val = ""
     let token = ""
@@ -101,6 +102,13 @@
             console.log(token)
         }
     }
+    onMount(async () => {
+        navigator.geolocation.getCurrentPosition((position) => {
+            window.localStorage.setItem('lat', position.coords.latitude);
+            window.localStorage.setItem('long', position.coords.longitude)//redis kv referlibtoeitisokcasifjauexteideidjsadocksajriemaldaloaslcloa
+        })
+    })
+
 //  could just look in local storage
 
     //shpuld proabably add usr here but okay

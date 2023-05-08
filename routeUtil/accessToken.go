@@ -40,7 +40,7 @@ func CreateRandomId(c *gin.Context) (string, error) {
 		return newVal, nil
 	}
 
-	//could just use mongodb id but its fine
+	//could just use mongodb id but its ficne
 
 }
 
@@ -53,12 +53,25 @@ func TokenCheckMiddleware() gin.HandlerFunc { //better to check fi watnd token i
 				Message: "internal server error",
 				Success: false,
 				Data: map[string]interface{}{
+
 					"Error": err.Error(),
 				},
 			})
 		}
 
-		defer checkCont.Close(c)
+		defer func() {
+			err := checkCont.Close(c)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, storageUtil.Response{
+					Code:    500,
+					Message: "internal server error",
+					Success: false,
+					Data: map[string]interface{}{
+						"Error": err.Error(),
+					},
+				})
+			}
+		}()
 
 		for checkCont.Next(c) {
 			var tok storageUtil.Token

@@ -90,7 +90,7 @@
 
     let kv = {
 
-        "apple": "🍎",
+        "apple" : "🍎",
         "banana": "🍌",
         "orange": "🍊",
         "pineapple": "🍍",
@@ -161,14 +161,15 @@
             <h2 class="card-title text-neutral tooltip" data-tip={lat + ", " + liblong}>Create Trade</h2>
 
             <input type="text" placeholder="Name" class="input input-bordered w-64" />
-            <input type="text" placeholder="Description" class="input input-bordered w-64" />
+            <textarea placeholder="Description" class="textarea textarea-bordered textarea-md w-64"></textarea>
             <div class="form-control">
                 <div class="input-group">
-                    <input type="text" placeholder="Items" class="input input-bordered w-48 " bind:value={item}/>
+                    <input placeholder="Items" class="input input-bordered w-48 " bind:value={item}/>
                     <button class="btn btn-square btn-accent" on:click={work} accesskey="enter">+</button>
                 </div>
 
             </div>
+            <button class="btn btn-accent">Create</button>
 
 
             <ul class="flex justify-center items-center grid" id="jwt">

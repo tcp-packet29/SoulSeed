@@ -87,14 +87,18 @@
             }
 
         });
+    let lati = 0;
+    let longi = 0;
+
 
     onMount(async () => {
+
         mapboxgl.accessToken = "pk.eyJ1Ijoic3BlbGxjYXN0IiwiYSI6ImNsZTN1YjNtcTBjaGczb2xmMzJ1YnZua2IifQ.ZzbJhqpfTl94WAt8jpUHvA" //should probably env this
 
         const map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
-            center: [-74.5, 40],
+            center: [0, 0], //redis
             zoom: 11.5,
         })
 
@@ -117,6 +121,17 @@
             pop.getElement().addEventListener('click', () => {
                 setLatLong(e)
             })
+        })
+
+        navigator.geolocation.getCurrentPosition((position) => {
+            window.localStorage.setItem('lat', position.coords.latitude);
+            window.localStorage.setItem('long', position.coords.longitude)//redis kv referlibtoeitisokcasifjauexteideidjsadocksajriemaldaloaslcloa
+            map.flyTo(
+                {
+                    center: [position.coords.longitude, position.coords.latitude],
+                    zoom: 10
+                }
+            )
         })
     })
 
