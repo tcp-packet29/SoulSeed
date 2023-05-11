@@ -6,6 +6,26 @@
     var exp = "";
     var emails = "";
     console.log($page.params.id)
+
+    if (browser) {
+        let token = window.localStorage.getItem('token')
+        if (token == null) {
+            window.location.href = "/login"
+        }
+    }
+    axios.get("http://localhost:8080/app/auth", {
+        headers: {
+            Token: getToken()
+        }
+    })
+        .then(function(response) {
+            console.log(response)
+        })
+        .catch(function (error) {
+            console.log(error)
+            window.location.href = '/login'
+
+        })
     function aaa() {
         if (browser) {
             var date = Date.now()
@@ -32,6 +52,23 @@
                     document.getElementById("token").innerHTML = response.data.data.data.Access;
                     var date = Date.now()
                     window.localStorage.setItem('cooldown', date.toString())
+                    axios.post("http://localhost:8080/email/join/test/" + emails + "/" + response.data.data.data.Access +"/" + exp, {
+                        "organization_code": $page.params.id,
+                        "emails": emails.split(","),
+                    },{
+                        headers: {
+                            Token: getToken()
+                        }
+                    })
+                        .then(function(response) {
+                            console.log(response)
+                        })
+                        .catch(function(error) {
+                            console.log(error)
+                            if (error.statusCode == 400) {
+                                alert("Invalid Email (keep less than 10)")
+                            }
+                        })
 
                 }
                 console.log(response)

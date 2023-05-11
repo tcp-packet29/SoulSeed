@@ -14,7 +14,37 @@
     import axios from 'axios';
     import { onMount } from 'svelte';
     import mapboxgl from 'mapbox-gl';
+    import {page} from '$app/stores'
 
+if (browser && ($page.params.organization != "global"))  { //jwtauthiasndmasjhaseprskosrjejnder
+    axios.get('http://localhost:8080/access/users/token', {
+        headers: {
+            "token": getToken(),
+        }
+    })
+        .then(function (response) {
+            let usId = response.data.data.Data.Id
+            console.log(usId)
+            axios.get('http://localhost:8080/app/organizations/stuff' + $page.params.organization + '/' + usId, {
+                headers: {
+                    "token": getToken(),
+                }
+            })//webrtc refere since server
+                .then(function (response) {
+                    console.log(response)
+                })
+                .catch(function (response) {
+                    console.log(response)
+                    alert("no org yes")
+                    // window.location.href = "/login";
+                })
+        })
+        .catch(function (error) {
+            console.log(error);
+            window.location.href = "/login";
+            console.log("this wont come")
+        })
+}
     let zipc = ""
 
     import { browser } from '$app/environment';
@@ -98,7 +128,7 @@
         const map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
-            center: [0, 0], //redis
+            center: [0, 0],
             zoom: 11.5,
         })
 
@@ -115,7 +145,7 @@
             console.log(e.lngLat.wrap())
             let pop = new mapboxgl.Popup()
                 .setLngLat(e.lngLat.wrap())
-                .setHTML("<a class='text-xl text-accent' href=''>Create</a>")
+                .setHTML("<button class='text-xl text-secondary btn-accent btn' href=''>Create</button>")
                 .addTo(map)
 
             pop.getElement().addEventListener('click', () => {

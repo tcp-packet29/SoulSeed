@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var tradeCol *mongo.Collection = dbUtil.GetCollection("trades");
+var tradeCol *mongo.Collection = dbUtil.GetCollection("trades")
 
 func CreateTrade() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -51,6 +51,7 @@ func CreateTrade() gin.HandlerFunc {
 			Items:       trade.Items,
 			Description: trade.Description,
 			Open:        true,
+			OrgId:       trade.OrgId,
 		}
 
 		_, err = tradeCol.InsertOne(c, newTrade)

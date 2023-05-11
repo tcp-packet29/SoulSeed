@@ -11,4 +11,5 @@ func OrgRoutes(r *gin.RouterGroup) {
 	r.PUT("/organizations/:oid/items", AddItemOrganization()) //put juts for okgging purposes, cna do soemyhing else ufncitoanltiy routes loginging peurposes weh logging debug mode and orgnaization log
 	r.GET("/organizations/aa/:jwt", Wotk())
 	r.POST("/organizations/idBulk", MultOrg())
+	r.GET("/organizations/stuff/:oid/:uid", UserInOrg())
 }

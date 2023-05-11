@@ -1,8 +1,11 @@
 package routeUtil
 
 import (
+	"context"
+	ma "github.com/mailgun/mailgun-go/v4"
 	"main/genUtil"
 	"main/storageUtil"
+	"time"
 
 	"net/http"
 
@@ -155,6 +158,65 @@ func AddUserOrganization() gin.HandlerFunc {
 		}
 
 		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: true, Data: map[string]interface{}{"data": result}})
+
+	}
+}
+func SendTokenMessage() gin.HandlerFunc { //strings instead of models for the sake of simplcity
+	return func(c *gin.Context) {
+		var model storageUtil.Model
+		if err := c.ShouldBindJSON(&model); err != nil {
+			c.JSON(400, gin.H{"error": err.Error()})
+			return
+		}
+
+		org := genUtil.FetchOrgById(model.OrganizationCode, OrganizationCol, c, func() { c.JSON(404, gin.H{"error": "Organization not found"}) }) //redis key not found
+
+		token := c.Param("token")
+		aaa := c.Param("aaa")
+		val := genUtil.GetMailgunData()
+
+		mg := ma.NewMailgun("sandbox9c61bd1e4277496793c46e636d1f0a6c.mailgun.org", val)
+		ca, cancel := context.WithTimeout(context.Background(), time.Second*14)
+		defer cancel()
+		if len(model.Emails) > 10 {
+			c.JSON(400, gin.H{"error": "Too many emails"})
+			return
+		}
+		for _, em := range model.Emails {
+			tok := mg.NewMessage(
+				"Gaurav <bansal22.gaurav@gmail.com>", //tobedecided
+				"You have been invited to the organization "+org.Name,
+				"",
+				em,
+			)
+
+			tok.SetHtml("<h1>Please use the following token to join the organization: " + token + ".</h1><br>This token will expire in " + aaa + " hours")
+			_, _, _ = mg.Send(ca, tok)
+		}
+
+	}
+
+}
+
+func UserInOrg() gin.HandlerFunc {
+	return func(co *gin.Context) {
+		oid, _ := primitive.ObjectIDFromHex(co.Param("oid"))
+
+		var org storageUtil.Organization
+		err := OrganizationCol.FindOne(co, bson.M{"id": oid}).Decode(&org)
+		if err != nil {
+			co.JSON(http.StatusNotFound, storageUtil.Response{Code: http.StatusNotFound, Message: "Not Found", Success: false, Data: nil})
+			return
+		}
+		in := false
+		for _, id := range org.Users_ID {
+			if id == co.Param("uid") {
+				in = true
+				break
+			}
+		}
+
+		co.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: true, Data: map[string]interface{}{"exists": in}})
 
 	}
 }

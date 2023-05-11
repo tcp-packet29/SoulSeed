@@ -2,21 +2,14 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"main/dbUtil"
-	"main/genUtil"
 	"main/middleware"
 	auth "main/oAuthHandling"
 	"main/routeUtil"
-	"main/storageUtil"
-	"time"
 )
 
 func main() {
-	_, err := genUtil.SendTokenMessage("sandbox9c61bd1e4277496793c46e636d1f0a6c.mailgun.org", storageUtil.Token{ID: primitive.NewObjectID(), Access: "1234", OrganizationCode: "1234", Expiry: time.Now().Add(time.Hour * 24)}, "Gaurav", "Org", "bansal22.gaurav@gmail.com")
-	if err != "" {
-		println(err)
-	}
+
 	dbUtil.UploadImage("./assetsFS/test.png", "test.png")
 	go middleware.RateLimitInit()
 	router := gin.Default()
@@ -30,6 +23,7 @@ func main() {
 	access := router.Group("/access")
 	tokens := router.Group("/tokens")
 	confirmation := router.Group("/email")
+	confirmation.POST("/join/:org/:receiver/:token/:aaa", routeUtil.SendTokenMessage())
 	access.Use(auth.NonContribCors())
 	access.POST("/login", auth.LoginHandle())
 	access.POST("/users", routeUtil.CreateUser())
