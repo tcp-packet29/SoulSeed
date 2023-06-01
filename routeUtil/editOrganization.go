@@ -123,7 +123,7 @@ func AddUserOrganization() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: map[string]interface{}{"error": err.Error()}})
 			return
 		}
-		organization := genUtil.FetchOrgById(uid, OrganizationCol, c, func() {
+		organization := genUtil.FetchOrgById(uid, OrganizationCol, c, func(err error) {
 			c.JSON(http.StatusNotFound, storageUtil.Response{Code: http.StatusNotFound, Message: "Not Found", Success: false, Data: nil})
 
 		})
@@ -169,7 +169,7 @@ func SendTokenMessage() gin.HandlerFunc { //strings instead of models for the sa
 			return
 		}
 
-		org := genUtil.FetchOrgById(model.OrganizationCode, OrganizationCol, c, func() { c.JSON(404, gin.H{"error": "Organization not found"}) }) //redis key not found
+		org := genUtil.FetchOrgById(model.OrganizationCode, OrganizationCol, c, func(err error) { c.JSON(404, gin.H{"error": "Organization not found"}) }) //redis key not found
 
 		token := c.Param("token")
 		aaa := c.Param("aaa")
@@ -221,6 +221,22 @@ func UserInOrg() gin.HandlerFunc {
 	}
 }
 
+func CheckOrgLocation() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		uid, zipcode := c.Param("uid"), c.Param("zipcode")
+		organization := genUtil.FetchOrgById(uid, OrganizationCol, c, func(err error) {
+			c.JSON(http.StatusNotFound, storageUtil.Response{Code: http.StatusNotFound, Message: "Not Found", Success: false, Data: map[string]interface{}{"error": err.Error()}})
+		})
+
+		if organization.Zipcode[:3] == zipcode[:3] {
+			c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: true, Data: map[string]interface{}{"exists": true}})
+		} else {
+			c.JSON(http.StatusNotAcceptable, storageUtil.Response{Code: http.StatusNotAcceptable, Message: "jwt", Success: true, Data: map[string]interface{}{"exists": false}})
+		}
+
+	}
+}
+
 func AddItemOrganization() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		uid := c.Param("oid")
@@ -231,7 +247,7 @@ func AddItemOrganization() gin.HandlerFunc {
 			return
 		}
 
-		organization := genUtil.FetchOrgById(uid, OrganizationCol, c, func() {
+		organization := genUtil.FetchOrgById(uid, OrganizationCol, c, func(err error) {
 			c.JSON(http.StatusNotFound, storageUtil.Response{Code: http.StatusNotFound, Message: "Not Found", Success: false, Data: nil})
 		})
 		//wt auth interpce thtp request

@@ -6,6 +6,7 @@ import (
 	"main/middleware"
 	auth "main/oAuthHandling"
 	"main/routeUtil"
+	"net/http"
 )
 
 func main() {
@@ -35,16 +36,22 @@ func main() {
 	confirmation.POST("/confirm/:email", routeUtil.SendConfirmationMessage()) //dont need middleware, just make random token
 	confirmation.POST("/password/:email", routeUtil.SendPasswordMessage())
 	authNeeded := router.Group("/app")
+	http.HandleFunc("/wc", routeUtil.Wsock())
 	authNeeded.Use(auth.NonContribCors())
 	authNeeded.Use(middleware.JwtAuth())
 
 	routeUtil.GeoRoutes(access)
 
 	routeUtil.UserRoutes(authNeeded)
+	//comments in abstrac syuntax tree
 	routeUtil.DealRoutes(authNeeded)
 	routeUtil.OrgRoutes(authNeeded)
 
 	authNeeded.GET("/auth", auth.AuthEndpoint())
+	authNeeded.POST("/jwt", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"jwtauthwebsockettcp": "webrtcrealrtiemstream"})
+	})
 	//routes for different ufnctiaonlties
 	//oi lve golang restapi guragavbansal restapis
 	router.Run(":8080")

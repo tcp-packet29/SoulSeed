@@ -3,12 +3,7 @@
     import {browser} from "$app/environment";
     import { page } from '$app/stores';
 
-
-
-
-
-
-    let val = '';
+    let val = $page.params.id;
     let email = "";
     function getToken() {
         if (browser) {
@@ -31,12 +26,12 @@
             'Token': getToken(),
         }
     })
-    .then(response => {
+        .then(response => {
             let jsobj = JSON.parse(JSON.stringify(response.data));
             console.log(jsobj)
             console.log(jsobj.data.Data.Username)
             console.log(jsobj.data.Data.Email)
-        email = jsobj.data.Data.Email
+            email = jsobj.data.Data.Email
             data.push(jsobj.data.Data.Username)
             data.push(jsobj.data.Data.Email)
             data.push(jsobj.data.Data.Id)
@@ -60,38 +55,38 @@
         // return;-
         // }
 
-            axios.get('http://localhost:8080/tokens/tokens/' + val)
-                .then(response=> {
-                    let jsobj = JSON.parse(JSON.stringify(response.data));
-                    console.log(jsobj.data.data.OrganizationCode)
-                    console.log(jsobj)
-                    console.log(jsobj.data.data.access) //what they input
-                    if (!getVal(jsobj.data.data.Emails, email)) {
-                        alert("Invalid Code")
-                        return;
-                    }
-                    axios.put('http://localhost:8080/app/organizations/' + jsobj.data.data.OrganizationCode+'/users', {
-                        "id": data[2], //not just an int
-                        "username": data[0],
-                        //body of the request, ast an d lexer and parser ignore this comments and preesnet in ast but dont parse persay
+        axios.get('http://localhost:8080/tokens/tokens/' + val)
+            .then(response=> {
+                let jsobj = JSON.parse(JSON.stringify(response.data));
+                console.log(jsobj.data.data.OrganizationCode)
+                console.log(jsobj)
+                console.log(jsobj.data.data.access) //what they input
+                if (!getVal(jsobj.data.data.Emails, email)) {
+                    alert("Invalid Code")
+                    return;
+                }
+                axios.put('http://localhost:8080/app/organizations/' + jsobj.data.data.OrganizationCode+'/users', {
+                    "id": data[2], //not just an int
+                    "username": data[0],
+                    //body of the request, ast an d lexer and parser ignore this comments and preesnet in ast but dont parse persay
+
+                })
+                    .then(response => {
+                        let jsobj = JSON.parse(JSON.stringify(response.data));
+                        console.log(jsobj)
+                        console.log("it worked")
+                        alert(jsobj.data.data.description)
 
                     })
-                        .then(response => {
-                            let jsobj = JSON.parse(JSON.stringify(response.data));
-                            console.log(jsobj)
-                            console.log("it worked")
-                            alert(jsobj.data.data.description)
+                    .catch(error => {
+                        console.log(error)
+                    })
 
-                        })
-                        .catch(error => {
-                            console.log(error)
-                        })
-
-                })
-                .catch(error => {
-                    console.log(error)
-                    alert("Invalid Code not va;od among us")
-                })
+            })
+            .catch(error => {
+                console.log(error)
+                alert("Invalid Code not va;od among us")
+            })
 
 
 
@@ -117,9 +112,6 @@
         <div class="text-center lg:text-right">
             <h1 class="mb-5 text-5xl font-bold text-neutral">Join A Group!</h1>
             <p class="text-neutral">Input the 10-Character Code</p>
-        </div>
-        <div id="qrcode">
-
         </div>
         <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl base-bg-100 bg-secondary">
             <div class="card-body">

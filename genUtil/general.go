@@ -67,7 +67,7 @@ func FetchUserById(id string, col *mongo.Collection, ctx *gin.Context, f func())
 	return userCopy
 }
 
-func FetchOrgById(id string, col *mongo.Collection, ctx *gin.Context, f func()) storageUtil.Organization {
+func FetchOrgById(id string, col *mongo.Collection, ctx *gin.Context, f func(err error)) storageUtil.Organization {
 	var oId primitive.ObjectID
 	var userFound storageUtil.Organization
 	var userCopy storageUtil.Organization
@@ -77,7 +77,7 @@ func FetchOrgById(id string, col *mongo.Collection, ctx *gin.Context, f func()) 
 	err := col.FindOne(ctx, bson.M{"id": oId}).Decode(&userFound) //finding user and decoding and transferring into userfound struct"}
 	if err != nil {
 		fmt.Println(err)
-		f() //closure func tionm in a varioable to ivnvoke ervbent event
+		f(err) //closure func tionm in a varioable to ivnvoke ervbent event
 	}
 
 	userCopy = storageUtil.Organization{

@@ -25,7 +25,7 @@ if (browser && ($page.params.organization != "global"))  { //jwtauthiasndmasjhas
         .then(function (response) {
             let usId = response.data.data.Data.Id
             console.log(usId)
-            axios.get('http://localhost:8080/app/organizations/stuff' + $page.params.organization + '/' + usId, {
+            axios.get('http://localhost:8080/app/organizations/stuff/' + $page.params.organization + '/' + usId, {
                 headers: {
                     "token": getToken(),
                 }
@@ -41,7 +41,7 @@ if (browser && ($page.params.organization != "global"))  { //jwtauthiasndmasjhas
         })
         .catch(function (error) {
             console.log(error);
-            window.location.href = "/login";
+            // window.location.href = "/login";
             console.log("this wont come")
         })
 }
@@ -58,36 +58,64 @@ if (browser && ($page.params.organization != "global"))  { //jwtauthiasndmasjhas
     function logOut() {
         if (browser) {
             window.localStorage.removeItem("token");
+
             window.location.href = "/login";
         }
     }
 
     function setLatLong(e) {
         if (browser) {
-            axios.get('http://localhost:8080/access/geo/' + zipc, {
-                headers: {
-                    "Token": getToken(), //this isnt returning null or underfined
-                    "Content-Type": "application/json"
-                }
-            })
+            if ($page.params.organization == 'global') {
+                axios.get('http://localhost:8080/access/geo/' + zipc, {
+                    headers: {
+                        "Token": getToken(), //this isnt returning null or underfined
+                        "Content-Type": "application/json"
+                    }
+                })
 
-                .then(function (response) {
-                    console.log(response)
-                    // if (response.status != 201 && response.status != 200) {
-                    //     console.log(response.status)
-                    //     alert("You are not logged in")//will it show
-                    //
-                    // }
+                    .then(function (response) {
+                        console.log(response)
+                        window.localStorage.setItem("org", $page.params.organization);
+                        // if (response.status != 201 && response.status != 200) {
+                        //     console.log(response.status)
+                        //     alert("You are not logged in")//will it show
+                        //
+                        // }
 
-                    window.location.href = "http://localhost:5173/tradeCreate/" + e.lngLat.wrap().lat + "~amqp~" + e.lngLat.wrap().lng
+                        window.location.href = "http://localhost:5173/tradeCreate/" + e.lngLat.wrap().lat + "~amqp~" + e.lngLat.wrap().lng
 
 
-                }).catch(function (error) {
+                    }).catch(function (error) {
                     console.log(error)
                     alert("That is not a nearby area!")
 
-            })
+                })
+            } else {
+                axios.get('http://localhost:8080/app/organizations/loc/' + $page.params.organization + '/' + zipc, {
+                    headers: {
+                        "Token": getToken(), //this isnt returning null or underfined
+                        "Content-Type": "application/json"
+                    }
+                })
+
+                    .then(function (response) {
+                        console.log(response)
+                        window.localStorage.setItem("org", $page.params.organization);
+                        // if (response.status != 201 && response.status != 200) {
+                        //     console.log(response.status)
+                        //     alert("You are not logged in")//will it show
+                        //
+                        // }
+
+                        window.location.href = "http://localhost:5173/tradeCreate/" + e.lngLat.wrap().lat + "~amqp~" + e.lngLat.wrap().lng
+                }).catch((error) => {
+                    console.log(error)
+                    alert("That is not a nearby area!")
+                })
+            }
         }
+
+
     }
 
     //cpidl add of sttet,emt nroser but then would ahe to add if not browser then rhrow erero

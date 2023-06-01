@@ -49,6 +49,35 @@
 
     }
 
+    if (browser) {
+        let x = window.localStorage.getItem("org");
+        if (x == global) {
+            setLatLong(lat, liblong)
+        } else {
+            axios.get('http://localhost:8080/app/organizations/loc/' + $page.params.organization + '/' + zipc, {
+                headers: {
+                    "Token": getToken(), //this isnt returning null or underfined
+                    "Content-Type": "application/json"
+                }
+            })
+
+                .then(function (response) {
+                    console.log(response)
+
+                    // if (response.status != 201 && response.status != 200) {
+                    //     console.log(response.status)
+                    //     alert("You are not logged in")//will it show
+                    //
+                    // }
+
+                }).catch((error) => {
+                console.log(error)
+                alert("That is not a nearby area!")
+            })
+        }
+
+    }
+
 
     function getToken() {
         if (browser) {
@@ -86,7 +115,6 @@
 
     }
 
-    setLatLong(lat, liblong)
 
     let kv = {
 
@@ -108,6 +136,15 @@
         "potato": "🥔",
         "carrot": "🥕",
         "corn": "🌽",
+        "pepper": "🌶",
+        "cucumber": "🥒",
+        "broccoli": "🥦",
+        "mushroom": "🍄",
+        "peanuts": "🥜",
+        "chestnut": "🌰",
+
+
+
 
         //make a key value pair of more fruits matched to their emojis
 

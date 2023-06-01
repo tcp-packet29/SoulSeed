@@ -134,7 +134,7 @@ func ExtractUserID(c *gin.Context) (string, error) { //takes in reuest handlign 
 			fmt.Println("parsing successful (this probvably won't print in main consoe")
 			return jwtEncryptionKey, nil
 
-		})
+		}) //llvm ir abstract syntax tree node
 		if err != nil {
 			//if error in aprsing jwt no auth
 			c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized due to jwt not being parsed", Success: false, Data: map[string]interface{}{"error": err.Error()}})

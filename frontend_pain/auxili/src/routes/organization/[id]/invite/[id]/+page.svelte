@@ -6,6 +6,12 @@
     var exp = "";
     var emails = "";
     console.log($page.params.id)
+    if (browser) {
+        let script = document.createElement('script');
+        script.src = "https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"
+        document.head.append(script);
+    }
+
 
     if (browser) {
         let token = window.localStorage.getItem('token')
@@ -23,7 +29,7 @@
         })
         .catch(function (error) {
             console.log(error)
-            window.location.href = '/login'
+            // window.location.href = '/login'
 
         })
     function aaa() {
@@ -50,6 +56,15 @@
                 if (browser) {
                     document.getElementById("token").style.color = null
                     document.getElementById("token").innerHTML = response.data.data.data.Access;
+                    document.getElementById("qr").innerHTML = "";
+                    const qrcode = new QRCode("qr", {
+                        text: "http://localhost:5173/joinOrganization/" + response.data.data.data.Access,
+                        width: 128,
+                        height: 128,
+                        colorDark : "#000000",
+                        colorLight : "#ffffff",
+                    })
+
                     var date = Date.now()
                     window.localStorage.setItem('cooldown', date.toString())
                     axios.post("http://localhost:8080/email/join/test/" + emails + "/" + response.data.data.data.Access +"/" + exp, {
@@ -93,7 +108,7 @@
             <input type="text" placeholder="Expiry" class="input input-bordered w-full" bind:value={exp} />
             <h1 class="text-neutral" id="token">Token To Be Generated!</h1>
             <input type="text" placeholder="Emails (separate by comma)" class="input input-bordered w-full" bind:value={emails} />
-
+            <div id="qr"></div>
             <button class="btn btn-primary" on:click={aaa}>Generate</button>
         </div>
     </div>
