@@ -113,6 +113,25 @@ func MultOrg() gin.HandlerFunc {
 	}
 }
 
+func UserOwner() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		oid := c.Param("oid")
+		uid := c.Param("uid")
+		oidHex, err := primitive.ObjectIDFromHex(oid)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: map[string]interface{}{"error": err.Error()}})
+			return
+		}
+
+		err = OrganizationCol.FindOne(c, bson.M{"id": oidHex, "owner_id": uid}).Err()
+		if err != nil {
+			c.JSON(http.StatusNotFound, storageUtil.Response{Code: http.StatusNotFound, Message: "Not Found", Success: false, Data: nil})
+			return
+		}
+		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: true, Data: map[string]interface{}{"organization": "jwtauth"}})
+	}
+}
+
 func AddUserOrganization() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		uid := c.Param("oid")

@@ -12,5 +12,6 @@ func OrgRoutes(r *gin.RouterGroup) {
 	r.GET("/organizations/aa/:jwt", Wotk())
 	r.POST("/organizations/idBulk", MultOrg())
 	r.GET("/organizations/stuff/:oid/:uid", UserInOrg())
+	r.GET("/organizations/admin/:oid/:uid", UserOwner())
 	r.GET("/organizations/loc/:uid/:zipcode", CheckOrgLocation())
 }

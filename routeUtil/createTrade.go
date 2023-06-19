@@ -24,8 +24,18 @@ func CreateTrade() gin.HandlerFunc {
 		}
 
 		var userFound storageUtil.User
+		var organizationF storageUtil.Organization
 
 		oID, _ := primitive.ObjectIDFromHex(trade.MakerID)
+		if trade.OrgId != "global" {
+			oIdtcp, _ := primitive.ObjectIDFromHex(trade.OrgId)
+			err = OrganizationCol.FindOne(c, bson.M{"id": oIdtcp}).Decode(&organizationF)
+			if organizationF.Zipcode[:2] != c.Param("zipcode")[:2] {
+				c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized", Success: false, Data: nil})
+				return
+			}
+		}
+
 		//converting id form param from hex and assigning it to oid
 
 		err = userCol.FindOne(c, bson.M{"id": oID}).Decode(&userFound) //finding user and decoding and transferring into userfound struct
@@ -47,6 +57,7 @@ func CreateTrade() gin.HandlerFunc {
 		newTrade := storageUtil.Trade{
 			Id:          primitive.NewObjectID(),
 			Maker:       newUser,
+			MakerID:     trade.MakerID,
 			Name:        trade.Name,
 			Items:       trade.Items,
 			Description: trade.Description,

@@ -7,6 +7,8 @@
     let zipcode = ""
     let lat = x[0]
     let liblong = x[2]
+    let amqp = ""
+    let tcp = ""
 
     function test(callback) {
         let among = "";
@@ -31,16 +33,47 @@
     try {
         axios.get(' https://api.mapbox.com/geocoding/v5/mapbox.places/' + liblong + ',' + lat + '.json?types=postcode&limit=1&access_token=pk.eyJ1Ijoic3BlbGxjYXN0IiwiYSI6ImNsZTN1YjNtcTBjaGczb2xmMzJ1YnZua2IifQ.ZzbJhqpfTl94WAt8jpUHvA')
             .then(function (response) {
+                console.log(response);
                 if (response.data.features.length > 0) {
                     console.log(response.data.features[0].text);
                     zipcode = response.data.features[0].text //synchroous
                 }
+                if (browser) {
+                    let x = window.localStorage.getItem("org");
+                    if (x == "global") {
+                        setLatLong(lat, liblong)
+                    } else {
+                        axios.get('http://localhost:8080/app/organizations/loc/' + x+ '/' + zipcode, {
+                            headers: {
+                                "Token": getToken(), //this isnt returning null or underfined
+                                "Content-Type": "application/json"
+                            }
+                        })
+
+                            .then(function (response) {
+                                console.log(response)
+
+                                // if (response.status != 201 && response.status != 200) {
+                                //     console.log(response.status)
+                                //     alert("You are not logged in")//will it show
+                                //
+                                // }
+
+                            }).catch((error) => {
+                            console.log(error)
+                            alert("That is not a nearby area!")
+
+                            })
+                    }
+                    // { AMOUNT: 0999990329053295258934888888
+                    }
 
 
             })
             .catch(function (error) {
                 console.log(error);
             })
+
     } catch(e) {
         alert("aa")
         if(browser) {
@@ -49,34 +82,7 @@
 
     }
 
-    if (browser) {
-        let x = window.localStorage.getItem("org");
-        if (x == global) {
-            setLatLong(lat, liblong)
-        } else {
-            axios.get('http://localhost:8080/app/organizations/loc/' + $page.params.organization + '/' + zipc, {
-                headers: {
-                    "Token": getToken(), //this isnt returning null or underfined
-                    "Content-Type": "application/json"
-                }
-            })
 
-                .then(function (response) {
-                    console.log(response)
-
-                    // if (response.status != 201 && response.status != 200) {
-                    //     console.log(response.status)
-                    //     alert("You are not logged in")//will it show
-                    //
-                    // }
-
-                }).catch((error) => {
-                console.log(error)
-                alert("That is not a nearby area!")
-            })
-        }
-
-    }
 
 
     function getToken() {
@@ -178,8 +184,44 @@
         }
     }
 
+    function jwtcudp() {
+        if (browser) {
+            let valu = window.localStorage.getItem("org")
 
 
+            axios.get('http://localhost:8080/access/users/token', {
+                headers: {
+                    "Token": getToken(), //this isnt returning null or underfined
+                    "Content-Type": "application/json"
+                }
+            })
+                .then((response) => {
+                    console.log(response)
+                    console.log(response.data.data.Data.Id)
+                    axios.post('http://localhost:8080/app/trades/create/' + zipcode, {
+                        "makerid": response.data.data.Data.Id,
+                        "name": amqp,
+                        "items": a,
+                        "description": tcp,
+                        "open": true,
+                        "orgid": valu,
+                    }, {
+                        headers: {
+                            "Token": getToken(), //this isnt returning null or underfined
+                            "Content-Type": "application/json"
+                        }
+                    }).then((response) => {
+                        console.log(response)
+
+                    }).catch((response) => {
+                        console.log(response)
+                    })
+                })
+                .catch((response) => {
+                    console.log(response)
+                })
+        }
+    }
 
 </script>
 
@@ -197,8 +239,8 @@
         <div class="card-body items-center text-center">
             <h2 class="card-title text-neutral tooltip" data-tip={lat + ", " + liblong}>Create Trade</h2>
 
-            <input type="text" placeholder="Name" class="input input-bordered w-64" />
-            <textarea placeholder="Description" class="textarea textarea-bordered textarea-md w-64"></textarea>
+            <input type="text" placeholder="Name" class="input input-bordered w-64" bind:value={amqp} />
+            <textarea placeholder="Description" class="textarea textarea-bordered textarea-md w-64" bind:value={tcp}></textarea>
             <div class="form-control">
                 <div class="input-group">
                     <input placeholder="Items" class="input input-bordered w-48 " bind:value={item}/>
@@ -206,7 +248,7 @@
                 </div>
 
             </div>
-            <button class="btn btn-accent">Create</button>
+            <button class="btn btn-accent" on:click={jwtcudp}>Create</button>
 
 
             <ul class="flex justify-center items-center grid" id="jwt">

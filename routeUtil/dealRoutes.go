@@ -5,7 +5,7 @@ import (
 )
 
 func DealRoutes(r *gin.RouterGroup) {
-	r.POST("/trades", CreateTrade())
+	r.POST("/trades/create/:zipcode", CreateTrade())
 	r.PUT("/trades/:tid", EditTrade())
 	r.GET("/trades/:tid", FetchTrade())
 	r.GET("/trades", FetchTrades())
