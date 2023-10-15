@@ -162,7 +162,7 @@ func FullID() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userId, err := ExtractUserID(c)
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized due to jwt not being valid due to some reason", Success: false, Data: nil})
+			c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized due to jwt not being valid due to some reason" + err.Error(), Success: false, Data: nil})
 			return
 		}
 		userFnd := genUtil.FetchUserById(userId, userCol, c, func() {

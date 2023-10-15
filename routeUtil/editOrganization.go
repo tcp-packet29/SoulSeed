@@ -235,6 +235,10 @@ func UserInOrg() gin.HandlerFunc {
 			}
 		}
 
+		if org.Owner_ID == co.Param("uid") {
+			in = true
+		}
+
 		co.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: true, Data: map[string]interface{}{"exists": in}})
 
 	}

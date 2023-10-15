@@ -68,6 +68,20 @@
             });
     }
 
+    function llvm() {
+        if (browser) {
+            let x = document.getElementById("pass")
+            let j = document.getElementById("jwt")
+            if (x.getAttribute("type") == "password") {
+                x.setAttribute("type", "text")
+                j.innerText = "-"
+            } else {
+                x.setAttribute("type", "password")
+                j.innerText= "+"
+            }
+        }
+    }
+
 </script>
 
 <body class="bg-primary"></body>
@@ -85,9 +99,16 @@
             <h2 class="card-title text-neutral">Log In</h2>
 
             <input type="text" placeholder="Username" class="input input-bordered input-accent w-full max-w-xs" bind:value={uname}/>
-            <input type="password" placeholder="Password" class="input input-bordered input-accent w-full max-w-xs" bind:value={pword}/>
+            <div class="form-control">
+                <div class="input-group udp">
+                <input type="password" id="pass" placeholder="Password" class="input input-bordered input-accent w-full max-w-xs join-item" bind:value={pword}/>
+                <button class="btn btn-accent join-item" on:click={llvm} id="jwt">+</button>
+                </div>
+            </div>
+
             <p class="text-neutral textarea-sm"><a on:click={forPass}>Forgot Password?</a></p>
             <div class="card-actions">
+
                 <button class="btn btn-outline btn-accent" on:click={createUser}>Login</button>
             </div>
         </div>

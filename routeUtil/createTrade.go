@@ -12,6 +12,15 @@ import (
 )
 
 var tradeCol *mongo.Collection = dbUtil.GetCollection("trades")
+var DataCol = dbUtil.GetCollection("data")
+
+func TCP() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var datFound storageUtil.Data
+		_ = DataCol.FindOne(c, bson.M{"id": "data"}).Decode(&datFound)
+		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "OK", Success: true, Data: map[string]interface{}{"data": datFound.Map}})
+	}
+}
 
 func CreateTrade() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -25,7 +34,8 @@ func CreateTrade() gin.HandlerFunc {
 
 		var userFound storageUtil.User
 		var organizationF storageUtil.Organization
-
+		var datFound storageUtil.Data
+		_ = DataCol.FindOne(c, bson.M{"id": "data"}).Decode(&datFound)
 		oID, _ := primitive.ObjectIDFromHex(trade.MakerID)
 		if trade.OrgId != "global" {
 			oIdtcp, _ := primitive.ObjectIDFromHex(trade.OrgId)
@@ -36,8 +46,11 @@ func CreateTrade() gin.HandlerFunc {
 			}
 		}
 
-		//converting id form param from hex and assigning it to oid
+		for _, val := range trade.Items {
+			datFound.Map[val]++
+		} //converting id form param from hex and assigning it to oid
 
+		DataCol.ReplaceOne(c, bson.M{"id": "data"}, datFound)
 		err = userCol.FindOne(c, bson.M{"id": oID}).Decode(&userFound) //finding user and decoding and transferring into userfound struct
 
 		if err != nil {
@@ -63,6 +76,9 @@ func CreateTrade() gin.HandlerFunc {
 			Description: trade.Description,
 			Open:        true,
 			OrgId:       trade.OrgId,
+			Latlong:     trade.Latlong,
+			Offers:      trade.Offers,
+			Providing:   trade.Providing,
 		}
 
 		_, err = tradeCol.InsertOne(c, newTrade)
@@ -72,5 +88,26 @@ func CreateTrade() gin.HandlerFunc {
 			return
 		}
 		c.JSON(http.StatusCreated, storageUtil.Response{Code: http.StatusCreated, Message: "Created", Success: true, Data: map[string]interface{}{"data": newTrade}})
+	}
+}
+
+func GetOfferAmount() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		tID := c.Param("tid")
+
+		var trade storageUtil.Trade
+		dat, err := primitive.ObjectIDFromHex(tID)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: err.Error(), Success: false, Data: nil})
+			return
+		}
+		err = tradeCol.FindOne(c, bson.M{"id": dat}).Decode(&trade)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: err.Error(), Success: false, Data: nil})
+			return
+		} // couldnot find or error in fining
+
+		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "tcp", Success: true, Data: map[string]interface{}{"data": len(trade.Offers)}})
+
 	}
 }

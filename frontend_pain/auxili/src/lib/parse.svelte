@@ -17,8 +17,19 @@
         }
     }
 
+    //sig syscall
+
+    export function checkErr(err) {
+        if (err.response.status == 401 && browser) {
+            alert("jwt")
+            window.location.href = "http://localhost:5173/login";
+        }
+    }
+
+
+
     export function auth() {
-        axios.get('http://localhost:8080/app/auth')
+        axios.get('http://localhost:8080/app/au th')
         .then(function (response) {
             console.log(response);
         })
@@ -40,7 +51,8 @@
     export function getTok() {
         return axios.get('http://localhost:8080/access/users/token', {
             headers: {
-                "Token": getToken()
+                "Token": getToken(),
+                "Content-Type": "application/json",
             }
         })
 

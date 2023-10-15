@@ -9,6 +9,7 @@
     let liblong = x[2]
     let amqp = ""
     let tcp = ""
+    let providing = false
 
     function test(callback) {
         let among = "";
@@ -205,6 +206,9 @@
                         "description": tcp,
                         "open": true,
                         "orgid": valu,
+                        "latlong": [lat, liblong],
+                        "offers": [],
+                        "providing": providing,
                     }, {
                         headers: {
                             "Token": getToken(), //this isnt returning null or underfined
@@ -212,6 +216,10 @@
                         }
                     }).then((response) => {
                         console.log(response)
+                        if (response.status == 201) {
+                            alert("Trade Createlibtcp!")
+                            window.location.href = "http://localhost:5173/mainPg"
+                        }
 
                     }).catch((response) => {
                         console.log(response)
@@ -238,6 +246,12 @@
     <div data-theme="mycodecompiled" class="card w-96 bg-secondary bg-base-200 text-neutral-content shadow-xl">
         <div class="card-body items-center text-center">
             <h2 class="card-title text-neutral tooltip" data-tip={lat + ", " + liblong}>Create Trade</h2>
+            <div class="form-control">
+                <label class="label cursor-pointer">
+                    <span class="label-text">Providing Resources?</span>
+                    <input type="checkbox" class="checkbox checkbox-accent" bind:checked={providing} />
+                </label>
+            </div>
 
             <input type="text" placeholder="Name" class="input input-bordered w-64" bind:value={amqp} />
             <textarea placeholder="Description" class="textarea textarea-bordered textarea-md w-64" bind:value={tcp}></textarea>

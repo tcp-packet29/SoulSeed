@@ -9,6 +9,12 @@ func DealRoutes(r *gin.RouterGroup) {
 	r.PUT("/trades/:tid", EditTrade())
 	r.GET("/trades/:tid", FetchTrade())
 	r.GET("/trades", FetchTrades())
+	r.GET("/trades/user/:uid", GetTradesByUserId())
+	r.GET("/trades/organization/:oid", GetTradesByOrgId())
+	r.GET("/trades/tcpreference/:id/:orgid", FetchTradeById())
+	r.GET("/trades/checkOwner/:tradeid", AuthTradeOwner())
+	r.POST("/trades/offer/:id", AddDealOffer())
+	r.GET("/trades/offer/:tid/amnt", GetOfferAmount())
 	//r.DELETE("/trades/:tid", DeleteTrade())
 	//delete trade doesnt exist
 }

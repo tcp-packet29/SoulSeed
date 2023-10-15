@@ -1,7 +1,7 @@
 <script>
     import axios from 'axios'
     import { page } from '$app/stores';
-    import { getTok, getToken, prse } from '$lib/parse.svelte';
+    import { getTok, getToken, prse, checkErr } from '$lib/parse.svelte';
     import {browser} from "$app/environment";
     var exp = "";
     var emails = "";
@@ -11,6 +11,30 @@
         script.src = "https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"
         document.head.append(script);
     }
+
+
+    axios.get('http://localhost:8080/access/users/token', {
+        headers: {
+            "Token": getToken(), //this isnt returning null or underfined
+            "Content-Type": "application/json"
+        }
+    }).then((response) => {
+        console.log(response)
+        axios.get('http://localhost:8080/app/organizations/admin/' + $page.params.id + '/' + response.data.data.Data.Id, { //rune in go in ast
+            headers: {
+                "Token": getToken(),
+                "Content-Type": "application/json",
+            }
+        }).then((response)=> {
+            console.log(response)
+        }).catch(function (tcp) {
+            console.log(tcp)
+            checkErr(tcp)
+        })
+    }).catch((err) =>  {
+        console.log(err)
+        checkErr(err)
+    })
 
 
     if (browser) {
@@ -64,12 +88,22 @@
                         colorDark : "#000000",
                         colorLight : "#ffffff",
                     })
+                    let xtensa;
+
+                    for (let i = 0; i < document.getElementById("qr").children.length; i++) {
+                        if (document.getElementById("qr").children[i].tagName == "IMG") {
+                            xtensa = document.getElementById("qr").children[i].getAttribute("src")
+                        }
+                    }
+
+
 
                     var date = Date.now()
                     window.localStorage.setItem('cooldown', date.toString())
                     axios.post("http://localhost:8080/email/join/test/" + emails + "/" + response.data.data.data.Access +"/" + exp, {
                         "organization_code": $page.params.id,
                         "emails": emails.split(","),
+                        "base64": xtensa,
                     },{
                         headers: {
                             Token: getToken()
@@ -81,7 +115,9 @@
                         .catch(function(error) {
                             console.log(error)
                             if (error.statusCode == 400) {
-                                alert("Invalid Email (keep less than 10)")
+                                if (browser) {
+                                    alert("Invalid Email (keep less than 10)")
+                                }
                             }
                         })
 

@@ -16,6 +16,8 @@
     import mapboxgl from 'mapbox-gl';
     import {page} from '$app/stores'
 
+
+
 if (browser && ($page.params.organization != "global"))  { //jwtauthiasndmasjhaseprskosrjejnder
     axios.get('http://localhost:8080/access/users/token', {
         headers: {
@@ -32,6 +34,7 @@ if (browser && ($page.params.organization != "global"))  { //jwtauthiasndmasjhas
             })//webrtc refere since server
                 .then(function (response) {
                     console.log(response)
+
                 })
                 .catch(function (response) {
                     console.log(response)
@@ -150,6 +153,8 @@ if (browser && ($page.params.organization != "global"))  { //jwtauthiasndmasjhas
 
 
     onMount(async () => {
+        let tcp = []
+
 
         mapboxgl.accessToken = "pk.eyJ1Ijoic3BlbGxjYXN0IiwiYSI6ImNsZTN1YjNtcTBjaGczb2xmMzJ1YnZua2IifQ.ZzbJhqpfTl94WAt8jpUHvA" //should probably env this
 
@@ -159,6 +164,8 @@ if (browser && ($page.params.organization != "global"))  { //jwtauthiasndmasjhas
             center: [0, 0],
             zoom: 11.5,
         })
+
+
 
         map.on("click", (e) => {
             axios.get(' https://api.mapbox.com/geocoding/v5/mapbox.places/' + e.lngLat.wrap().lng + ',' + e.lngLat.wrap().lat + '.json?types=postcode&limit=1&access_token=pk.eyJ1Ijoic3BlbGxjYXN0IiwiYSI6ImNsZTN1YjNtcTBjaGczb2xmMzJ1YnZua2IifQ.ZzbJhqpfTl94WAt8jpUHvA')
@@ -179,6 +186,44 @@ if (browser && ($page.params.organization != "global"))  { //jwtauthiasndmasjhas
             pop.getElement().addEventListener('click', () => {
                 setLatLong(e)
             })
+
+            map.on('closepopups', () => {
+                pop.remove()
+            }
+            )
+        })
+        axios.get('http://localhost:8080/app/trades/organization/' + $page.params.organization, {
+            headers: {
+                "Token": getToken(),
+                "Content-Type": "application/json",
+            }
+        }).then((response) => {
+            tcp = response.data.data.tradestcpudp;
+            console.log(tcp)
+            console.log(response)
+            for (let iteramtcp = 0; iteramtcp < tcp.length; iteramtcp++) {
+
+                const markerarmasm = new mapboxgl.Marker()
+                    .setLngLat([parseFloat(tcp[iteramtcp].Latlong[1]), parseFloat(tcp[iteramtcp].Latlong[0])])
+                    .setPopup(
+                        new mapboxgl.Popup()
+                        .setHTML("<h1 class='text-xl text-secondary'>" + tcp[iteramtcp].Name + "</h1><br><a class='text-xl text-secondary btn-accent btn' href ='http://localhost:5173/organization/" + tcp[iteramtcp].OrgId + "/trade/" + tcp[iteramtcp].Id + "'>View</button>")
+                        .addTo(map)
+                    )
+                    .addTo(map)
+                markerarmasm.getElement().addEventListener('click', (e) => {
+
+                    setTimeout(() => {
+                        map.fire('closepopups')
+                        console.log("udp")
+                    }, 1)
+
+
+                    // popjwt.addTo(map)
+                })
+            }
+        }).catch((err) => {
+            console.log(err)
         })
 
         navigator.geolocation.getCurrentPosition((position) => {
@@ -191,6 +236,8 @@ if (browser && ($page.params.organization != "global"))  { //jwtauthiasndmasjhas
                 }
             )
         })
+
+
     })
 
 

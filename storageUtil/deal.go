@@ -11,9 +11,24 @@ type Trade struct {
 	Description string             `bson:"desc"`
 	Open        bool               `bson:"open,omitempty"`
 	OrgId       string             `bson:"orgid"`
+	Latlong     []string           `bson:"latlong"`
+	Offers      []Offer            `bson:"offers"`
+	Providing   bool               `bson:"providing"`
 }
 
 type Model struct {
 	OrganizationCode string   `json:"organization_code"`
 	Emails           []string `json:"emails"`
+}
+
+type Data struct {
+	Id  string         `bson:"id"`
+	Map map[string]int `bson:"map"`
+}
+
+type Offer struct {
+	UserId      string `bson:"userid"`
+	Address     string `bson:"address"`
+	Description string `bson:"memo"`
+	Approved    bool   `bson:"approved"`
 }

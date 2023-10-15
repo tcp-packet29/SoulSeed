@@ -19,6 +19,8 @@ func main() {
 	dbUtil.ConnectToMongo()
 	dbUtil.ConnectToRedis()
 	router.Use(auth.NonContribCors())
+
+	//routeUtil.DataCol.InsertOne(context.Background(), bson.M{"id": "data", "map": map[string]int{"test": 1}})
 	//mnot actually an instance of client we can actually reference, just for tersrting purposes
 
 	access := router.Group("/access")
@@ -38,6 +40,7 @@ func main() {
 	authNeeded := router.Group("/app")
 	http.HandleFunc("/wc", routeUtil.Wsock())
 	authNeeded.Use(auth.NonContribCors())
+	access.GET("/allstuff", routeUtil.TCP())
 	authNeeded.Use(middleware.JwtAuth())
 
 	routeUtil.GeoRoutes(access)
@@ -45,6 +48,7 @@ func main() {
 	routeUtil.UserRoutes(authNeeded)
 	//comments in abstrac syuntax tree
 	routeUtil.DealRoutes(authNeeded)
+	routeUtil.NotifRoutes(authNeeded)
 	routeUtil.OrgRoutes(authNeeded)
 
 	authNeeded.GET("/auth", auth.AuthEndpoint())
