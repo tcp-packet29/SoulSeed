@@ -1,5 +1,6 @@
 <script>
     import axios from 'axios';
+    import Navbar from "../../lib/navbar.svelte";
     import {browser} from "$app/environment";
     import { getTok, getToken, prse } from '$lib/parse.svelte';
     import { height, width } from '$lib/constants.svelte';
@@ -21,14 +22,14 @@
         .catch(function (error) {
             console.log(error)
             console.log("error internal")
-            if (browser) {
-                window.location.href = "http://localhost:5173/login";
-            }
+            // if (browser) {
+            //     window.location.href = "http://localhost:5173/login";
+            // }
         });
 
-    var valo = 0
+    var valo = ""
     //jwtrfef
-    var editast = 0
+    var editast = ""
     if (!val) {
         if (browser) {
             //window.location.href = "http://localhost:5173/login";
@@ -55,44 +56,49 @@
 
 
 
-    axios.post('http://localhost:8080/app/users/org/' + val.Id + '/createOrganization', dat, head)
-        .then(function (response) {
-            console.log(response);
-            document.getElementById("textone").innerHTML = "Org Created";
-            document.getElementById("texttwo").innerHTML = "You have reached the maximum number of organizations you can own";
-            document.getElementById("close").innerHTML = "Close";
-            document.getElementById("donemodal").checked = true;
-            //TODO:
-            //send put request
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-    //xmpp amqp jwt authb mdidelewar for these and use in stomp mqtt
+        axios.post('http://localhost:8080/app/users/org/' + val.Id + '/createOrganization', dat, head)
+            .then(function (response) {
+                console.log(response);
+                document.getElementById("textone").innerHTML = "Org Created";
+                document.getElementById("texttwo").innerHTML = "You have reached the maximum number of organizations you can own";
+                document.getElementById("close").innerHTML = "Close";
+                document.getElementById("donemodal").checked = true;
+                //TODO:
+                //send put request
+            })
+            .catch(function (error) {
+                document.getElementById("textone").innerHTML = "Error making organization";
+                document.getElementById("texttwo").innerHTML = "You have either reached the max amount of organizations or you need to try again";
+                document.getElementById("close").innerHTML = "Close";
+                document.getElementById("donemodal").checked = true;
+                console.log(error);
+            });
+        //xmpp amqp jwt authb mdidelewar for these and use in stomp mqtt
 
 
 
     }
-    if (browser) {
-        let script = document.createElement('script');
-        script.src = "https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"
-        document.head.append(script)
-        script.onload = function() {
-            console.log("loaded")
-            new QRCode(document.getElementById("qrcode"), {
-                text: "github.com/gaurav-ban22/quoobo",
-                width: width,
-                height: height,
-                colorDark: "#1f5f32",
-                colorLight: "#ffffff",
-            }) //kv
-        }
-
-    }
+    // if (browser) {
+    //     let script = document.createElement('script');
+    //     script.src = "https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"
+    //     document.head.append(script)
+    //     script.onload = function() {
+    //         console.log("loaded")
+    //         new QRCode(document.getElementById("qrcode"), {
+    //             text: "github.com/gaurav-ban22/quoobo",
+    //             width: width,
+    //             height: height,
+    //             colorDark: "#1f5f32",
+    //             colorLight: "#ffffff",
+    //         }) //kv
+    //     }
+    //
+    // }
 
 
 </script>
 
+<Navbar />
 <input type="checkbox" id="donemodal" class="modal-toggle" />
 <div class="modal">
     <div class="modal-box relative bg-neutral">
@@ -121,14 +127,31 @@
 </div>
 
 <div class="flex h-screen justify-center items-center">
-    <div>
+    <div> <!-- ignore in html to oparse uib abtufe vriwedsr redbere oarse html by http requedst !-->
         <div data-theme="mycodecompiled" class="card w-96 bg-secondary bg-base-200 text-neutral-content shadow-xl">
             <div class="card-body items-center text-center">
-                <h2 class="card-title text-neutral">Make a New Organization!</h2>
-                <p class="card-subtitle text-primary">Make a group</p>
+                <h2 class="card-title text-neutral">Create an Organization</h2>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Name</span>
 
+                    </label>
+
+                    <input type="text" placeholder="california neighbourhood" class="input input-bordered input-accent w-full max-w-xs text-white" bind:value={valo}/>
+
+                    <label class="label">
+                        <span class="label-text">Description</span>
+                    </label>
+
+                    <input type="text" placeholder="for members of our neighbourhood" class="input input-bordered input-accent w-full max-w-xs text-white" bind:value={editast}/>
+
+                </div>
+                <div class="card-actions">
+                    <label for="donemodal" class="btn btn-outline btn-accent" on:click={createOrg}>Register</label>
+                </div>
             </div>
 
         </div>
     </div>
 </div>
+

@@ -2,6 +2,8 @@
     import axios from 'axios';
     import {browser} from "$app/environment";
     import { page } from '$app/stores';
+    import Navbar from "../../../lib/navbar.svelte";
+
 
     let val = $page.params.id;
     let email = "";
@@ -106,7 +108,7 @@
      */
 </script>
 
-
+<Navbar />
 <div class="hero min-h-screen bg-base-200 bg-secondary">
     <div class="hero-content flex-col lg:flex-row-reverse">
         <div class="text-center lg:text-right">

@@ -1,6 +1,7 @@
 <script>
     import axios from 'axios';
     import {browser} from "$app/environment";
+    import Navbar from "../../lib/navbar.svelte";
     import { page } from '$app/stores';
 
 
@@ -67,7 +68,7 @@
                     console.log(jsobj)
                     console.log(jsobj.data.data.access) //what they input
                     if (!getVal(jsobj.data.data.Emails, email)) {
-                        alert("Invalid Code")""
+                        alert("Invalid Code")
                         return;
                     }
                     //keyboad injterupt whenerw riting tushc code since interrtupt to reqire om screen and handle executable of writing into file and to hjandle the code absede on the extra bytes and utn tcp
@@ -112,11 +113,11 @@
      */
 </script>
 
-
+<Navbar />
 <div class="hero min-h-screen bg-base-200 bg-secondary">
     <div class="hero-content flex-col lg:flex-row-reverse">
         <div class="text-center lg:text-right">
-            <h1 class="mb-5 text-5xl font-bold text-neutral">Join A Group!</h1>
+            <h1 class="mb-5 text-5xl font-bold text-primary">Join A Group!</h1>
             <p class="text-neutral">Input the 10-Character Code</p>
         </div>
         <div id="qrcode">

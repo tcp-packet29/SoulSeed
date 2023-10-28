@@ -89,7 +89,7 @@
 
 <input type="checkbox" id="donemodal" class="modal-toggle" />
 <div class="modal">
-    <div class="modal-box relative bg-neutral">
+    <div class="modal-box relative bg-secondary">
         <h3 class="text-lg font-bold text-primary" id="textone">Error</h3>
         <p class="text-gray-600 text-primary" id="texttwo">Username already exists</p>
 
@@ -117,39 +117,39 @@
         <div data-theme="mycodecompiled" class="card w-96 bg-secondary bg-base-200 text-neutral-content shadow-xl">
             <div class="card-body items-center text-center">
                 <h2 class="card-title text-neutral">Register</h2>
-                <p class="card-subtitle text-primary">An app for vendors and customers; with emphasis on flexibility.</p>
+                <p class="card-subtitle text-accent">Already have an account? <a class="link-hover" href="/login">Login Here.</a></p>
                 <div class="form-control">
                     <label class="label">
                         <span class="label-text">Username</span>
 
                     </label>
 
-                        <input type="text" placeholder="myCodeCompiled42" class="input input-bordered input-accent w-full max-w-xs" bind:value={uname}/>
+                        <input type="text" placeholder="myCodeCompiled42" class="input input-bordered input-accent w-full max-w-xs text-white" bind:value={uname}/>
 
                     <label class="label">
                         <span class="label-text">Email</span>
                     </label>
 
-                    <input type="text" placeholder="golang@golang.go" class="input input-bordered input-accent w-full max-w-xs" bind:value={email}/>
+                    <input type="text" placeholder="golang@golang.go" class="input input-bordered input-accent w-full max-w-xs text-white" bind:value={email}/>
 
                     <label class="label">
                         <span class="label-text">Password</span>
                     </label>
 
-                        <input type="password" placeholder="clojureIsBestJVMLang" class="input input-bordered input-accent w-full max-w-xs" bind:value={pword}/>
+                        <input type="password" placeholder="clojureIsBestJVMLang" class="input input-bordered input-accent w-full max-w-xs text-white" bind:value={pword}/>
 
 
                     <label class="label">
                         <span class="label-text">Confirm Password</span>
                     </label>
 
-                        <input type="password" placeholder="clojureIsBestJVMLang" class="input input-bordered input-accent w-full max-w-xs" bind:value={confirm}/>
+                        <input type="password" placeholder="clojureIsBestJVMLang" class="input input-bordered input-accent w-full max-w-xs text-white" bind:value={confirm}/>
 
                     <label class="label">
                         <span class="label-text">Zipcode</span>
                     </label>
 
-                        <input type="text" placeholder="11111" class="input input-bordered input-accent w-full max-w-xs" bind:value={zipcode}/>
+                        <input type="text" placeholder="11111" class="input input-bordered input-accent w-full max-w-xs text-white" bind:value={zipcode}/>
 
                 </div>
                 <div class="card-actions">

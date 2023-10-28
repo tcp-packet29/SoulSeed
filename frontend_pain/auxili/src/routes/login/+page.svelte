@@ -98,11 +98,11 @@
         <div class="card-body items-center text-center">
             <h2 class="card-title text-neutral">Log In</h2>
 
-            <input type="text" placeholder="Username" class="input input-bordered input-accent w-full max-w-xs" bind:value={uname}/>
+            <input type="text" placeholder="Username" class="input input-bordered input-accent w-full max-w-xs text-white" bind:value={uname}/>
             <div class="form-control">
                 <div class="input-group udp">
                 <input type="password" id="pass" placeholder="Password" class="input input-bordered input-accent w-full max-w-xs join-item" bind:value={pword}/>
-                <button class="btn btn-accent join-item" on:click={llvm} id="jwt">+</button>
+                <button class="btn btn-accent join-item text-white"  on:click={llvm} id="jwt">+</button>
                 </div>
             </div>
 

@@ -2,6 +2,7 @@
     import axios from 'axios'
     import { page } from '$app/stores';
     import { getTok, getToken, prse, checkErr } from '$lib/parse.svelte';
+    import Navbar from "../../../../../lib/navbar.svelte";
     import {browser} from "$app/environment";
     var exp = "";
     var emails = "";
@@ -135,6 +136,7 @@
 
 </script>
 
+<Navbar />
 <div class="flex h-screen justify-center items-center">
     <div class="card w-96 bg-secondary bg-base-500 text-neutral-content shadow-xl">
 

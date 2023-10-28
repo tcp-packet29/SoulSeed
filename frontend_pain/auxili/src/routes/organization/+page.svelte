@@ -2,6 +2,7 @@
     import axios from 'axios';
     import { browser } from '$app/environment';
     import { getTok, getToken, prsse } from '$lib/parse.svelte';
+    import Navbar from "../../lib/navbar.svelte";
     //http reference?
     //TODO:
     //1. send a request to check if user is logged in through jwt auth middleware to fertch dat aform the databs erolesnaocljerf and render orgs
@@ -96,6 +97,8 @@
 
 
 </script>
+
+<Navbar />
 <body class="bg-primary"></body>
 <div class="flex h-screen justify-center items-center">
 <ul class="menu  bg-base-100 w-200 p-2 rounded-box bg-secondary">
@@ -103,13 +106,13 @@
         <span class="hover:text-accent">Organizations In</span>
     </li>
     {#each ins as org}
-        <li class="bg-neutral"><a href="/organization/{org.Id}">{org.Name}</a></li>
+        <li class="bg-secondary text-accent m-2"><a href="/organization/{org.Id}">{org.Name}</a></li>
     {/each}
     <li class="menu-title">
-        <span class="hover:text-accent bg-primary">Organizations Owned</span>
+        <span class="hover:text-accent">Organizations Owned</span>
     </li>
     {#each dats as id}
-        <li class="bg-primary"><a href="/organization/{id.Id}">{id.Name}</a></li>
+        <li class="bg-secondary text-accent m-2"><a href="/organization/{id.Id}">{id.Name}</a></li>
     {/each}
 
 
@@ -118,6 +121,6 @@
     <li class="menu-title">
         <span class="hover:text-accent" >Util</span>
     </li>
-    <li><a class>+ Create</a></li>
+    <li><a class="link-accent" href="/createOrg">Create</a></li>
 </ul>
 </div>

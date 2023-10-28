@@ -28,7 +28,7 @@
 
     }).then((response)=> {
         console.log(response)
-    }).catch(function(err) {
+    }).catch(f  unction(err) {
         console.log(err)
     })
 

@@ -153,7 +153,20 @@ if (browser && ($page.params.organization != "global"))  { //jwtauthiasndmasjhas
 
 
     onMount(async () => {
+        let x;
         let tcp = []
+        navigator.geolocation.getCurrentPosition((position) => {
+            window.localStorage.setItem('lat', position.coords.latitude);
+            window.localStorage.setItem('long', position.coords.longitude)//redis kv referlibtoeitisokcasifjauexteideidjsadocksajriemaldaloaslcloa
+            x = position
+            console.log("first")
+            // map.flyTo(
+            //     {
+            //         center: [position.coords.longitude, position.coords.latitude],
+            //         zoom: 10
+            //     }
+            // )
+        })
 
 
         mapboxgl.accessToken = "pk.eyJ1Ijoic3BlbGxjYXN0IiwiYSI6ImNsZTN1YjNtcTBjaGczb2xmMzJ1YnZua2IifQ.ZzbJhqpfTl94WAt8jpUHvA" //should probably env this
@@ -161,7 +174,7 @@ if (browser && ($page.params.organization != "global"))  { //jwtauthiasndmasjhas
         const map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
-            center: [0, 0],
+            center: [window.localStorage.getItem('long'), window.localStorage.getItem('lat')],
             zoom: 11.5,
         })
 
@@ -202,40 +215,32 @@ if (browser && ($page.params.organization != "global"))  { //jwtauthiasndmasjhas
             console.log(tcp)
             console.log(response)
             for (let iteramtcp = 0; iteramtcp < tcp.length; iteramtcp++) {
-
-                const markerarmasm = new mapboxgl.Marker()
-                    .setLngLat([parseFloat(tcp[iteramtcp].Latlong[1]), parseFloat(tcp[iteramtcp].Latlong[0])])
-                    .setPopup(
-                        new mapboxgl.Popup()
-                        .setHTML("<h1 class='text-xl text-secondary'>" + tcp[iteramtcp].Name + "</h1><br><a class='text-xl text-secondary btn-accent btn' href ='http://localhost:5173/organization/" + tcp[iteramtcp].OrgId + "/trade/" + tcp[iteramtcp].Id + "'>View</button>")
+                if (tcp[iteramtcp].Open) {
+                    const markerarmasm = new mapboxgl.Marker()
+                        .setLngLat([parseFloat(tcp[iteramtcp].Latlong[1]), parseFloat(tcp[iteramtcp].Latlong[0])])
+                        .setPopup(
+                            new mapboxgl.Popup()
+                                .setHTML("<h1 class='text-xl text-secondary'>" + tcp[iteramtcp].Name + "</h1><p>Made by <b>" + tcp[iteramtcp].Maker.Username + "</b></p><br><a class='text-xl text-secondary btn-accent btn' href ='http://localhost:5173/organization/" + tcp[iteramtcp].OrgId + "/trade/" + tcp[iteramtcp].Id + "'>View</button>")
+                                .addTo(map)
+                        )
                         .addTo(map)
-                    )
-                    .addTo(map)
-                markerarmasm.getElement().addEventListener('click', (e) => {
+                    markerarmasm.getElement().addEventListener('click', (e) => {
 
-                    setTimeout(() => {
-                        map.fire('closepopups')
-                        console.log("udp")
-                    }, 1)
+                        setTimeout(() => {
+                            map.fire('closepopups')
+                            console.log("udp")
+                        }, 1)
 
 
-                    // popjwt.addTo(map)
-                })
+                        // popjwt.addTo(map)
+                    })
+                }
             }
         }).catch((err) => {
             console.log(err)
         })
 
-        navigator.geolocation.getCurrentPosition((position) => {
-            window.localStorage.setItem('lat', position.coords.latitude);
-            window.localStorage.setItem('long', position.coords.longitude)//redis kv referlibtoeitisokcasifjauexteideidjsadocksajriemaldaloaslcloa
-            map.flyTo(
-                {
-                    center: [position.coords.longitude, position.coords.latitude],
-                    zoom: 10
-                }
-            )
-        })
+
 
 
     })
@@ -268,7 +273,7 @@ if (browser && ($page.params.organization != "global"))  { //jwtauthiasndmasjhas
             <li class="menu-title hover:text-accent">
                 <span class="hover:text-accent">General</span>
             </li>
-            <li><button><a>Profile</a></button></li>
+            <li><button><a href="/">Main Page</a></button></li>
             <li>
                 <button on:click={logOut}><a>Logout</a></button>
             </li>
@@ -276,8 +281,6 @@ if (browser && ($page.params.organization != "global"))  { //jwtauthiasndmasjhas
             <li class="menu-title hover:text-accent">
                 <span class="hover:text-accent">Util</span>
             </li>
-            <li><button><a>Organizations</a></button></li>
-            <li><button><a>Trades</a></button></li>
-            <li><button><a>Deals</a></button></li>
+            <li><button><a href="/organization">Organizations</a></button></li>
         </ul></div>
 </div>

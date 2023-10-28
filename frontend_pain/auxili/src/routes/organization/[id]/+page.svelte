@@ -3,6 +3,7 @@
     import { page } from '$app/stores';
     import { getTok, getToken, prse } from '$lib/parse.svelte';
     import {browser} from "$app/environment";
+    import Navbar from "../../../lib/navbar.svelte";
     var nam = "";
     var desc = "";
     var zipc = "";
@@ -20,16 +21,21 @@
                     "Token": getToken(),
                 }
             })
-                .then(function (response) {
-                    const orgin = response.data.data.Data.OrganizationsIn.concat(response.data.data.Data.OrganizationOwned); //immutable
+                .then(function (responsea) {
+                    console.log(responsea)
+                    const orgin = responsea.data.data.Data.OrganizationsIn.concat(responsea.data.data.Data.OrganizationOwned); //immutable
 
                     if (!orgin.includes(dat)) {
                         console.log(orgin)
                         console.log("edit keep in ast")
+                        if (browser) {
+                            window.location.href = "/organization"
+                        }
                     } else {
-                        nam = response.data.data.Data.Name;
-                        desc = response.data.data.Data.Description;
-                        zipc = response.data.data.Data.Zipcode;
+                        nam = response.data.data.organization.Name;
+                        desc = response.data.data.organization.Description;
+                        zipc = response.data.data.organization.Zipcode;
+
                     }
 
 
@@ -38,9 +44,11 @@
 
     
                     if (browser) {
-                        alert("not logged in");
+                        alert("Not logged in!");
                         console.log(error);
-                        // window.location.href = "/login";
+                        if (browser) {
+                            window.location.href = "/organization"
+                        }
                     }})
         })
         .catch(function (error) {
@@ -48,16 +56,22 @@
         })
 
 </script>
+<Navbar />
 
 <div class="flex h-screen justify-center items-center">
     <div class="card w-96 bg-secondary bg-base-500 text-neutral-content shadow-xl">
-        <figure><img src="https://miro.medium.com/max/600/1*i2skbfmDsHayHhqPfwt6pA.png" alt="Shoes" /></figure>
         <div class="card-body">
-            <h2 id="Name" class="card-title text-neutral">{nam}</h2>
+            <h1 class="card-title text-neutral text-2xl">ORGANIZATION</h1>
+            <h2 id="Name" class="card-title text-neutral">Name: {nam}</h2>
+            <hr>
             <br>
             <p id="Zipcode" class="text-neutral">{desc}</p>
             <br>
-            <h2 class="text-neutral card-side"><b>{zipc}</b></h2>
+            <h2 class="text-neutral card-side"><b>Zipcode: {zipc}</b></h2>
+            <hr>
+            <br>
+            <button class="btn btn-accent mt-4"><a href="/mainPg/{$page.params.id}/">Check Trades in Organization</a></button>
+            <button class="btn btn-accent mt-4"><a href="/organization/{$page.params.id}/invite/{$page.params.id}">Invite Someone!</a></button>
         </div>
     </div>
 </div>

@@ -21,7 +21,7 @@
 
     export function checkErr(err) {
         if (err.response.status == 401 && browser) {
-            alert("jwt")
+            alert("You cannot invite anyone. You don't own this organization!")
             window.location.href = "http://localhost:5173/login";
         }
     }

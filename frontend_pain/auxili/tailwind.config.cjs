@@ -14,10 +14,11 @@ module.exports = {
           "primary": "#3C787E",
           "secondary": "#17191E",
           "accent": "#9D6A9D",
-          "neutral": "#86CB92",
+          "neutral": "#ffffff",
+          "base-100": "#17191E"
           
 
-        },
+        }
       }
     ]
   }
