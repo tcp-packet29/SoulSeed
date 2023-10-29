@@ -62,6 +62,8 @@
                 console.log(window.localStorage.getItem("token"))
                 tok = window.localStorage.getItem("token")
 
+                window.location.href = "http://localhost:5173/"
+
             })
             .catch(function (error) {
                 console.log(error);

@@ -2,6 +2,7 @@
     import { page } from '$app/stores'
     import axios from 'axios';
     import {browser} from "$app/environment";
+    import Navbar from "../../../lib/navbar.svelte";
     let x = $page.params.latlong.split('~')
     console.log(x)
     let zipcode = ""
@@ -218,7 +219,7 @@
                         console.log(response)
                         if (response.status == 201) {
                             alert("Trade Createlibtcp!")
-                            window.location.href = "http://localhost:5173/mainPg"
+                            window.location.href = "http://localhost:5173/organization/" + valu + "/trade/" + response.data.data.data.Id
                         }
 
                     }).catch((response) => {
@@ -234,21 +235,15 @@
 </script>
 
 <body class="bg-primary"></body>
-<div class="navbar bg-base-100 bg-accent">
-    <a class="btn btn-ghost btn-sm rounded-btn bg-secondary" href="http://localhost:5173">Auxili</a>
-    <h1>--</h1>
-    <h2><a class="btn btn-sm btn-ghost rounded-btn bg-secondary" href="http://localhost:5173/register">Register</a></h2>
-    <h1>--</h1>
-    <h2><a class="btn btn-ghost btn-sm rounded-btn bg-secondary" href="http://localhost:5173/login">Login</a></h2>
-
-</div>
+<Navbar />
 <div class="flex h-screen justify-center items-center">
     <div data-theme="mycodecompiled" class="card w-96 bg-secondary bg-base-200 text-neutral-content shadow-xl">
         <div class="card-body items-center text-center">
             <h2 class="card-title text-neutral tooltip" data-tip={lat + ", " + liblong}>Create Trade</h2>
             <div class="form-control">
                 <label class="label cursor-pointer">
-                    <span class="label-text">Providing Resources?</span>
+                    <span class="label-text tooltip" data-tip="Are you offering material or asking for some?">Providing Resources? </span>
+                    <span class="text-secondary">-</span>
                     <input type="checkbox" class="checkbox checkbox-accent" bind:checked={providing} />
                 </label>
             </div>

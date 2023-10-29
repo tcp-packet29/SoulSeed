@@ -3,6 +3,7 @@
     import {browser} from "$app/environment";
     import { usrn, psord, em, zpc, emTok} from "../../stores.js";
     import {get} from "svelte/store";
+    import Navbar from "../../lib/navbar.svelte";
 
     let uname = "";
     let pword = "";
@@ -103,14 +104,7 @@
 
 <body class="bg-primary"></body>
 
-<div class="navbar bg-base-100 bg-accent">
-    <a class="btn btn-ghost btn-sm rounded-btn bg-secondary" href="http://localhost:5173">Auxili</a>
-    <h1>--</h1>
-    <h2><a class="btn btn-sm btn-ghost rounded-btn bg-secondary" href="http://localhost:5173/register">Register</a></h2>
-    <h1>--</h1>
-    <h2><a class="btn btn-ghost btn-sm rounded-btn bg-secondary" href="http://localhost:5173/login">Login</a></h2>
-
-</div>
+<Navbar/>
 
 <div class="flex h-screen justify-center items-center">
     <div> <!-- ignore in html to oparse uib abtufe vriwedsr redbere oarse html by http requedst !-->

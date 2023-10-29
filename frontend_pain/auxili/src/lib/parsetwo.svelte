@@ -1,8 +1,7 @@
 <script>
     export let id = ""
 </script>
-
-<div class="navbar bg-base-100 bg-accent z-50 fixed top-0 w-full">
+<div class="navbar bg-base-100 bg-accent z-50 top-0 w-full">
     <div class="flex-none">
         <div class="dropdown">
             <label tabindex = "0" class="m-1 btn bg-secondary m-4 border-secondary text-accent">

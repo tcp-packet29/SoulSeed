@@ -122,5 +122,6 @@
         <span class="hover:text-accent" >Util</span>
     </li>
     <li><a class="link-accent" href="/createOrg">Create</a></li>
+    <li><a class="link-accent" href="/joinOrganization">Join</a></li>
 </ul>
 </div>

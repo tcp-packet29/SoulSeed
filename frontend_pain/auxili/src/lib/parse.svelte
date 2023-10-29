@@ -20,9 +20,9 @@
     //sig syscall
 
     export function checkErr(err) {
-        if (err.response.status == 401 && browser) {
+        if ((err.response.status == 401 || err.response.status == 404) && browser) {
             alert("You cannot invite anyone. You don't own this organization!")
-            window.location.href = "http://localhost:5173/login";
+            window.location.href = "http://localhost:5173/organization";
         }
     }
 

@@ -3,6 +3,7 @@
     import  axios  from 'axios'
     import {getTok, prse, getToken} from "$lib/parse.svelte"
     import {browser} from "$app/environment";
+    import Parsetwo from "../../../../../lib/parsetwo.svelte";
     import Navbar from "../../../../../lib/navbar.svelte";
     let val = "rsi"
     let udp = ""
@@ -171,8 +172,42 @@
     //astr
     ///macro rpeprocessor
     //tcp
+
+    let kv = {
+
+        "apple" : "🍎",
+        "banana": "🍌",
+        "orange": "🍊",
+        "pineapple": "🍍",
+        "grapes": "🍇",
+        "watermelon": "🍉",
+        "pear": "🍐",
+        "peach": "🍑",
+        "cherries": "🍒",
+        "strawberry": "🍓",
+        "kiwi": "🥝",
+        "tomato": "🍅",
+        "coconut": "🥥",
+        "avocado": "🥑",
+        "eggplant": "🍆",
+        "potato": "🥔",
+        "carrot": "🥕",
+        "corn": "🌽",
+        "pepper": "🌶",
+        "cucumber": "🥒",
+        "broccoli": "🥦",
+        "mushroom": "🍄",
+        "peanuts": "🥜",
+        "chestnut": "🌰",
+
+
+
+
+        //make a key value pair of more fruits matched to their emojis
+
+    }
 </script>
-<Navbar/>
+
 
 <!--<div class="hero min-screen bg-base-200 bg-primary">-->
 <!--    <div class="hero-content flex-col">-->
@@ -184,7 +219,7 @@
 
 <!--    </div>-->
 <!--</div>-->
-<div class="alert alert-accent bg-black z-20 absolute m-5 w-1/4 text-center justify-center left-0 bottom-0 fixed" id="tcpstream">
+<div class="alert alert-accent bg-black z-60 absolute m-5 w-1/4 text-center justify-center  left-0 bottom-0 " id="tcpstream">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-info shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
     <span id="works" class="text-accent"></span>
 </div>
@@ -192,6 +227,11 @@
 
 {#await promise}
     {:then response}
+    {#if response.data.data.data.Maker.Id == val.Id}
+        <Parsetwo id="{$page.params.id}"/>
+    {:else}
+        <Navbar id="{$page.params.id}"/>
+    {/if}
 
     <dialog class="rounded-xl bg-secondary shadow-xl border-l-accent border-l-8 a" id="confirmation_modal">
         <div class="modal-box content-center justify-center bg-secondary p-10 shadow-none">
@@ -266,7 +306,7 @@
                             <ul>
                                 {#each response.data.data.data.Items as udp}
 
-                                    <li class="mb-5 text-xl text-neutral text-left">{udp}</li>
+                                    <li class="mb-5 text-xl text-neutral text-left">{kv[udp] == undefined ? udp : kv[udp] + " " + udp}</li>
                                 {/each}
                             </ul>
                         </div>

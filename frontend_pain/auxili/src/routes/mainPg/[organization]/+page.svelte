@@ -1,9 +1,11 @@
 <link href='https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css' rel='stylesheet' />
 <style>
+
     #map {
         width: 100%;
         position: center;
-        height: 80%;
+        height: 100%;
+
 
 
 
@@ -11,6 +13,7 @@
     }
 </style>
 <script>
+    import Navbar from "../../../lib/navbar.svelte";
     import axios from 'axios';
     import { onMount } from 'svelte';
     import mapboxgl from 'mapbox-gl';
@@ -179,7 +182,6 @@ if (browser && ($page.params.organization != "global"))  { //jwtauthiasndmasjhas
         })
 
 
-
         map.on("click", (e) => {
             axios.get(' https://api.mapbox.com/geocoding/v5/mapbox.places/' + e.lngLat.wrap().lng + ',' + e.lngLat.wrap().lat + '.json?types=postcode&limit=1&access_token=pk.eyJ1Ijoic3BlbGxjYXN0IiwiYSI6ImNsZTN1YjNtcTBjaGczb2xmMzJ1YnZua2IifQ.ZzbJhqpfTl94WAt8jpUHvA')
                 .then(function (response) {
@@ -252,17 +254,7 @@ if (browser && ($page.params.organization != "global"))  { //jwtauthiasndmasjhas
     <input id="opensettings" type="checkbox" class="drawer-toggle">
     <div class="drawer-content">
         <div id="map" class="z-40 border-8 border-b-secondary border-l-secondary border-r-secondary rounded-xl"></div>
-        <div class="navbar bg-base-200 rounded-b-box z-50 absolute inset-x-0 top-0">
-            <div class="flex-1">
-                <a class="btn btn-ghost btn-sm rounded-btn btn btn-md border-accent">restapi</a>
-            </div>
-
-            <div class="flex-none">
-                <label for="opensettings" class="btn btn-square btn-ghost border-accent">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                </label>
-            </div>
-        </div>
+        <Navbar />
 
 
 
