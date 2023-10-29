@@ -13,7 +13,7 @@
     }
 </style>
 <script>
-    import Navbar from "../../../lib/navbar.svelte";
+    import Parsetwo from "../../../lib/parsetwo.svelte";
     import axios from 'axios';
     import { onMount } from 'svelte';
     import mapboxgl from 'mapbox-gl';
@@ -253,8 +253,9 @@ if (browser && ($page.params.organization != "global"))  { //jwtauthiasndmasjhas
 <div class="drawer drawer-end">
     <input id="opensettings" type="checkbox" class="drawer-toggle">
     <div class="drawer-content">
-        <div id="map" class="z-40 border-8 border-b-secondary border-l-secondary border-r-secondary rounded-xl"></div>
-        <Navbar />
+        <Parsetwo />
+        <div id="map" class="z-10 border-8 border-b-secondary border-l-secondary border-r-secondary border-t-secondary"></div>
+
 
 
 

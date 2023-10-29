@@ -360,10 +360,12 @@
                                                     "message": document.getElementById("systellvmmd").value
                                                 }, {
                                                     headers: {
-                                                        "Token": getToken()
+                                                        "Token": getToken()//al reresntation in the machienc ode oneison
+                                                        //tpc reference comment nd ent he ast tsructur
                                                     }
                                                 }).then(response => {
                                                     console.log(response)
+                                                    window.location.href = window.location.href
                                                 }).catch(error => {
                                                     document.getElementById("accept_modal").showModal();
                                                     console.log(error)
