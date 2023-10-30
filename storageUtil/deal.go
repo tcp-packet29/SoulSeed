@@ -28,7 +28,12 @@ type Data struct {
 
 type Offer struct {
 	UserId      string `bson:"userid"`
+	Usr         User   `bson:"user"`
 	Address     string `bson:"address"`
 	Description string `bson:"memo"`
 	Approved    bool   `bson:"approved"`
+}
+
+type Mess struct {
+	Message string `json:"message"`
 }

@@ -4,7 +4,7 @@
 
 <div class="navbar bg-base-100 bg-accent z-50 top-0 w-full">
     <div class="flex-1">
-        <h1 class="font-bold text-2xl text-accent m-5">🌱 Soulseed</h1>
+        <h1 class="font-bold text-2xl text-accent m-5"><a href="/">🌱 Soulseed</a></h1>
     </div>
     <div class="">
         <div class="join">

@@ -35,6 +35,7 @@ func main() {
 	access.GET("/users/organizations/:uid/:rg", routeUtil.AddOrgMember())
 	routeUtil.TokRoutes(tokens)
 	tokens.Use(routeUtil.TokenCheckMiddleware())
+	access.GET("/tradesin/:zipc", routeUtil.GetOfferItems())
 	confirmation.POST("/confirm/:email", routeUtil.SendConfirmationMessage()) //dont need middleware, just make random token
 	confirmation.POST("/password/:email", routeUtil.SendPasswordMessage())
 	authNeeded := router.Group("/app")

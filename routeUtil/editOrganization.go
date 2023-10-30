@@ -152,6 +152,14 @@ func AddUserOrganization() gin.HandlerFunc {
 		userList := organization.Users_ID
 		userList = append(userList, addedUser.Id.Hex())
 
+		chngUser := genUtil.FetchUserById(addedUser.Id.Hex(), userCol, c, func() {})
+		chngUser.OrganizationsIn = append(chngUser.OrganizationsIn, organization.Id.Hex())
+		_, err = userCol.ReplaceOne(c, bson.M{"id": addedUser.Id}, chngUser)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: map[string]interface{}{"error": err.Error()}})
+			return
+		}
+
 		finalOrganization := storageUtil.Organization{
 			//new orgnaizaiton odel
 			Id:          organization.Id,

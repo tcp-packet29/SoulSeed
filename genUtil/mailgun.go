@@ -41,3 +41,18 @@ func SendNotif(domain string, uName string, message string, llvmcompile string) 
 	return err
 
 }
+
+func SendTcp(domain string, uName string, message string, fromDomain string, toDomain string) error {
+	val := GetMailgunData()
+	mg := ma.NewMailgun(domain, val)
+	msg := mg.NewMessage(
+		"Gaurav <bansal22.gaurav@gmail.com>",
+		"Your Offer Got Accepted!",
+		"Hey "+uName+",\n\n Your offer got accepted! Here's a word from the other party:\n\n"+" "+message+"\n\n Reply to this email to talk to them!",
+		toDomain)
+	msg.SetReplyTo(fromDomain)
+	con, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	_, _, err := mg.Send(con, msg)
+	return err
+}

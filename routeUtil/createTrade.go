@@ -60,6 +60,7 @@ func CreateTrade() gin.HandlerFunc {
 		newUser := storageUtil.User{
 			Id:       userFound.Id,
 			Username: userFound.Username,
+			Email:    userFound.Email,
 			Password: "",
 			Items:    userFound.Items,
 			Zipcode:  userFound.Zipcode,
@@ -108,6 +109,33 @@ func GetOfferAmount() gin.HandlerFunc {
 		} // couldnot find or error in fining
 
 		c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "tcp", Success: true, Data: map[string]interface{}{"data": len(trade.Offers)}})
+
+	}
+}
+
+func GetOffer() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id := c.Param("id")
+		tid := c.Param("tid")
+
+		var tradee storageUtil.Trade
+
+		trade, _ := primitive.ObjectIDFromHex(tid)
+
+		err := tradeCol.FindOne(c, bson.M{"id": trade}).Decode(&tradee)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: err.Error(), Success: false, Data: nil})
+			return
+		}
+
+		for _, val := range tradee.Offers {
+			if val.UserId == id {
+				c.JSON(http.StatusOK, storageUtil.Response{Code: http.StatusOK, Message: "tcp", Success: true, Data: map[string]interface{}{"data": val}})
+				return
+			}
+		}
+
+		c.JSON(http.StatusNotFound, storageUtil.Response{Code: http.StatusNotFound, Message: "Not Found", Success: false, Data: nil})
 
 	}
 }
