@@ -143,9 +143,9 @@
         <div class="card-body">
             <h2 class="card-title text-neutral ">Invite</h2>
 
-            <input type="text" placeholder="Expiry" class="input input-bordered w-full" bind:value={exp} />
+            <input type="text" placeholder="Expiry" class="input input-bordered w-full text-white" bind:value={exp} />
             <h1 class="text-neutral" id="token">Token To Be Generated!</h1>
-            <input type="text" placeholder="Emails (separate by comma)" class="input input-bordered w-full" bind:value={emails} />
+            <input type="text" placeholder="Emails (separate by comma)" class="input input-bordered w-full text-white" bind:value={emails} />
             <div id="qr"></div>
             <button class="btn btn-primary" on:click={aaa}>Generate</button>
         </div>

@@ -56,3 +56,18 @@ func SendTcp(domain string, uName string, message string, fromDomain string, toD
 	_, _, err := mg.Send(con, msg)
 	return err
 }
+
+func SendLlvm(domain string, uName string, message string, fromDomain string, toDomain string, orgname string) error {
+	val := GetMailgunData()
+	mg := ma.NewMailgun(domain, val)
+	msg := mg.NewMessage(
+		"Gaurav <bansal22.gaurav@gmail.com>",
+		"Request to join Organization",
+		"Hey "+uName+",\n\n Someone ("+fromDomain+") wants to join your organization '"+orgname+"'! heres a word from them:\n\n"+" "+message+"\n\n Reply to this email to talk to them!",
+		toDomain)
+	msg.SetReplyTo(fromDomain)
+	con, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	_, _, err := mg.Send(con, msg)
+	return err
+}

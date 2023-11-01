@@ -73,8 +73,8 @@
 <Navbar/>
 <div class="hero min-h-screen" style="background-image: url(https://media.istockphoto.com/id/612242240/photo/ripe-apples-in-orchard-ready-for-harvesting.jpg?s=612x612&w=0&k=20&c=10kwdSAOJeC-pbr0t9QmmGg6psA9dzGQc6rDcnXLLqo=);">
     <div class="hero-overlay bg-opacity-50"></div>
-    <div class="hero-content text-center text-secondary-content align-bottom">
-        <div class="max-w-md bg-secondary bg-opacity-30 rounded-xl p-5">
+    <div class="hero-content text-center text-secondary-content align-bottom grid-cols-2 grid bg-secondary bg-opacity-30 rounded-xl">
+        <div class="max-w-md glass rounded-xl p-5">
             <p class="mb-5 text-7xl font-bold">
                 🌱
             </p>
@@ -98,16 +98,18 @@
 
         </div>
 
-        <div data-theme="mycodecompiled" class="card w-96 bg-secondary bg-opacity-30 text-neutral-content shadow-xl">
+        <div data-theme="mycodecompiled" class="card w-96 text-neutral-content glass">
             <div class="card-body items-center text-center">
                 <h2 class="card-title text-secondary text-2xl">Enter Your Zipcode!</h2>
+                <a class="content-center link-secondary text-sm link" href="/organizationFinder">Want to Find Organizations Instead?</a>
                 <p class="text-secondary text-md">Enter your Zipcode to find items offered in your area!</p>
 
-                <input type="text" placeholder="" class="input input-bordered glass w-full max-w-xs text-white " bind:value={zipc}/>
+                <input type="text" placeholder="" class="input input-bordered glass w-full max-w-xs text-secondary " bind:value={zipc}/>
                 <p class="text-secondary text-xl" id="udp"></p>
                 <div class="card-actions">
 
                     <button class="btn btn-outline glass" on:click={createUser}>Find</button>
+
                 </div>
             </div>
         </div>
@@ -115,4 +117,5 @@
     </div>
 
 </div>
+
 

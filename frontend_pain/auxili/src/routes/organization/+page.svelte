@@ -22,7 +22,7 @@
             if (browser) {
                 alert("not logged in");
                 console.log(error);
-                // window.location.href = "/login" //jwt reference
+                window.location.href = "/login" //jwt reference
             }
 
         });
@@ -55,7 +55,6 @@
                 })
                 .catch(function (error) {
                     if (browser) {
-                        alert("not logged in");
                         console.log('why sir estapi')
                         console.log(error);
                         // window.location.href = "/login";
@@ -77,8 +76,7 @@
 
                 })
                 .catch(function (error) {
-                    if (browser) {
-                        alert("not logged in");
+                    if (browser) {   
                         console.log('why sir estapi')
                         console.log(error);
                         // window.location.href = "/login";
@@ -91,7 +89,7 @@
             if (browser) {
                 alert("not logged in");
                 console.log(error);
-                // window.location.href = "/login";
+                window.location.href = "/login";
             }})
 
 

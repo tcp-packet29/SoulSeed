@@ -42,6 +42,7 @@ func main() {
 	http.HandleFunc("/wc", routeUtil.Wsock())
 	authNeeded.Use(auth.NonContribCors())
 	access.GET("/allstuff", routeUtil.TCP())
+	access.GET("/organizations/organizationsInArea/:zcode", routeUtil.GetOrganizationByZipcode())
 	authNeeded.Use(middleware.JwtAuth())
 
 	routeUtil.GeoRoutes(access)

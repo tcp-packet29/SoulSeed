@@ -14,4 +14,6 @@ func OrgRoutes(r *gin.RouterGroup) {
 	r.GET("/organizations/stuff/:oid/:uid", UserInOrg())
 	r.GET("/organizations/admin/:oid/:uid", UserOwner())
 	r.GET("/organizations/loc/:uid/:zipcode", CheckOrgLocation())
+	r.POST("/organizations/sendRequest/:oid", SendRequestToJoin())
+
 }

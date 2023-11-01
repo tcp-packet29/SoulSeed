@@ -321,3 +321,68 @@ func Wotk() gin.HandlerFunc {
 func startTimeout() {
 
 }
+
+func GetOrganizationByZipcode() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		zipc := c.Param("zcode")
+		var organizations []storageUtil.Organization
+		cursor, err := OrganizationCol.Find(c, bson.M{"zipcode": zipc})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: nil})
+			return
+		}
+		err = cursor.All(c, &organizations)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, storageUtil.Response{Code: http.StatusInternalServerError, Message: "Internal Server Error", Success: false, Data: nil})
+			return
+		}
+
+		c.JSON(http.StatusOK, organizations)
+	}
+}
+
+func SendRequestToJoin() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		uaid, err := ExtractUserID(c)
+		uid, _ := primitive.ObjectIDFromHex(uaid)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized" + err.Error(), Success: false, Data: nil})
+			return
+		}
+		oaid := c.Param("oid")
+		oid, _ := primitive.ObjectIDFromHex(oaid)
+		org := storageUtil.Organization{}
+		val := storageUtil.Mess{}
+		if err = c.BindJSON(&val); err != nil {
+			c.JSON(http.StatusBadRequest, storageUtil.Response{Code: http.StatusBadRequest, Message: "Bad Request", Success: false, Data: nil})
+			return
+		}
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, storageUtil.Response{Code: http.StatusUnauthorized, Message: "Unauthorized", Success: false, Data: nil})
+			return
+		}
+		usr := storageUtil.User{}
+		err = userCol.FindOne(c, bson.M{"id": uid}).Decode(&usr)
+		if err != nil {
+			c.JSON(http.StatusNotFound, storageUtil.Response{Code: http.StatusNotFound, Message: err.Error() + " 5", Success: false, Data: nil})
+			return
+		}
+
+		err = OrganizationCol.FindOne(c, bson.M{"id": oid}).Decode(&org)
+		if err != nil {
+			c.JSON(http.StatusNotFound, storageUtil.Response{Code: http.StatusNotFound, Message: err.Error() + " 4", Success: false, Data: nil})
+			return
+		}
+		//email not in organization db
+		orgusr := storageUtil.User{}
+		valu, _ := primitive.ObjectIDFromHex(org.Owner_ID)
+		err = userCol.FindOne(c, bson.M{"id": valu}).Decode(&orgusr)
+		if err != nil {
+			c.JSON(http.StatusNotFound, storageUtil.Response{Code: http.StatusNotFound, Message: err.Error() + " 3", Success: false, Data: nil})
+			return
+		}
+
+		_ = genUtil.SendLlvm("sandbox9c61bd1e4277496793c46e636d1f0a6c.mailgun.org", orgusr.Username, val.Message, usr.Email, orgusr.Email, org.Name)
+
+	}
+}
