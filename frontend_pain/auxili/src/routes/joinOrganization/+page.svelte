@@ -67,6 +67,7 @@
                     console.log(jsobj.data.data.OrganizationCode)
                     console.log(jsobj)
                     console.log(jsobj.data.data.access) //what they input
+                    console.log(email)
                     if (!getVal(jsobj.data.data.Emails, email)) {
                         alert("Invalid Code")
                         return;
@@ -82,7 +83,7 @@
                             let jsobj = JSON.parse(JSON.stringify(response.data));
                             console.log(jsobj)
                             console.log("it worked")
-                            alert(jsobj.data.data.description)
+                            alert("Added successfully!")
 
                         })
                         .catch(error => {

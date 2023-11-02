@@ -49,7 +49,7 @@
             }
         }).then(response => {
             console.log(response)
-            document.getElementById("works").innerText = "There are currently " + response.data.data.data + " offers for this trade."
+            // document.getElementById("works").innerText = "There are currently " + response.data.data.data + " offers for this trade."
         }).catch(error => {
             console.log(error)
         })
@@ -98,19 +98,19 @@
                 if (browser) {
                     document.getElementById("tcp").innerText = "Close Trade"
                     document.getElementById('by').innerText = "By you"
-                    let x = document.getElementById("tcpstream")
-                    x.addEventListener("click", () => {
-                        x.style.display = "none"
-                    })
+                    // let x = document.getElementById("tcpstream")
+                    // x.addEventListener("click", () => {
+                    //     x.style.display = "none"
+                    // })
                 }
 
             }).catch(function (error) {
                 if (browser) {
                     document.getElementById("tcp").innerText = "Edit Offer"
-                    let x = document.getElementById("tcpstream")
-                    x.addEventListener("click", () => {
-                        x.style.display = "none"
-                    })
+                    // let x = document.getElementById("tcpstream")
+                    // x.addEventListener("click", () => {
+                    //     x.style.display = "none"
+                    // })
 
                     let vale = getToken()
                     document.getElementById("tcp").addEventListener("click", () => {
@@ -219,10 +219,7 @@
 
 <!--    </div>-->
 <!--</div>-->
-<div class="alert alert-accent bg-black z-60 absolute m-5 w-1/4 text-center justify-center  left-0 bottom-0 " id="tcpstream">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-info shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-    <span id="works" class="text-accent"></span>
-</div>
+
 
 
 {#await promise}
@@ -232,6 +229,11 @@
     {:else}
         <Navbar id="{$page.params.id}"/>
     {/if}
+
+<!--    <div class="m-20 alert alert-accent bg-black z-100 relative m-5 w-1/4 text-center justify-center  left-0 bottom-0 hover:bg-opacity-0 transition-all" id="tcpstream">-->
+<!--        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-info shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>-->
+<!--        <span id="works" class="text-accent">Currently {response.data.data.data.Offers.length} offer(s) for this trade.</span>-->
+<!--    </div>-->
 
     <dialog class="rounded-xl bg-secondary shadow-xl border-l-accent border-l-8 a" id="confirmation_modal">
         <div class="modal-box content-center justify-center bg-secondary p-10 shadow-none">
@@ -312,6 +314,7 @@
                         </div>
                         <div class="border-l-2 border-r-2 border-b-2 border-accent rounded-b-md p-5 text-center content-center">
                             <p class="text-4xl font-bold text-neutral ">INFO</p>
+                            <p class="text-md">Currently {response.data.data.data.Offers.length} offer(s) for this trade.</p>
                             <br>
                             <a class="mb-5 text-xl text-accent" id="by" href="/usr/{response.data.data.data.Maker.Username}">By {response.data.data.data.Maker.Username}</a>
                             <br>

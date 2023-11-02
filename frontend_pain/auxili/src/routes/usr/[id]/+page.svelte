@@ -1,6 +1,7 @@
 <script>
     import { page } from '$app/stores';
     import axios from 'axios';
+    import Navbar from '../../../lib/navbar.svelte';
     import { onMount } from 'svelte';
     import {browser} from "$app/environment";
     let items = []
@@ -52,33 +53,39 @@
 
 <body class="bg-primary"></body>
 
+<Navbar />
 <div class="flex h-screen justify-center items-center">
-<div class="card w-96 bg-secondary bg-base-500 text-neutral-content shadow-xl">
-    <figure><img src="https://miro.medium.com/max/600/1*i2skbfmDsHayHhqPfwt6pA.png" alt="Shoes" /></figure>
-    <div class="card-body">
-        <h2 id="Name" class="card-title text-neutral">Golang</h2>
+<div class="card w-96 bg-secondary bg-base-500 text-neutral-content shadow-xl border-4 hover:border-8 transition-all border-accent">
+    <div class="card-body text-center">
+        <div class="divider">
+            <h2  class="text-neutral text-xl uppercase text-center">USER</h2>
+        </div>
+        <br>
+        <h2 id="Name" class="text-center text-neutral text-3xl uppercase font-bold">Golang</h2>
+        <br>
+        <br>
         <br>
         <p id="Zipcode" class="text-neutral">High Level, Static Typed, Compiled</p>
         <br>
-        <h2 class="text-neutral card-side"><b>Items</b></h2>
-        <ul class="menu bg-base-100 w-56 p-2 rounded-box bg-secondary">
-        {#each items as item}
-
-                <li>
-                    <div>
-                    <b class="text-accent">
-                        O
-                    </b>
-                    <div class="badge badge-accent gap-2">
-
-                        {item}
-                    </div>
-                    </div>
-                </li>
-
-
-        {/each}
-        </ul>
+<!--        <h2 class="text-neutral card-side"><b>Items</b></h2>-->
+<!--        <ul class="menu bg-base-100 w-56 p-2 rounded-box bg-secondary">-->
+<!--        &lt;!&ndash;{#each items as item}&ndash;&gt;-->
+<!--        -->
+<!--        &lt;!&ndash;        <li>&ndash;&gt;-->
+<!--        &lt;!&ndash;            <div>&ndash;&gt;-->
+<!--        &lt;!&ndash;            <b class="text-accent">&ndash;&gt;-->
+<!--        &lt;!&ndash;                O&ndash;&gt;-->
+<!--        &lt;!&ndash;            </b>&ndash;&gt;-->
+<!--        &lt;!&ndash;            <div class="badge badge-accent gap-2">&ndash;&gt;-->
+<!--        -->
+<!--        &lt;!&ndash;                {item}&ndash;&gt;-->
+<!--        &lt;!&ndash;            </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;            </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;        </li>&ndash;&gt;-->
+<!--        -->
+<!--        -->
+<!--        &lt;!&ndash;{/each}&ndash;&gt;-->
+<!--        </ul>-->
     </div>
 </div>
 </div>

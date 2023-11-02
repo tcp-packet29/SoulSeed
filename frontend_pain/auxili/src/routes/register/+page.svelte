@@ -3,7 +3,7 @@
     import {browser} from "$app/environment";
     import { usrn, psord, em, zpc, emTok} from "../../stores.js";
     import {get} from "svelte/store";
-    import Navbar from "../../lib/navbar.svelte";
+    import Thisworks from "../../lib/thisworks.svelte";
 
     let uname = "";
     let pword = "";
@@ -104,7 +104,7 @@
 
 <body class="bg-primary"></body>
 
-<Navbar/>
+<Thisworks/>
 
 <div class="flex h-screen justify-center items-center">
     <div> <!-- ignore in html to oparse uib abtufe vriwedsr redbere oarse html by http requedst !-->

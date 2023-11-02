@@ -1,8 +1,9 @@
 <script>
     import axios from 'axios';
     import { writable } from "svelte/store";
-    import { browser } from "$app/environment";
+    import Thisworks from "../../lib/thisworks.svelte"
     import setItem from "./login.js";
+    import {browser} from "$app/environment";
 
 
     let tok = ""
@@ -87,19 +88,22 @@
 </script>
 
 <body class="bg-primary"></body>
-<div class="navbar bg-base-100 bg-accent">
-    <a class="btn btn-ghost btn-sm rounded-btn bg-secondary" href="http://localhost:5173">Auxili</a>
-    <h1>--</h1>
-    <h2><a class="btn btn-sm btn-ghost rounded-btn bg-secondary" href="http://localhost:5173/register">Register</a></h2>
-    <h1>--</h1>
-    <h2><a class="btn btn-ghost btn-sm rounded-btn bg-secondary" href="http://localhost:5173/login">Login</a></h2>
+<!--<div class="navbar bg-base-100 bg-accent">-->
+<!--    <a class="btn btn-ghost btn-sm rounded-btn bg-secondary" href="http://localhost:5173">Auxili</a>-->
+<!--    <h1>&#45;&#45;</h1>-->
+<!--    <h2><a class="btn btn-sm btn-ghost rounded-btn bg-secondary" href="http://localhost:5173/register">Register</a></h2>-->
+<!--    <h1>&#45;&#45;</h1>-->
+<!--    <h2><a class="btn btn-ghost btn-sm rounded-btn bg-secondary" href="http://localhost:5173/login">Login</a></h2>-->
 
-</div>
+<!--</div>-->
+
+<Thisworks />
+
 <div class="flex h-screen justify-center items-center">
     <div data-theme="mycodecompiled" class="card w-96 bg-secondary bg-base-200 text-neutral-content shadow-xl">
         <div class="card-body items-center text-center">
             <h2 class="card-title text-neutral">Log In</h2>
-
+    <!-- COMMEN TNIDE -->
             <input type="text" placeholder="Username" class="input input-bordered input-accent w-full max-w-xs text-white" bind:value={uname}/>
             <div class="form-control">
                 <div class="input-group udp">

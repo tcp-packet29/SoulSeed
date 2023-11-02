@@ -12,6 +12,24 @@
 
     // let aaa = getTok()
     // console.log(aaa, "jhmm")
+
+    axios.get('http://localhost:8080/app/auth', {
+        headers: {//inverse kinematics reference
+            "Token": getToken(),
+        }
+    })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            if (browser) {
+                alert("not logged in");
+                console.log(error);
+                window.location.href = "/login" //jwt reference
+            }
+
+        });
+
     getTok()
         .then(function (response) {
             let jsotn = prse(response)

@@ -218,7 +218,7 @@
                     }).then((response) => {
                         console.log(response)
                         if (response.status == 201) {
-                            alert("Trade Createlibtcp!")
+                            alert("Trade Created!")
                             window.location.href = "http://localhost:5173/organization/" + valu + "/trade/" + response.data.data.data.Id
                         }
 
@@ -248,11 +248,11 @@
                 </label>
             </div>
 
-            <input type="text" placeholder="Name" class="input input-bordered w-64" bind:value={amqp} />
-            <textarea placeholder="Description" class="textarea textarea-bordered textarea-md w-64" bind:value={tcp}></textarea>
+            <input type="text" placeholder="Name" class="input input-bordered w-64 text-white" bind:value={amqp} />
+            <textarea placeholder="Description" class="textarea textarea-bordered textarea-md w-64 text-white" bind:value={tcp}></textarea>
             <div class="form-control">
                 <div class="input-group">
-                    <input placeholder="Items" class="input input-bordered w-48 " bind:value={item}/>
+                    <input placeholder="Items" class="input input-bordered w-48 text-white" bind:value={item}/>
                     <button class="btn btn-square btn-accent" on:click={work} accesskey="enter">+</button>
                 </div>
 

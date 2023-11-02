@@ -91,8 +91,8 @@
             window.localStorage.setItem("password", "");
             window.localStorage.setItem("email", "");
             window.localStorage.setItem("zipcode", "");
-            window.location.href = "http://localhost:5173/setupItems"
-
+            window.location.href = "http://localhost:5173/login"
+//commment nodee
     }
     function Check() {
         if (val === token) {

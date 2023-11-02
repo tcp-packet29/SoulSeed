@@ -85,12 +85,7 @@
                 })
         })
         .catch(function (error) {
-
-            if (browser) {
-                alert("not logged in");
-                console.log(error);
-                window.location.href = "/login";
-            }})
+        })
 
 
 
